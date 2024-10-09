@@ -15,15 +15,6 @@ CREATE TABLE  rating(
 
 CREATE TYPE trip_status AS ENUM ('available', 'completed', 'cancelled');
 
-CREATE TABLE trip(
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    route_id INT REFERENCES route(id) ON DELETE CASCADE,
-    trip_date_time TIMESTAMP NOT NULL,
-    available_seats INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    status trip_status
-);
 
 CREATE TABLE route (
     id SERIAL PRIMARY KEY,
@@ -31,6 +22,15 @@ CREATE TABLE route (
     destination_point VARCHAR(255) NOT NULL,
     intermediate_stops TEXT,
     distance DECIMAL(10, 2)
+);
+CREATE TABLE trip(
+                     id SERIAL PRIMARY KEY,
+                     user_id INT REFERENCES users(id) ON DELETE CASCADE,
+                     route_id INT REFERENCES route(id) ON DELETE CASCADE,
+                     trip_date_time TIMESTAMP NOT NULL,
+                     available_seats INT NOT NULL,
+                     price DECIMAL(10, 2) NOT NULL,
+                     status trip_status
 );
 
 CREATE TABLE review(
