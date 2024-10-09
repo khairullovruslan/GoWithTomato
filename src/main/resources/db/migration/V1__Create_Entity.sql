@@ -6,7 +6,7 @@ CREATE TABLE users
     phone_number VARCHAR(15)
 );
 
-create table rating(
+CREATE TABLE  rating(
     id SERIAL PRIMARY KEY,
     count_trips INT DEFAULT 0,
     sum_rates INT DEFAULT 0,
@@ -15,7 +15,7 @@ create table rating(
 
 CREATE TYPE trip_status AS ENUM ('available', 'completed', 'cancelled');
 
-create table trip(
+CREATE TABLE trip(
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     route_id INT REFERENCES route(id) ON DELETE CASCADE,
@@ -32,3 +32,11 @@ CREATE TABLE route (
     intermediate_stops TEXT,
     distance DECIMAL(10, 2)
 );
+
+CREATE TABLE review(
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    trip_id INT REFERENCES trip(id) ON DELETE  CASCADE,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    description text
+)
