@@ -2,7 +2,6 @@ package org.tomato.gowithtomato.entity;
 
 
 import lombok.*;
-import org.tomato.gowithtomato.dto.TripStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
