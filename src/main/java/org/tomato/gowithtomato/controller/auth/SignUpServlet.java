@@ -36,7 +36,7 @@ public class SignUpServlet extends BaseServlet {
         if (!violations.isEmpty()) {
             throw new RegistrationException(violations);
         }
-        authService.registration(userDTO);
-        resp.sendRedirect("/home");
+        authService.registration(userDTO, req, resp);
+        resp.sendRedirect(req.getContextPath() + "/home");
     }
 }
