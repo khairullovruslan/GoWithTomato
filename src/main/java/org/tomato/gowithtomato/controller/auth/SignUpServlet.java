@@ -11,6 +11,7 @@ import org.tomato.gowithtomato.exception.RegistrationException;
 import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.util.UserUtil;
 
+import java.io.IOException;
 import java.util.Set;
 
 @WebServlet("/sign-up")
@@ -29,12 +30,13 @@ public class SignUpServlet extends BaseServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp){
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UserDTO userDTO = UserUtil.getInstance().buildUserDTO(req);
         Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
         if (!violations.isEmpty()) {
             throw new RegistrationException(violations);
         }
         authService.registration(userDTO);
+        resp.sendRedirect("/home");
     }
 }
