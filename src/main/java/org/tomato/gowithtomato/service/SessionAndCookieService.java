@@ -4,7 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.tomato.gowithtomato.dto.UserDTO;
+
 
 public class SessionAndCookieService {
     private final static SessionAndCookieService INSTANCE = new SessionAndCookieService();
@@ -21,6 +21,11 @@ public class SessionAndCookieService {
     public void setCookie(HttpServletResponse resp, String login){
         Cookie usernameCookie = new Cookie("username", login);
         usernameCookie.setMaxAge(60 * 60 * 24);
+        resp.addCookie(usernameCookie);
+    }
+    public void deleteCookie(HttpServletResponse resp){
+        Cookie usernameCookie = new Cookie("username", null);
+        usernameCookie.setMaxAge(0);
         resp.addCookie(usernameCookie);
     }
 }
