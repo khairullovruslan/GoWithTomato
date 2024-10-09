@@ -10,9 +10,9 @@ public class AuthService {
     private final  ModelMapper mapper;
 
 
-    public AuthService(UserDaoImpl userDao, ModelMapper mapper) {
-        this.userDao = userDao;
-        this.mapper = mapper;
+    public AuthService() {
+        this.userDao = UserDaoImpl.getInstance();
+        this.mapper = new ModelMapper();
     }
     public void registration(UserDTO userDTO){
         userDao.save(mapper.map(userDTO, User.class));
