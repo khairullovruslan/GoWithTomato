@@ -1,17 +1,22 @@
 package org.tomato.gowithtomato.dao;
 
+import org.tomato.gowithtomato.exception.DaoException;
+import org.tomato.gowithtomato.util.ConnectionManager;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface CrudDao<T> {
-    Optional<T> findById(Long id);
+public interface CrudDao<K, E> {
+    Optional<E> findById(K id);
 
-    List<T> findAll();
+    List<E> findAll();
 
-    T save(T entity);
+    E save(E entity) throws DaoException;
 
-    T update(T entity);
+    E update(E entity);
 
-    void delete(Long id);
+    void delete(K id);
+
+    final ConnectionManager connectionManager = ConnectionManager.getInstance();
 
 }
