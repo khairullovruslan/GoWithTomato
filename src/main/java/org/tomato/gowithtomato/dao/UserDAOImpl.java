@@ -1,18 +1,28 @@
 package org.tomato.gowithtomato.dao;
 
-import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.DaoException;
 import org.tomato.gowithtomato.exception.UniqueException;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDaoImpl implements UserDao{
+public class UserDAOImpl implements UserDAO{
+    private final static UserDAOImpl INSTANCE = new UserDAOImpl();
+    private UserDAOImpl(){}
+
     private final String SAVE_SQL = "insert into users(login, password, email, phone_number)" +
             "values (?, ? , ?, ?)";
+
+    private final String FIND_BY_LOGIN = "select * from users where login = ?";
+
+    public static UserDAOImpl getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public Optional<User> findById(Long id) {
@@ -54,5 +64,34 @@ public class UserDaoImpl implements UserDao{
     @Override
     public void delete(Long id) {
 
+    }
+
+    @Override
+    public Optional<User> findByLogin(String login) {
+        try (var connection = connectionManager.get();
+             var statement = connection.prepareStatement(FIND_BY_LOGIN)){
+            statement.setString(1, login);
+            var result = statement.executeQuery();
+            List<User> users = convertResultSetToList(result);
+            return Optional.ofNullable(users.size() == 1 ? users.get(0) : null);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<User> convertResultSetToList(ResultSet result) throws SQLException {
+        ArrayList<User> currencies = new ArrayList<>();
+        while (result.next()) {
+            currencies.add(User
+                    .builder()
+                    .id(result.getLong("id"))
+                    .login(result.getString("login"))
+                    .password(result.getString("password"))
+                    .email(result.getString("email"))
+                    .phoneNumber(result.getString("phone_number"))
+                    .build());
+        }
+        return currencies;
     }
 }
