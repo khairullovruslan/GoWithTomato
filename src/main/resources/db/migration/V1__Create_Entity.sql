@@ -10,6 +10,25 @@ create table rating(
     id SERIAL PRIMARY KEY,
     count_trips INT DEFAULT 0,
     sum_rates INT DEFAULT 0,
-    owner_id INT,
-    FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
-)
+    user_id INT REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TYPE trip_status AS ENUM ('available', 'completed', 'cancelled');
+
+create table trip(
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    route_id INT REFERENCES route(id) ON DELETE CASCADE,
+    trip_date_time TIMESTAMP NOT NULL,
+    available_seats INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    status trip_status
+);
+
+CREATE TABLE route (
+    id SERIAL PRIMARY KEY,
+    departure_point VARCHAR(255) NOT NULL,
+    destination_point VARCHAR(255) NOT NULL,
+    intermediate_stops TEXT,
+    distance DECIMAL(10, 2)
+);
