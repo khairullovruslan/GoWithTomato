@@ -5,7 +5,6 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import org.modelmapper.ModelMapper;
-import org.tomato.gowithtomato.dao.UserDaoImpl;
 import org.tomato.gowithtomato.service.AuthService;
 
 @WebListener
