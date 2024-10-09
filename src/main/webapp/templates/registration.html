@@ -31,7 +31,11 @@
             <label for="phone">Телефон:</label>
             <input type="text" id="phone" name="phone" required>
         </div>
-
+        <div th:if="${not #lists.isEmpty(errorList)}" class="error-container">
+            <ul class="error-list">
+                <li th:each="error : ${errorList}" th:text="${error}"></li>
+            </ul>
+        </div>
         <button type="submit">Отправить</button>
     </form>
 </div>
