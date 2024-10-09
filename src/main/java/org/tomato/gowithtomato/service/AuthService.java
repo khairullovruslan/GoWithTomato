@@ -2,12 +2,15 @@ package org.tomato.gowithtomato.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.tomato.gowithtomato.dao.UserDAOImpl;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.util.PasswordUtil;
+
+import java.io.IOException;
 
 @Slf4j
 public class AuthService {
@@ -31,5 +34,15 @@ public class AuthService {
         sessionAndCookieService.setCookie(response, userDTO.getLogin());
         log.info("Пользователь успешно зарегестрирован");
 
+    }
+
+    public void logout(HttpServletRequest req,  HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        sessionAndCookieService.deleteCookie(resp);
+        log.info("Пользователь успешно вышел");
+        resp.sendRedirect(req.getContextPath() + "/login");
     }
 }
