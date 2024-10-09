@@ -3,6 +3,8 @@ package org.tomato.gowithtomato.controller;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.thymeleaf.TemplateEngine;
@@ -17,11 +19,13 @@ public class BaseServlet extends HttpServlet {
     protected TemplateEngine templateEngine;
     private ExceptionHandler exceptionHandler;
     private ThymeleafUtil thymeleafUtil;
+    protected Validator validator;
 
     @Override
     public void init() {
-        try  {
+        try (var validatorFactory = Validation.buildDefaultValidatorFactory()) {
             thymeleafUtil = ThymeleafUtil.getInstance();
+            validator = validatorFactory.getValidator();
             templateEngine = (TemplateEngine) this.getServletContext().getAttribute("templateEngine");
             exceptionHandler = new ExceptionHandler(templateEngine, this.getServletContext());
         } catch (Exception e) {
@@ -52,6 +56,7 @@ public class BaseServlet extends HttpServlet {
             super.service(req, resp);
             log.info("Успешно обработан {} запрос на {}", req.getMethod(), req.getServletPath());
         } catch (Exception e) {
+            e.printStackTrace();
             exceptionHandler.handle(e, req, resp);
         }
     }
