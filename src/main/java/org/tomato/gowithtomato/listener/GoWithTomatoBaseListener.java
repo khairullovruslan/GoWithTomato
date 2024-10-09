@@ -13,12 +13,7 @@ public class GoWithTomatoBaseListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext servletContext = sce.getServletContext();
-        UserDaoImpl userDao = new UserDaoImpl();
-        ModelMapper modelMapper = new ModelMapper();
-
-
-
-        AuthService authService = new AuthService(userDao, modelMapper);
+        AuthService authService = new AuthService();
 
 
         servletContext.setAttribute("authService", authService);
