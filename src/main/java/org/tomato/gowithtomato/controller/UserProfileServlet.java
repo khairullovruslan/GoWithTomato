@@ -1,12 +1,14 @@
 package org.tomato.gowithtomato.controller;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.thymeleaf.context.WebContext;
-import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.service.UserService;
+
+import java.io.IOException;
 
 
 @WebServlet("/profile")
@@ -22,15 +24,15 @@ public class UserProfileServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         String name = req.getParameter("u");
-        UserDTO whoChecked;
         WebContext context = thymeleafUtil.buildWebContext(req, resp, getServletContext());
         if (name == null){
             String login = (String) session.getAttribute("user");
-             whoChecked = userService.findUserByLogin(login);
+            context.setVariable("userData", userService.findUserByLogin(login));
+            context.setVariable("isOwner", true);
+            processTemplate(context, "profile", req, resp);
         }
         else{
-            UserDTO userDTO = userService.findUserByLogin(name);
-            context.setVariable("userData", userDTO);
+            context.setVariable("userData",  userService.findUserByLogin(name));
             processTemplate(context, "profile", req, resp);
         }
     }
