@@ -11,6 +11,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.tomato.gowithtomato.exception.RegistrationException;
 import org.tomato.gowithtomato.exception.ServletInitializationException;
+import org.tomato.gowithtomato.exception.UserNotFoundException;
+import org.tomato.gowithtomato.exception.WrongPasswordException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,12 @@ public class ExceptionHandler {
                             .map(ConstraintViolation::getMessage)
                             .toList();
                     processTemplate("registration", req, resp, errors);
+                }
+                case UserNotFoundException ignored -> {
+                    processTemplate("login", req, resp, new ArrayList<>(List.of("Пользователь с таким логином не был найден")));
+                }
+                case WrongPasswordException ignored -> {
+                    processTemplate("login", req, resp, new ArrayList<>(List.of("Неверный пароль")));
                 }
 
                 default -> throw new IllegalStateException("Unexpected value: " + e);
