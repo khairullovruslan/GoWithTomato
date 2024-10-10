@@ -21,7 +21,6 @@ CREATE TABLE route (
     id SERIAL PRIMARY KEY,
     departure_point VARCHAR(255) NOT NULL,
     destination_point VARCHAR(255) NOT NULL,
-    intermediate_stops TEXT,
     distance DECIMAL(10, 2)
 );
 CREATE TABLE trip(
@@ -40,4 +39,15 @@ CREATE TABLE review(
     trip_id INT REFERENCES trip(id) ON DELETE  CASCADE,
     rating INT CHECK (rating BETWEEN 1 AND 5),
     description text
-)
+);
+CREATE TABLE Point (
+                       id SERIAL PRIMARY KEY,
+                       lat DOUBLE PRECISION,
+                       lng DOUBLE PRECISION,
+                       name VARCHAR(255),
+                       country VARCHAR(100),
+                       state VARCHAR(100),
+                       osm_value VARCHAR(255),
+                       CONSTRAINT unique_lat_lng UNIQUE (lat, lng)
+);
+
