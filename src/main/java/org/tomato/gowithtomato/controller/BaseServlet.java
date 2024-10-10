@@ -18,7 +18,7 @@ import org.tomato.gowithtomato.util.ThymeleafUtil;
 public class BaseServlet extends HttpServlet {
     protected TemplateEngine templateEngine;
     private ExceptionHandler exceptionHandler;
-    private ThymeleafUtil thymeleafUtil;
+    protected ThymeleafUtil thymeleafUtil;
     protected Validator validator;
 
     @Override

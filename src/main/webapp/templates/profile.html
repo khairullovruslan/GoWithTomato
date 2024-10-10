@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница пользователя</title>
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+<div class="container">
+    <h1>Профиль пользователя</h1>
+
+    <div class="profile-info">
+        <h2>Личная информация</h2>
+        <p><strong>Логин:</strong> <span th:text="${userData.login}"></span></p>
+        <p><strong>Электронная почта:</strong> <span th:text="${userData.email}"></span></p>
+        <p><strong>Номер телефона:</strong> <span th:text="${userData.phoneNumber}"></span></p>
+    </div>
+
+    <div th:if="${isOwner}" class="profile-edit">
+        <a th:href="@{/edit}" class="edit-button">Редактировать данные</a>
+    </div>
+
+</div>
+</body>
+</html>
