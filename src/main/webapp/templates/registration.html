@@ -36,7 +36,10 @@
                 <li th:each="error : ${errorList}" th:text="${error}"></li>
             </ul>
         </div>
-        <button type="submit">Отправить</button>
+        <div class="button-container" >
+            <button type="submit">Зарегистрироваться</button>
+            <a th:href="@{/login}" class="register-button">Уже есть аккаунт</a>
+        </div>
     </form>
 </div>
 
