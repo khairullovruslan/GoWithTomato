@@ -12,6 +12,5 @@ public class Route {
     private Long id;
     private String departurePoint;
     private String destinationPoint;
-    private String intermediateStops;
     private double distance;
 }
