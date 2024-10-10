@@ -20,5 +20,6 @@ public class LogoutServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         authService.logout(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/login");
     }
 }
