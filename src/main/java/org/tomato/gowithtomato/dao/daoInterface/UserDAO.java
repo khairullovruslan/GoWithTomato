@@ -1,9 +1,9 @@
-package org.tomato.gowithtomato.dao;
+package org.tomato.gowithtomato.dao.daoInterface;
 
 import org.tomato.gowithtomato.entity.User;
 
 import java.util.Optional;
 
-public interface UserDAO extends CrudDao<Long, User>{
+public interface UserDAO extends CrudDao<Long, User> {
     Optional<User> findByLogin(String login);
 }
