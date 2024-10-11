@@ -2,6 +2,7 @@ package org.tomato.gowithtomato.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.tomato.gowithtomato.dto.GeoResponse;
 import org.tomato.gowithtomato.dto.PointDTO;
 import org.tomato.gowithtomato.exception.GraphHopperApiException;
@@ -15,6 +16,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 
+@Slf4j
 public class GraphHopperApiService {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -43,6 +45,7 @@ public class GraphHopperApiService {
             GeoResponse geoResponse = objectMapper.readValue(response.body(), new TypeReference<>() {});
             return geoResponse.getPointDTOList();
         }
+        log.error("response code : {}", response.statusCode());
         throw new GraphHopperApiException();
     }
 
