@@ -1,10 +1,11 @@
 package org.tomato.gowithtomato.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.tomato.gowithtomato.controller.mapper.RouteMapper;
+import org.tomato.gowithtomato.dao.RouteDAOImpl;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.util.AjaxUtil;
 
@@ -22,6 +23,8 @@ public class RouteServlet extends BaseServlet {
         ObjectMapper objectMapper = new ObjectMapper();
         AjaxUtil ajaxUtil =  AjaxUtil.getInstance();
         RouteDTO routeDTO = objectMapper.readValue(req.getInputStream(), RouteDTO.class);
+        RouteDAOImpl routeDAO = RouteDAOImpl.getInstance();
+        routeDAO.save(RouteMapper.getInstance().convertDTOToRoute(routeDTO));
         ajaxUtil.senderRespUrl(req.getContextPath() + "/profile", resp);
     }
 }
