@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.dao;
+package org.tomato.gowithtomato.dao.daoInterface;
 
 import org.tomato.gowithtomato.exception.DaoException;
 import org.tomato.gowithtomato.util.ConnectionManager;
