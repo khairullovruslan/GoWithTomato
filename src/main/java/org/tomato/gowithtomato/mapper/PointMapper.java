@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.controller.mapper;
+package org.tomato.gowithtomato.mapper;
 
 import org.tomato.gowithtomato.dto.PointDTO;
 import org.tomato.gowithtomato.entity.Point;
