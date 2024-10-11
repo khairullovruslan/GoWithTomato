@@ -13,16 +13,29 @@ CREATE TABLE  rating(
     sum_rates INT DEFAULT 0,
     user_id INT REFERENCES users(id) ON DELETE CASCADE
 );
+CREATE TABLE Point (
+                       id SERIAL PRIMARY KEY,
+                       lat DOUBLE PRECISION,
+                       lng DOUBLE PRECISION,
+                       name VARCHAR(255),
+                       country VARCHAR(100),
+                       state VARCHAR(100),
+                       osm_value VARCHAR(255),
+                       CONSTRAINT unique_lat_lng UNIQUE (lat, lng)
+);
 
 CREATE TYPE trip_status AS ENUM ('available', 'completed', 'cancelled');
 
 
 CREATE TABLE route (
     id SERIAL PRIMARY KEY,
-    departure_point VARCHAR(255) NOT NULL,
-    destination_point VARCHAR(255) NOT NULL,
+    start_point_id INT REFERENCES Point(id) ON DELETE RESTRICT,
+    finish_point_id INT REFERENCES Point(id) ON DELETE RESTRICT,
     distance DECIMAL(10, 2)
 );
+
+
+
 CREATE TABLE trip(
                      id SERIAL PRIMARY KEY,
                      user_id INT REFERENCES users(id) ON DELETE CASCADE,
@@ -40,14 +53,18 @@ CREATE TABLE review(
     rating INT CHECK (rating BETWEEN 1 AND 5),
     description text
 );
-CREATE TABLE Point (
-                       id SERIAL PRIMARY KEY,
-                       lat DOUBLE PRECISION,
-                       lng DOUBLE PRECISION,
-                       name VARCHAR(255),
-                       country VARCHAR(100),
-                       state VARCHAR(100),
-                       osm_value VARCHAR(255),
-                       CONSTRAINT unique_lat_lng UNIQUE (lat, lng)
+
+
+--  для связи Many-to-Many между trip и users
+CREATE TABLE trip_participants (
+                                   trip_id INT REFERENCES trip(id) ON DELETE CASCADE,
+                                   user_id INT REFERENCES users(id) ON DELETE CASCADE,
+                                   PRIMARY KEY (trip_id, user_id)
 );
 
+CREATE TABLE route_intermediate_points (
+                                           route_id INT REFERENCES route(id) ON DELETE CASCADE,
+                                           point_id INT REFERENCES Point(id) ON DELETE CASCADE,
+                                           sequence INT NOT NULL,
+                                           PRIMARY KEY (route_id, point_id, sequence)
+);
