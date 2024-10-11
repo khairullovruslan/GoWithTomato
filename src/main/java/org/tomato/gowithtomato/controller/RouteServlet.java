@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.tomato.gowithtomato.controller.mapper.RouteMapper;
+import org.tomato.gowithtomato.mapper.RouteMapper;
 import org.tomato.gowithtomato.dao.RouteDAOImpl;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.util.AjaxUtil;
