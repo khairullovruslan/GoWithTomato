@@ -1,5 +1,6 @@
 package org.tomato.gowithtomato.dao;
 
+import org.tomato.gowithtomato.dao.daoInterface.UserDAO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.DaoException;
 import org.tomato.gowithtomato.exception.UniqueException;
@@ -11,14 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDAOImpl implements UserDAO{
+public class UserDAOImpl implements UserDAO {
     private final static UserDAOImpl INSTANCE = new UserDAOImpl();
     private UserDAOImpl(){}
 
-    private final String SAVE_SQL = "insert into users(login, password, email, phone_number)" +
-            "values (?, ? , ?, ?)";
+    private final static String SAVE_SQL =
+            """
+            insert into users(login, password, email, phone_number)values (?, ? , ?, ?)
+            """;
 
-    private final String FIND_BY_LOGIN = "select * from users where login = ?";
+    private final static String FIND_BY_LOGIN = "select * from users where login = ?";
 
     public static UserDAOImpl getInstance() {
         return INSTANCE;
@@ -51,7 +54,6 @@ public class UserDAOImpl implements UserDAO{
             throw new DaoException();
 
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new UniqueException();
         }
     }
