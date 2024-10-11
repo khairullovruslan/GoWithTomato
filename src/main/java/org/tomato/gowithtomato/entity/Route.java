@@ -2,6 +2,8 @@ package org.tomato.gowithtomato.entity;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -10,7 +12,8 @@ import lombok.*;
 @NoArgsConstructor
 public class Route {
     private Long id;
-    private String departurePoint;
-    private String destinationPoint;
+    private Point departurePoint;
+    private Point destinationPoint;
+    private List<Point> other;
     private double distance;
 }
