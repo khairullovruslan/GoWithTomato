@@ -5,8 +5,10 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import org.modelmapper.ModelMapper;
+import org.thymeleaf.TemplateEngine;
 import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.UserService;
+import org.tomato.gowithtomato.util.ThymeleafUtil;
 
 @WebListener
 public class GoWithTomatoBaseListener implements ServletContextListener {
@@ -19,6 +21,9 @@ public class GoWithTomatoBaseListener implements ServletContextListener {
 
         servletContext.setAttribute("authService", authService);
         servletContext.setAttribute("userService", userService);
+        TemplateEngine templateEngine = ThymeleafUtil.getInstance().buildTemplateEngine(servletContext);
+
+        servletContext.setAttribute("templateEngine", templateEngine);
 
     }
 }
