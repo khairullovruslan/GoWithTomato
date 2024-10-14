@@ -29,6 +29,11 @@ public class PointDAOImpl implements PointDao {
         SELECT * from point WHERE lat = ? AND lng = ?
         """;
 
+    private static final String FIND_BY_ID_SQL =
+            """
+            SELECT * from point WHERE id = ?
+            """;
+
     public static PointDAOImpl getInstance() {
         return INSTANCE;
     }
@@ -61,6 +66,14 @@ public class PointDAOImpl implements PointDao {
         }
     }
 
+    public Optional<Point> findById(Connection connection, Long id) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
+            statement.setLong(1, id);
+            ResultSet result = statement.executeQuery();
+            List<Point> points = convertResultSetToList(result);
+            return points.isEmpty() ? Optional.empty() : Optional.of(points.get(0));
+        }
+    }
     private List<Point> convertResultSetToList(ResultSet result) throws SQLException {
         List<Point> points = new ArrayList<>();
         while (result.next()) {
