@@ -29,6 +29,7 @@ CREATE TYPE trip_status AS ENUM ('available', 'completed', 'cancelled');
 
 CREATE TABLE route (
     id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
     start_point_id INT REFERENCES Point(id) ON DELETE RESTRICT,
     finish_point_id INT REFERENCES Point(id) ON DELETE RESTRICT,
     distance DECIMAL(10, 2)
