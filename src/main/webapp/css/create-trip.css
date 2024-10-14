@@ -1,0 +1,71 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fb;
+    margin: 0;
+    height: 100vh; /* Заполнение высоты окна */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 70%; /* Изменено на 90% ширины экрана */
+    height: 40%; /* Изменено на 90% высоты экрана */
+    margin: 0 auto;
+    background: white;
+    padding: 30px; /* Увеличиваем отступы */
+    border-radius: 10px; /* Углы более закругленные */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: auto; /* Добавлено для прокрутки при переполнении */
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px; /* Увеличиваем отступ между формами */
+}
+
+label {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px; /* Увеличиваем внутренние отступы */
+    font-size: 18px; /* Увеличиваем размер шрифта */
+    flex-grow: 1;
+    width: 100%; /* Полная ширина поля */
+    transition: border-color 0.3s; /* Анимация при фокусе */
+}
+
+.form-control:focus {
+    border-color: #28a745; /* Цвет рамки при фокусе */
+    outline: none; /* Убираем стандартное выделение */
+}
+
+.btn {
+    padding: 10px 20px; /* Увеличиваем отступы кнопок */
+    border: none;
+    border-radius: 5px;
+    font-size: 18px; /* Увеличиваем размер шрифта */
+    cursor: pointer;
+    margin-top: 10px; /* Отступ сверху для кнопки */
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    width: 100%; /* Полная ширина кнопки */
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Цвет кнопки при наведении */
+}
