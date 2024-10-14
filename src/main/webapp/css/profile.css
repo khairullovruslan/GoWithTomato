@@ -1,39 +1,123 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
+/* Стили CSS */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background-color: #f5f5f5;
+    color: #333;
 }
 
 .container {
-    background-color: white;
-    padding: 30px;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    text-align: center;
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
 }
 
-.profile-info{
+.edit-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    display: inline-flex; /* Align icon and text */
+    align-items: center;  /* Align icon and text vertically */
+}
+.edit-button i {
+    margin-right: 5px; /* Add some space between icon and text */
+}
+.edit-button:hover {
+    background-color: #0056b3;
+}
+
+.user-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.info-item {
+    display: flex;
+    align-items: center; /* vertically center align */
+}
+.info-item i {
+    margin-right: 10px;
+    color: #555;
+}
+.info-item span {
+    font-weight: 500;
+}
+
+.routes {
+}
+
+.route-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    padding: 20px;
+}
+.route-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
 }
 
-h2 {
-    font-size: 20px;
+.route-body {
+    display: flex;
+    gap: 20px;  /* Added some gap between the two sections */
+}
+
+.route-locations {
+    display: flex;
+    flex-direction: column; /* Stack locations vertically */
+    align-items: flex-start; /* Align to the left */
+}
+.route-locations i {
+    margin-right: 5px;
+    color: #888;
+}
+
+.route-locations .start-icon {
+    color: green;
+}
+
+.route-locations .end-icon {
+    color: red;
+
+}
+
+.route-locations .fa-arrow-right {
+    margin: 10px 0; /* Space arrow between locations */
+    align-self: center; /* Center arrow horizontally */
+    color: #aaa; /* Style the arrow (e.g., gray) */
+}
+
+
+
+.route-details {
+    flex: 1; /* Allows route details to take remaining space */
+}
+
+
+
+.full-route {
+    white-space: pre-wrap;
     margin-bottom: 10px;
-    color: #333;
+
 }
+
 
