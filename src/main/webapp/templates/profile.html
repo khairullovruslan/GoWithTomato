@@ -3,24 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Страница пользователя</title>
-    <link rel="stylesheet" href="css/profile.css">
+    <title>Профиль пользователя</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="css/profile.css">
 </head>
 <body>
 <div class="container">
-    <h1>Профиль пользователя</h1>
+    <header class="profile-header">
+        <h1>Мой профиль</h1>
+        <a href="/edit" class="edit-button"><i class="fas fa-edit"></i> Редактировать</a>
+    </header>
 
-    <div class="profile-info">
-        <h2>Личная информация</h2>
-        <p><strong>Логин:</strong> <span th:text="${userData.login}"></span></p>
-        <p><strong>Электронная почта:</strong> <span th:text="${userData.email}"></span></p>
-        <p><strong>Номер телефона:</strong> <span th:text="${userData.phoneNumber}"></span></p>
-    </div>
+    <section class="user-info">
+        <div class="info-item">
+            <i class="fas fa-user"></i> <span>Логин:</span> <span th:text="${userData.login}"></span>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-envelope"></i> <span>Email:</span> <span th:text="${userData.email}"></span>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-phone"></i> <span>Телефон:</span> <span th:text="${userData.phoneNumber}"></span>
+        </div>
+    </section>
 
-    <div th:if="${isOwner}" class="profile-edit">
-        <a th:href="@{/edit}" class="edit-button">Редактировать данные</a>
-    </div>
 
+    <section th:if="${isOwner}" class="routes">
+        <h2>Мои маршруты</h2>
+        <div th:each="route, iterStat : ${routeList}" class="route-card">
+            <div class="route-header">
+                <h3>Маршрут №<span th:text="${iterStat.index + 1}"></span></h3>
+            </div>
+            <div class="route-body">
+                <div class="route-locations">
+                    <p><i class="fas fa-map-marker-alt start-icon"></i> <span th:text="${route.start.name}"></span>, <span th:text="${route.start.country}"></span></p>
+                    <i class="fas fa-arrow-right"></i>
+                    <p><i class="fas fa-map-marker-alt end-icon"></i> <span th:text="${route.finish.name}"></span>, <span th:text="${route.finish.country}"></span></p>
+                </div>
+                <div class="route-details">
+                    <p><strong>Полный маршрут:</strong></p>
+                    <p class="full-route">
+                        <span th:text="${route.start.name}"></span>
+                        <span th:each="point : ${route.others}" th:text="' - ' + ${point.name}"></span>
+                        <span th:text="' - ' + ${route.finish.name}"></span>
+                    </p>
+                    <p><span th:text="${route.distance}"></span> км</p>
+                    <a th:href="@{/create-trip(id=${route.id})}" class="btn btn-success">Создать поездку</a>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
 </div>
 </body>
 </html>
+
