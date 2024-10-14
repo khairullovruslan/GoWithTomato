@@ -4,8 +4,8 @@ import org.tomato.gowithtomato.dao.daoInterface.RouteAndPointsDao;
 import org.tomato.gowithtomato.entity.Point;
 import org.tomato.gowithtomato.exception.DaoException;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +15,26 @@ public class RouteAndPointsDaoImpl implements RouteAndPointsDao {
     private RouteAndPointsDaoImpl(){
         pointDAO = PointDAOImpl.getInstance();
     }
+    private final static String FIND_BY_ID_SQL =
+         """
+         SELECT
+              p.id AS id,
+              p.lat as lat,
+              p.lng as lng,
+              p.name as title,
+              p.country as country,
+              p.state as state,
+              p.osm_value as osm_value
+          FROM
+              route_intermediate_points rip
+                  JOIN
+              point p ON rip.point_id = p.id
+          WHERE
+              rip.route_id = ?
+          ORDER BY
+              rip.sequence;
+         """;
+
 
     public static RouteAndPointsDaoImpl getInstance() {
         return INSTANCE;
@@ -55,6 +75,30 @@ public class RouteAndPointsDaoImpl implements RouteAndPointsDao {
                 routeIntermediateStatement.executeBatch();
             }
     }
+    public List<Point> findByRouteId(Connection connection, Long id) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
+            statement.setLong(1, id);
+            ResultSet result = statement.executeQuery();
+            return convertResultSetToList(result);
+        }
+    }
+    private List<Point> convertResultSetToList(ResultSet result) throws SQLException {
+        List<Point> points = new ArrayList<>();
+        while (result.next()) {
+            points.add(Point.builder()
+                    .id(result.getLong("id"))
+                    .lng(result.getDouble("lng"))
+                    .lat(result.getDouble("lat"))
+                    .name(result.getString("title"))
+                    .state(result.getString("state"))
+                    .osmValue(result.getString("osm_value"))
+                    .country(result.getString("country"))
+                    .build());
+        }
+        return points;
+    }
+
+
 
 
 }
