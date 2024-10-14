@@ -12,7 +12,7 @@ import org.tomato.gowithtomato.validator.annotations.ValidPhoneNumber;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO{
-
+    private Long id;
     @ValidLogin
     private String login;
     @ValidPassword
