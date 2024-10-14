@@ -14,6 +14,7 @@ public class LogoutServlet extends BaseServlet {
     private AuthService authService;
     @Override
     public void init() {
+        super.init();
         authService = (AuthService) this.getServletContext().getAttribute("authService");
     }
 
