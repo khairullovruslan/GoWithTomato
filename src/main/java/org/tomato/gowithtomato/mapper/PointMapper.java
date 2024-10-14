@@ -23,4 +23,18 @@ public class PointMapper {
                 .state(pointDTO.getState())
                 .build();
     }
+    public PointDTO convertPointToDTO(Point point){
+        return PointDTO
+                .builder()
+                .name(point.getName())
+                .osmValue(point.getOsmValue())
+                .country(point.getCountry())
+                .state(point.getState())
+                .coordPoint(PointDTO.CoordPoint
+                            .builder()
+                            .lng(point.getLng())
+                            .lat(point.getLat())
+                            .build())
+                .build();
+    }
 }
