@@ -26,7 +26,7 @@ public class LoginServlet extends BaseServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         authService.login(req, resp);
-        resp.sendRedirect(req.getContextPath() + "/home");
+        resp.sendRedirect(req.getContextPath() + "/profile");
 
     }
 }
