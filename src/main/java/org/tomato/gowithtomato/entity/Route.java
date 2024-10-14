@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Route {
     private Long id;
+    private User owner;
     private Point departurePoint;
     private Point destinationPoint;
     private List<Point> other;
