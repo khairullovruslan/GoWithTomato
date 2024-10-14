@@ -1,10 +1,12 @@
 package org.tomato.gowithtomato.dao;
 
+import lombok.SneakyThrows;
 import org.tomato.gowithtomato.dao.daoInterface.UserDAO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.DaoException;
 import org.tomato.gowithtomato.exception.UniqueException;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,14 +25,29 @@ public class UserDAOImpl implements UserDAO {
 
     private final static String FIND_BY_LOGIN = "select * from users where login = ?";
 
+    private final static String FIND_BY_ID_SQL = "select * from users where id = ?";
+
     public static UserDAOImpl getInstance() {
         return INSTANCE;
     }
 
     @Override
+    @SneakyThrows
     public Optional<User> findById(Long id) {
-        return Optional.empty();
+        try (var connection = connectionManager.get()){
+            return findById(connection, id);
+        }
     }
+
+
+    public Optional<User> findById(Connection connection, Long id) throws SQLException {
+        var statement = connection.prepareStatement(FIND_BY_ID_SQL, Statement.RETURN_GENERATED_KEYS);
+        statement.setLong(1, id);
+        var result = statement.executeQuery();
+        List<User> users = convertResultSetToList(result);
+        return Optional.ofNullable(users.size() == 1 ? users.getFirst() : null);
+    }
+
 
     @Override
     public List<User> findAll() {
@@ -75,7 +92,7 @@ public class UserDAOImpl implements UserDAO {
             statement.setString(1, login);
             var result = statement.executeQuery();
             List<User> users = convertResultSetToList(result);
-            return Optional.ofNullable(users.size() == 1 ? users.get(0) : null);
+            return Optional.ofNullable(users.size() == 1 ? users.getFirst() : null);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
