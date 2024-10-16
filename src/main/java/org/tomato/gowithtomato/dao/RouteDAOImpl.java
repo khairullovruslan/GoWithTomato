@@ -1,5 +1,6 @@
 package org.tomato.gowithtomato.dao;
 
+import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PSQLException;
@@ -46,14 +47,12 @@ public class RouteDAOImpl implements RouteDAO {
         return INSTANCE;
     }
 
+    @SneakyThrows
     @Override
     public Optional<Route> findById(Long id) {
-        try (var connection = connectionManager.get()){
-            return findById(connection, id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        @Cleanup var connection = connectionManager.get();
+        return findById(connection, id);
 
-        }
     }
 
     public Optional<Route> findById(Connection connection, Long id) throws SQLException {
