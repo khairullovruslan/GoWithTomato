@@ -1,70 +1,70 @@
 package org.tomato.gowithtomato.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jakarta.servlet.ServletException;
+
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.WebContext;
-import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.dto.TripDTO;
-import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.exception.UserNotFoundException;
-import org.tomato.gowithtomato.mapper.RouteMapper;
-import org.tomato.gowithtomato.service.RouteService;
-import org.tomato.gowithtomato.service.SessionAndCookieService;
 import org.tomato.gowithtomato.service.TripService;
-import org.tomato.gowithtomato.util.AjaxUtil;
 
-import java.io.IOException;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-@WebServlet("/create-trip")
-public class TripServlet  extends BaseServlet{
-    private SessionAndCookieService sessionAndCookieService;
-    private AjaxUtil ajaxUtil;
+@WebServlet("/trips")
+public class TripServlet extends BaseServlet{
     private TripService tripService;
-    private RouteService routeService;
-
     @Override
     public void init() {
         super.init();
-        sessionAndCookieService = SessionAndCookieService.getInstance();
-        ajaxUtil = AjaxUtil.getInstance();
         tripService = TripService.getInstance();
-        routeService = RouteService.getInstance();
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long id = Long.valueOf(req.getParameter("id"));
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp){
         WebContext context = thymeleafUtil.buildWebContext(req, resp, getServletContext());
-        RouteDTO routeDTO = routeService.findById(id).get();
-        // todo добавить проверку
-        context.setVariable("route", routeDTO);
-        processTemplate(context,"create-trip",  req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        TripDTO tripDTO = objectMapper.readValue(req.getInputStream(), TripDTO.class);
-        System.out.println(tripDTO);
-        Long id = Long.valueOf(req.getParameter("id"));
-        UserDTO user;
-        try {
-            user = sessionAndCookieService.findUser(req);
-            tripDTO.setOwner(user);
-            tripDTO.setRoute(routeService.findById(id).get());
-            tripService.saveTrip(tripDTO, id);
-
-            ajaxUtil.senderRespUrl(req.getContextPath() + "/profile", resp);
+        Map<String, String> filter = new HashMap<>();
+        String from = req.getParameter("from");
+        if (from != null){
+            context.setVariable("from", from);
+            filter.put("from",   from.substring(0, 1).toUpperCase() + from.substring(1).toLowerCase());
         }
-        catch (UserNotFoundException e){
-            ajaxUtil.senderRespUrl(req.getContextPath() + "/login", resp);
+        String to = req.getParameter("to");
+        if (to != null){
+            context.setVariable("to", to);
+            filter.put("to",  to.substring(0, 1).toUpperCase() + to.substring(1).toLowerCase());
         }
+        String count = req.getParameter("count");
+        if (count != null){
+            context.setVariable("count", count);
+            filter.put("count", count);
+        }
+        String date = req.getParameter("date");
+        if (date != null){
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.parse(date, formatter);
+            LocalDateTime localDateTime = localDate.atStartOfDay();
+            context.setVariable("date",  localDateTime.format(formatter));
+            filter.put("date", localDateTime.toString());
+        }
+        List<TripDTO> tripList = tripService.findByFilter(filter);
+
+
+
+
+        tripList.forEach(trip -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            String formattedDateTime = trip.getTripDateTime().format(formatter);
+            trip.setTripDateTimeFormatted(formattedDateTime);
+        });
+
+        context.setVariable("tripList", tripList);
+        processTemplate(context, "trip", req, resp);
+
     }
 }
