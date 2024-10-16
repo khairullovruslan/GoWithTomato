@@ -6,17 +6,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.thymeleaf.context.WebContext;
+import org.tomato.gowithtomato.dto.RouteDTO;
+import org.tomato.gowithtomato.dto.UserDTO;
+import org.tomato.gowithtomato.service.RouteService;
 import org.tomato.gowithtomato.service.UserService;
 
-import java.io.IOException;
+import java.util.List;
 
 
 @WebServlet("/profile")
 public class UserProfileServlet extends BaseServlet {
     private UserService userService;
+    private RouteService routeService;
     @Override
     public void init() {
         super.init();
+        routeService = RouteService.getInstance();
         userService = (UserService) this.getServletContext().getAttribute("userService");
     }
 
@@ -27,8 +32,11 @@ public class UserProfileServlet extends BaseServlet {
         WebContext context = thymeleafUtil.buildWebContext(req, resp, getServletContext());
         if (name == null){
             String login = (String) session.getAttribute("user");
-            context.setVariable("userData", userService.findUserByLogin(login));
+            UserDTO user = userService.findUserByLogin(login);
+            context.setVariable("userData", user);
             context.setVariable("isOwner", true);
+            List<RouteDTO> routeDTOList = routeService.findByUser(user);
+            context.setVariable("routeList", routeDTOList);
             processTemplate(context, "profile", req, resp);
         }
         else{
