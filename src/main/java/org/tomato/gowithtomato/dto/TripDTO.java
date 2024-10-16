@@ -30,4 +30,6 @@ public class TripDTO {
     private BigDecimal price;
 
     private TripStatus status;
+
+    private String tripDateTimeFormatted;
 }
