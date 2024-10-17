@@ -7,6 +7,7 @@ import org.tomato.gowithtomato.mapper.TripMapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class TripService {
     private final static TripService INSTANCE = new TripService();
@@ -31,5 +32,10 @@ public class TripService {
     public List<TripDTO> findByFilter(Map<String, String> filter) {
         List<Trip> trips = tripDAO.findAllByFilter(filter);
         return trips.stream().map(tripMapper::convertTripToDTO).toList();
+    }
+    public TripDTO findById(Long id){
+        Optional<Trip> trip = tripDAO.findById(id);
+        if(trip.isPresent()) return tripMapper.convertTripToDTO(trip.get());
+        throw new RuntimeException();
     }
 }
