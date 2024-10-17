@@ -1,0 +1,135 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-container input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    flex: 1;
+}
+
+.filter-container button {
+    padding: 10px 20px;
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-container button:hover {
+    background-color: #1976D2;
+}
+
+.trip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.trip-card {
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.trip-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.trip-card .details {
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.trip-card h2 {
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.trip-card .description {
+    font-size: 14px;
+    color: #666;
+}
+
+.trip-card .price {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+.trip-card .status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.trip-card .status.available {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.trip-card .status.completed {
+    background-color: #2196F3;
+    color: #fff;
+}
+
+.trip-card .status.cancelled {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.trip-card .route {
+    margin-top: 10px;
+}
+
+.trip-card .route p {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+}
+
+
+.no-trips {
+    text-align: center;
+    color: #777;
+}
