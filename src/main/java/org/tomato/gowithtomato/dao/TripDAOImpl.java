@@ -30,6 +30,8 @@ public class TripDAOImpl implements TripDAO {
             SELECT * from trip
             """;
 
+    private final static String FIND_BY_ID_SQL = " SELECT * from trip where id = ?";
+
     public static TripDAOImpl getInstance() {
         return INSTANCE;
     }
@@ -57,9 +59,18 @@ public class TripDAOImpl implements TripDAO {
         }
     }
 
+    @SneakyThrows
     @Override
     public Optional<Trip> findById(Long id) {
-        return Optional.empty();
+        @Cleanup var connection = connectionManager.get();
+        return findById(connection, id);
+    }
+
+    public Optional<Trip> findById(Connection connection, Long id) throws SQLException {
+       var statement = connection.prepareStatement(FIND_BY_ID_SQL);
+       statement.setLong(1, id);
+       List<Trip> trips = convertResultSetToList(connection, statement.executeQuery());
+       return trips.size() == 1 ? Optional.ofNullable(trips.getFirst()) : Optional.empty();
     }
 
     @SneakyThrows
