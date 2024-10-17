@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trips List</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" type="text/css" href="css/trips.css">
+</head>
+<body>
+<div class="container">
+    <h1>Available Trips</h1>
+
+    <div id="filter" class="filter-container">
+        <input th:value="${from != null ? from : ''}" id="from" type="text" placeholder="Откуда" />
+        <input th:value="${to != null ? to : ''}" id="to" type="text" placeholder="Куда" />
+        <input  th:value="${date != null ? date : ''}" id="date" type="date" placeholder="Дата поездки" />
+        <input th:value="${count != null ? count : ''}" id="count" type="number" placeholder="Количество пассажиров" min="1" max="30" />
+        <button id="search-btn">Поиск</button>
+    </div>
+
+    <div class="trip-list">
+        <div th:if="${tripList != null and !tripList.isEmpty()}" th:each="trip : ${tripList}" class="trip-card"  th:class="'trip-card'">
+            <div class="details">
+                <h2 th:text="'From: ' + ${trip.route.start.name} + ' To: ' + ${trip.route.finish.name}"></h2>
+                <div class="description">
+                    <p th:text="${trip.getTripDateTimeFormatted()}"></p>
+                    <p th:text="'Available Seats: ' + ${trip.availableSeats}"></p>
+                </div>
+                <div class="route">
+                    <p th:text="'Route: Start: ' + ${trip.route.start.name} + ', Finish: ' + ${trip.route.finish.name}"></p>
+                </div>
+            </div>
+            <div class="price" th:text="${trip.price} + ' ₽'"></div>
+            <div class="status" th:class="${trip.status}"></div>
+            <input id="id" th:value="${trip.id}" hidden="hidden">
+        </div>
+
+        <p th:if="${tripList == null or tripList.isEmpty()}" class="no-trips">No trips found.</p>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="js/trips.js"></script>
+</body>
+</html>
