@@ -3,208 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trips List</title>
+    <title>Trip Details</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
+    <link rel="stylesheet" type="text/css" th:href="@{/css/trip.css}">
 
-        .container {
-            max-width: 960px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .filter-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .filter-container input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
-            flex: 1; /* Занимает всю доступную ширину */
-        }
-
-        .filter-container button {
-            padding: 10px 20px;
-            background-color: #2196F3;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .filter-container button:hover {
-            background-color: #1976D2;
-        }
-
-        .trip-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .trip-card {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .trip-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .trip-card .details {
-            flex-grow: 1;
-            margin-right: 20px;
-        }
-
-        .trip-card h2 {
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 16px;
-        }
-
-        .trip-card .description {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .trip-card .price {
-            font-weight: bold;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .trip-card .status {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            text-transform: uppercase;
-            display: inline-block;
-        }
-
-        .trip-card .status.available {
-            background-color: #4CAF50;
-            color: #fff;
-        }
-
-        .trip-card .status.completed {
-            background-color: #2196F3;
-            color: #fff;
-        }
-
-        .trip-card .status.cancelled {
-            background-color: #f44336;
-            color: #fff;
-        }
-
-        .trip-card .route {
-            margin-top: 10px;
-        }
-
-        .trip-card .route p {
-            margin: 0;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .no-trips {
-            text-align: center;
-            color: #777;
-        }
-    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Available Trips</h1>
 
-    <div id="filter" class="filter-container">
-        <input th:value="${from != null ? from : ''}" id="from" type="text" placeholder="Откуда" />
-        <input th:value="${to != null ? to : ''}" id="to" type="text" placeholder="Куда" />
-        <input  th:value="${date != null ? date : ''}" id="date" type="date" placeholder="Дата поездки" />
-        <input th:value="${count != null ? count : ''}" id="count" type="number" placeholder="Количество пассажиров" min="1" max="30" />
-        <button id="search-btn">Поиск</button>
+<div class="container">
+    <div class="header">
+        <h1 th:text="${trip.tripDateTimeFormatted}"></h1>
+        <span class="date" th:text="${tripInfo}"></span>
     </div>
 
-    <div class="trip-list">
-        <div th:if="${tripList != null and !tripList.isEmpty()}" th:each="trip : ${tripList}" class="trip-card" th:href="@{'/trip/' + ${trip.id}}" th:class="'trip-card'">
-            <div class="details">
-                <h2 th:text="'From: ' + ${trip.route.start.name} + ' To: ' + ${trip.route.finish.name}"></h2>
-                <div class="description">
-                    <p th:text="${trip.getTripDateTimeFormatted()}"></p>
-                    <p th:text="'Available Seats: ' + ${trip.availableSeats}"></p>
-                </div>
-                <div class="route">
-                    <p th:text="'Route: Start: ' + ${trip.route.start.name} + ', Finish: ' + ${trip.route.finish.name}"></p>
+    <div class="trip-info">
+        <h2 th:text="'Поездка из ' + ${trip.route.start.name} + ' в ' + ${trip.route.finish.name}"></h2>
+        <div class="timeline">
+            <ul>
+                <li>
+                    <span th:text="${trip.route.start.name}"></span>
+                </li>
+                <li th:each="waypoint : ${trip.route.others}" class="event">
+                    <span th:text="${waypoint.name}"></span>
+                </li>
+                <li>
+                    <span th:text="${trip.route.finish.name}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="creator-info">
+        <h2>Организатор:</h2>
+        <div class="creator-details">
+            <span th:text="'Никнейм: ' + ${trip.owner.getLogin()}"></span><br>
+            <span th:text="'Почта: ' + ${trip.owner.email}"></span><br>
+            <span th:text="'Телефон: ' + ${trip.owner.phoneNumber}"></span>
+        </div>
+    </div>
+
+    <div class="passenger-info">
+        <h2>Пассажиры</h2>
+        <div class="trip-details">
+            <div th:if="${not #lists.isEmpty(members)}">
+                <div th:each="member : ${members}">
+                    <span th:text="${member.login} + ' (' + ${member.email}+ ')'"></span>
+                    <br>
                 </div>
             </div>
-            <div class="price" th:text="${trip.price} + ' ₽'"></div>
-            <div class="status" th:class="${trip.status}"></div>
+            <div th:if="${#lists.isEmpty(members)}">
+                <span>Видимо, еще никого нет. Будьте первыми!</span>
+            </div>
         </div>
+    </div>
 
-        <p th:if="${tripList == null or tripList.isEmpty()}" class="no-trips">No trips found.</p>
+    <div class="price-section">
+        <span th:text="${trip.price} + ' ₽'" class="price"></span>
+        <a href="#" class="button">Забронировать</a>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#search-btn').on('click', function (event) {
-            event.preventDefault();
 
-            const contextPath = "/gowithtomato";
-            const from = $('#from').val();
-            const to = $('#to').val();
-            const date = $('#date').val();
-            const count = $('#count').val();
-
-            let path = contextPath + '/trips';
-            const params = [];
-            if (from !== '') {
-                params.push("from=" + encodeURIComponent(from));
-            }
-            if (to !== '') {
-                params.push("to=" + encodeURIComponent(to));
-            }
-            if (date !== '') {
-                params.push("date=" + encodeURIComponent(date));
-            }
-            if (count !== '' && count > 0) {
-                params.push("count=" + encodeURIComponent(count));
-            }
-            if (params.length > 0) {
-                path += "?" + params.join('&');
-            }
-
-            window.location.href = path;
-        });
-    });
-</script>
 </body>
 </html>
