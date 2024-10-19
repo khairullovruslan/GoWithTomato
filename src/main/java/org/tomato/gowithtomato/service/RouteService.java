@@ -4,6 +4,7 @@ import org.tomato.gowithtomato.dao.RouteDAOImpl;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.Route;
+import org.tomato.gowithtomato.exception.RoutNotFoundException;
 import org.tomato.gowithtomato.mapper.RouteMapper;
 import org.tomato.gowithtomato.mapper.UserMapper;
 
@@ -32,8 +33,11 @@ public class RouteService {
         return routes.stream().map(routeMapper::convertRouteToDTO).toList();
     }
 
-    public Optional<RouteDTO> findById(Long id){
+    public RouteDTO findById(Long id){
         Optional<Route> route =  routeDAO.findById(id);
-        return route.map(routeMapper::convertRouteToDTO).or(Optional::empty);
+        if (route.isPresent()){
+            return routeMapper.convertRouteToDTO(route.get());
+        }
+        throw new RoutNotFoundException();
     }
 }
