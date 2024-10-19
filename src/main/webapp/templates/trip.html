@@ -56,10 +56,12 @@
         </div>
     </div>
 
-    <div class="price-section">
+    <form th:action="@{/trip/{id}(id=${trip.id})}" method="post" class="price-section">
         <span th:text="${trip.price} + ' ₽'" class="price"></span>
-        <a href="#" class="button">Забронировать</a>
-    </div>
+        <button class="button" type="submit">Забронировать</button>
+    </form>
+
+
 </div>
 
 </body>
