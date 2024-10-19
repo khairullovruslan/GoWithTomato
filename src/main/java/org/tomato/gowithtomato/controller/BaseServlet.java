@@ -24,10 +24,10 @@ public class BaseServlet extends HttpServlet {
     @Override
     public void init() {
         try (var validatorFactory = Validation.buildDefaultValidatorFactory()) {
-            thymeleafUtil = ThymeleafUtil.getInstance();
+            thymeleafUtil = (ThymeleafUtil) this.getServletContext().getAttribute("thymeleafUtil");
             validator = validatorFactory.getValidator();
             templateEngine = (TemplateEngine) this.getServletContext().getAttribute("templateEngine");
-            exceptionHandler = new ExceptionHandler(templateEngine, this.getServletContext());
+            exceptionHandler = (ExceptionHandler) this.getServletContext().getAttribute("exceptionHandler");
         } catch (Exception e) {
             exceptionHandler.handle(new ServletInitializationException());
         }
@@ -48,15 +48,14 @@ public class BaseServlet extends HttpServlet {
     }
 
     @Override
+    @SneakyThrows
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
         log.info("Обработка {} запроса для {}", req.getMethod(), req.getServletPath());
         try {
-            req.setCharacterEncoding("UTF-8");
-            resp.setCharacterEncoding("UTF-8");
             super.service(req, resp);
             log.info("Успешно обработан {} запрос на {}", req.getMethod(), req.getServletPath());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Ошибка при обработке {} запроса на {}: {}", req.getMethod(), req.getServletPath(), e.getMessage(), e);
             exceptionHandler.handle(e, req, resp);
         }
     }
