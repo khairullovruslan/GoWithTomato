@@ -19,12 +19,15 @@ public class RouteServlet extends BaseServlet {
     private  AjaxUtil ajaxUtil;
     private RouteService routeService;
     private SessionAndCookieService sessionAndCookieService;
+    private ObjectMapper objectMapper;
+
     @Override
     public void init() {
         super.init();
-        routeService = RouteService.getInstance();
-        ajaxUtil =  AjaxUtil.getInstance();
-        sessionAndCookieService = SessionAndCookieService.getInstance();
+        routeService =  (RouteService) this.getServletContext().getAttribute("routeService");
+        ajaxUtil =  (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
+        sessionAndCookieService = (SessionAndCookieService) this.getServletContext().getAttribute("sessionAndCookieService");
+        objectMapper = (ObjectMapper) this.getServletContext().getAttribute("objectMapper");
     }
 
     @Override
@@ -34,7 +37,6 @@ public class RouteServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
         RouteDTO routeDTO = objectMapper.readValue(req.getInputStream(), RouteDTO.class);
         UserDTO user;
         try {
