@@ -29,6 +29,11 @@ public class TripDAOImpl implements TripDAO {
             """
             SELECT * from trip
             """;
+    private final static String ADD_NEW_MEMBER_SQL = """
+            UPDATE trip
+            SET available_seats = available_seats - 1
+            WHERE id = ? AND available_seats > 0;
+            """;
 
     private final static String FIND_BY_ID_SQL = " SELECT * from trip where id = ?";
 
@@ -161,5 +166,14 @@ public class TripDAOImpl implements TripDAO {
         }
         query.append(String.join(" and ", s));
         return query.toString();
+    }
+
+    @SneakyThrows
+    public boolean addNewMember(Connection connection, Long tripId) {
+        var statement = connection.prepareStatement(ADD_NEW_MEMBER_SQL);
+        statement.setLong(1, tripId);
+        int updated  = statement.executeUpdate();
+        return updated > 0;
+
     }
 }
