@@ -23,4 +23,7 @@ public class TripParticipantsService {
         List<User> users = tripParticipantsDAO.findUsersByTripId(id);
         return users.stream().map(userMapper::convertUserToDTO).toList();
     }
+    public void save(Long tripId, Long userId){
+        tripParticipantsDAO.save(tripId, userId);
+    }
 }
