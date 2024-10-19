@@ -16,12 +16,19 @@ import java.util.Optional;
 public class TripParticipantsDAOImpl implements TripParticipantsDAO {
     private final static TripParticipantsDAOImpl INSTANCE = new TripParticipantsDAOImpl();
     private final UserDAOImpl userDAO;
+    private final TripDAOImpl tripDAO;
     private TripParticipantsDAOImpl(){
         userDAO = UserDAOImpl.getInstance();
+        tripDAO = TripDAOImpl.getInstance();
     }
+
+
     private final static String FIND_USERS_BY_TRIP_ID_SQL = """
             select * from trip_participants where trip_id = ?
             """;
+    private final static String SAVE_SQL = """
+insert into trip_participants(trip_id, user_id) values (?, ?)
+""";
 
     public static TripParticipantsDAOImpl getInstance() {
         return INSTANCE;
@@ -71,5 +78,26 @@ public class TripParticipantsDAOImpl implements TripParticipantsDAO {
     @Override
     public void delete(Object id) {
 
+    }
+
+    @SneakyThrows
+    public void save(Long tripId, Long userId)  {
+        @Cleanup var connection = connectionManager.get();
+        connection.setAutoCommit(false);
+        try {
+            save(connection, tripId, userId);
+        }
+        catch (Exception e){
+            connection.rollback();
+        }
+
+    }
+    public void save(Connection connection, Long tripId, Long userId) throws SQLException {
+        boolean updated = tripDAO.addNewMember(connection, tripId);
+        if (!updated) throw new RuntimeException();
+        var statement = connection.prepareStatement(SAVE_SQL);
+        statement.setLong(1, tripId);
+        statement.setLong(2, userId);
+        statement.executeUpdate();
     }
 }
