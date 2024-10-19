@@ -7,64 +7,39 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.WebContext;
 import org.tomato.gowithtomato.dto.TripDTO;
 import org.tomato.gowithtomato.service.TripService;
+import org.tomato.gowithtomato.util.DateFormatter;
+import org.tomato.gowithtomato.util.FilterGenerator;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet("/trips")
 public class TripsServlet extends BaseServlet{
     private TripService tripService;
+    private FilterGenerator filterGenerator;
+    private DateFormatter dateFormatter;
     @Override
     public void init() {
         super.init();
-        tripService = TripService.getInstance();
+        tripService = (TripService) this.getServletContext().getAttribute("tripService");
+        filterGenerator = (FilterGenerator) this.getServletContext().getAttribute("filterGenerator");
+        dateFormatter = (DateFormatter) this.getServletContext().getAttribute("dateFormatter");
+
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp){
         WebContext context = thymeleafUtil.buildWebContext(req, resp, getServletContext());
-        Map<String, String> filter = new HashMap<>();
-        String from = req.getParameter("from");
-        if (from != null){
-            context.setVariable("from", from);
-            filter.put("from",   from.substring(0, 1).toUpperCase() + from.substring(1).toLowerCase());
-        }
-        String to = req.getParameter("to");
-        if (to != null){
-            context.setVariable("to", to);
-            filter.put("to",  to.substring(0, 1).toUpperCase() + to.substring(1).toLowerCase());
-        }
-        String count = req.getParameter("count");
-        if (count != null){
-            context.setVariable("count", count);
-            filter.put("count", count);
-        }
-        String date = req.getParameter("date");
-        if (date != null){
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate localDate = LocalDate.parse(date, formatter);
-            LocalDateTime localDateTime = localDate.atStartOfDay();
-            context.setVariable("date",  localDateTime.format(formatter));
-            filter.put("date", localDateTime.toString());
-        }
-        List<TripDTO> tripList = tripService.findByFilter(filter);
-
-
-
-
+        List<TripDTO> tripList = tripService.findByFilter(filterGenerator.generateFilter(context, req));
         tripList.forEach(trip -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-            String formattedDateTime = trip.getTripDateTime().format(formatter);
+            String formattedDateTime = dateFormatter.format(trip.getTripDateTime());
             trip.setTripDateTimeFormatted(formattedDateTime);
         });
 
         context.setVariable("tripList", tripList);
         processTemplate(context, "trips", req, resp);
-
     }
+
+
+
 }
