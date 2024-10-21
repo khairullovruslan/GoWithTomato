@@ -6,6 +6,8 @@ import org.tomato.gowithtomato.dao.daoInterface.TripParticipantsDAO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.DaoException;
 
+import static org.tomato.gowithtomato.dao.query.TripParticipantsQueries.*;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,12 +25,6 @@ public class TripParticipantsDAOImpl implements TripParticipantsDAO {
     }
 
 
-    private final static String FIND_USERS_BY_TRIP_ID_SQL = """
-            select * from trip_participants where trip_id = ?
-            """;
-    private final static String SAVE_SQL = """
-insert into trip_participants(trip_id, user_id) values (?, ?)
-""";
 
     public static TripParticipantsDAOImpl getInstance() {
         return INSTANCE;
@@ -36,14 +32,39 @@ insert into trip_participants(trip_id, user_id) values (?, ?)
 
     @SneakyThrows
     public List<User> findUsersByTripId(Long id) {
-        @Cleanup var connection = connectionManager.get();
-        return findUsersByTripId(connection, id);
+        try (Connection connection = connectionManager.get()){
+             return findUsersByTripId(connection, id);
+        }
     }
     public List<User> findUsersByTripId(Connection connection, Long id) throws SQLException {
-        var statement = connection.prepareStatement(FIND_USERS_BY_TRIP_ID_SQL);
+        @Cleanup var statement = connection.prepareStatement(FIND_USERS_BY_TRIP_ID_SQL);
         statement.setLong(1, id);
         return convertResultSetToUserList(connection, statement.executeQuery());
     }
+    @SneakyThrows
+    public void save(Long tripId, Long userId)  {
+        @Cleanup var connection = connectionManager.get();
+        connection.setAutoCommit(false);
+        try {
+            save(connection, tripId, userId);
+        }
+        catch (Exception e){
+            connection.rollback();
+            throw new DaoException("Ошибка при сохранении участника в trip: " + e.getMessage(), e);
+        }
+
+    }
+    public void save(Connection connection, Long tripId, Long userId) throws SQLException {
+        boolean updated = tripDAO.addNewMember(connection, tripId);
+        if (!updated) throw new DaoException("Невозможно добавить нового участника: недостаточно мест.");
+        var statement = connection.prepareStatement(SAVE_SQL);
+        statement.setLong(1, tripId);
+        statement.setLong(2, userId);
+        statement.executeUpdate();
+    }
+
+
+
     private List<User> convertResultSetToUserList(Connection connection, ResultSet result) throws SQLException {
         List<User> users = new ArrayList<>();
         while (result.next()){
@@ -55,49 +76,5 @@ insert into trip_participants(trip_id, user_id) values (?, ?)
 
     }
 
-    @Override
-    public Optional findById(Object id) {
-        return Optional.empty();
-    }
 
-    @Override
-    public List findAll() {
-        return List.of();
-    }
-
-    @Override
-    public Object save(Object entity) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public Object update(Object entity) {
-        return null;
-    }
-
-    @Override
-    public void delete(Object id) {
-
-    }
-
-    @SneakyThrows
-    public void save(Long tripId, Long userId)  {
-        @Cleanup var connection = connectionManager.get();
-        connection.setAutoCommit(false);
-        try {
-            save(connection, tripId, userId);
-        }
-        catch (Exception e){
-            connection.rollback();
-        }
-
-    }
-    public void save(Connection connection, Long tripId, Long userId) throws SQLException {
-        boolean updated = tripDAO.addNewMember(connection, tripId);
-        if (!updated) throw new RuntimeException();
-        var statement = connection.prepareStatement(SAVE_SQL);
-        statement.setLong(1, tripId);
-        statement.setLong(2, userId);
-        statement.executeUpdate();
-    }
 }

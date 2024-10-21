@@ -1,15 +1,14 @@
 package org.tomato.gowithtomato.dao;
 
+import lombok.Cleanup;
 import lombok.SneakyThrows;
 import org.tomato.gowithtomato.dao.daoInterface.UserDAO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.DaoException;
-import org.tomato.gowithtomato.exception.UniqueException;
+import org.tomato.gowithtomato.exception.UniqueSqlException;
+import static org.tomato.gowithtomato.dao.query.UserQueries.*;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,14 +17,6 @@ public class UserDAOImpl implements UserDAO {
     private final static UserDAOImpl INSTANCE = new UserDAOImpl();
     private UserDAOImpl(){}
 
-    private final static String SAVE_SQL =
-            """
-            insert into users(login, password, email, phone_number)values (?, ? , ?, ?)
-            """;
-
-    private final static String FIND_BY_LOGIN = "select * from users where login = ?";
-
-    private final static String FIND_BY_ID_SQL = "select * from users where id = ?";
 
     public static UserDAOImpl getInstance() {
         return INSTANCE;
@@ -37,22 +28,20 @@ public class UserDAOImpl implements UserDAO {
         try (var connection = connectionManager.get()){
             return findById(connection, id);
         }
+        catch (SQLException e) {
+            throw new DaoException("Ошибка при поиске пользователя с id: " + id, e);
+        }
     }
 
 
     public Optional<User> findById(Connection connection, Long id) throws SQLException {
-        var statement = connection.prepareStatement(FIND_BY_ID_SQL, Statement.RETURN_GENERATED_KEYS);
+        @Cleanup var statement = connection.prepareStatement(FIND_BY_ID_SQL, Statement.RETURN_GENERATED_KEYS);
         statement.setLong(1, id);
         var result = statement.executeQuery();
         List<User> users = convertResultSetToList(result);
         return Optional.ofNullable(users.size() == 1 ? users.getFirst() : null);
     }
 
-
-    @Override
-    public List<User> findAll() {
-        return List.of();
-    }
 
     @Override
     public User save(User user) throws DaoException{
@@ -68,10 +57,10 @@ public class UserDAOImpl implements UserDAO {
                 user.setId(keys.getLong("id"));
                 return user;
             }
-            throw new DaoException();
+            throw new DaoException("Ошибка при сохранении пользователя");
 
         } catch (SQLException e) {
-            throw new UniqueException();
+            throw new UniqueSqlException();
         }
     }
 
@@ -102,15 +91,18 @@ public class UserDAOImpl implements UserDAO {
     private List<User> convertResultSetToList(ResultSet result) throws SQLException {
         ArrayList<User> currencies = new ArrayList<>();
         while (result.next()) {
-            currencies.add(User
-                    .builder()
-                    .id(result.getLong("id"))
-                    .login(result.getString("login"))
-                    .password(result.getString("password"))
-                    .email(result.getString("email"))
-                    .phoneNumber(result.getString("phone_number"))
-                    .build());
+            currencies.add(createUserFromResultSet(result));
         }
         return currencies;
+    }
+    private User createUserFromResultSet(ResultSet result) throws SQLException {
+        return User
+                .builder()
+                .id(result.getLong("id"))
+                .login(result.getString("login"))
+                .password(result.getString("password"))
+                .email(result.getString("email"))
+                .phoneNumber(result.getString("phone_number"))
+                .build();
     }
 }
