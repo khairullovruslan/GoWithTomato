@@ -4,7 +4,7 @@ import lombok.Cleanup;
 import lombok.SneakyThrows;
 import org.tomato.gowithtomato.dao.daoInterface.TripParticipantsDAO;
 import org.tomato.gowithtomato.entity.User;
-import org.tomato.gowithtomato.exception.DaoException;
+import org.tomato.gowithtomato.exception.db.DaoException;
 
 import static org.tomato.gowithtomato.dao.query.TripParticipantsQueries.*;
 

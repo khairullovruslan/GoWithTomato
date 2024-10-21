@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.exception;
+package org.tomato.gowithtomato.exception.auth;
 
 import jakarta.validation.ConstraintViolation;
 import lombok.Getter;

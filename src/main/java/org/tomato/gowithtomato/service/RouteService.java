@@ -4,7 +4,7 @@ import org.tomato.gowithtomato.dao.RouteDAOImpl;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.Route;
-import org.tomato.gowithtomato.exception.RoutNotFoundException;
+import org.tomato.gowithtomato.exception.db.RoutNotFoundException;
 import org.tomato.gowithtomato.mapper.RouteMapper;
 import org.tomato.gowithtomato.mapper.UserMapper;
 

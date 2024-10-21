@@ -1,6 +1,6 @@
 package org.tomato.gowithtomato.dao.daoInterface.base;
 
-import org.tomato.gowithtomato.exception.DaoException;
+import org.tomato.gowithtomato.exception.db.DaoException;
 
 import java.util.Optional;
 

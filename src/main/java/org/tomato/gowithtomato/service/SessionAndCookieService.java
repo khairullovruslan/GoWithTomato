@@ -5,8 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.entity.User;
-import org.tomato.gowithtomato.exception.UserNotFoundException;
+import org.tomato.gowithtomato.exception.db.UserNotFoundException;
 
 
 public class SessionAndCookieService {

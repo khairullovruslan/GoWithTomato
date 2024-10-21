@@ -2,7 +2,7 @@ package org.tomato.gowithtomato.dao.daoInterface;
 
 import org.tomato.gowithtomato.dao.daoInterface.base.BaseDAO;
 import org.tomato.gowithtomato.entity.Point;
-import org.tomato.gowithtomato.exception.DaoException;
+import org.tomato.gowithtomato.exception.db.DaoException;
 
 import java.sql.Connection;
 import java.sql.SQLException;

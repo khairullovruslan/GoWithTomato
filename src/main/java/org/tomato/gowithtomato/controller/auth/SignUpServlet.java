@@ -8,7 +8,7 @@ import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.tomato.gowithtomato.controller.BaseServlet;
 import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.exception.RegistrationException;
+import org.tomato.gowithtomato.exception.auth.RegistrationException;
 import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.util.UserUtil;
 

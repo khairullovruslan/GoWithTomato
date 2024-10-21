@@ -2,8 +2,8 @@ package org.tomato.gowithtomato.dao;
 
 import org.tomato.gowithtomato.dao.daoInterface.PointDao;
 import org.tomato.gowithtomato.entity.Point;
-import org.tomato.gowithtomato.exception.DaoException;
-import org.tomato.gowithtomato.exception.UniqueSqlException;
+import org.tomato.gowithtomato.exception.db.DaoException;
+import org.tomato.gowithtomato.exception.db.UniqueSqlException;
 
 import java.sql.*;
 import java.util.ArrayList;

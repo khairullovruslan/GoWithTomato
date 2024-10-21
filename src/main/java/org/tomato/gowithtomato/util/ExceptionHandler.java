@@ -11,6 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.tomato.gowithtomato.exception.*;
+import org.tomato.gowithtomato.exception.auth.RegistrationException;
+import org.tomato.gowithtomato.exception.auth.WrongPasswordException;
+import org.tomato.gowithtomato.exception.db.RoutNotFoundException;
+import org.tomato.gowithtomato.exception.db.UserNotFoundException;
 
 import java.io.IOException;
 import java.util.ArrayList;

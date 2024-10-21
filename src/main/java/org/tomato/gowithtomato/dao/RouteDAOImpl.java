@@ -6,8 +6,8 @@ import org.tomato.gowithtomato.dao.daoInterface.RouteDAO;
 import org.tomato.gowithtomato.entity.Point;
 import org.tomato.gowithtomato.entity.Route;
 import org.tomato.gowithtomato.entity.User;
-import org.tomato.gowithtomato.exception.DaoException;
-import org.tomato.gowithtomato.exception.UniqueSqlException;
+import org.tomato.gowithtomato.exception.db.DaoException;
+import org.tomato.gowithtomato.exception.db.UniqueSqlException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
