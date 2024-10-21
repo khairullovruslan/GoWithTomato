@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.exception;
+package org.tomato.gowithtomato.exception.db;
 
 public class DaoException extends RuntimeException{
     public DaoException() {

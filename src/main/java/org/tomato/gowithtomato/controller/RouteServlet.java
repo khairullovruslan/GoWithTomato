@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.exception.UserNotFoundException;
+import org.tomato.gowithtomato.exception.db.UserNotFoundException;
 import org.tomato.gowithtomato.mapper.RouteMapper;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.service.RouteService;

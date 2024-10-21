@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.thymeleaf.context.WebContext;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.dto.TripDTO;
-import org.tomato.gowithtomato.exception.UserNotFoundException;
+import org.tomato.gowithtomato.exception.db.UserNotFoundException;
 import org.tomato.gowithtomato.service.RouteService;
 import org.tomato.gowithtomato.service.SessionAndCookieService;
 import org.tomato.gowithtomato.service.TripService;

@@ -5,7 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.tomato.gowithtomato.dao.UserDAOImpl;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.User;
-import org.tomato.gowithtomato.exception.UserNotFoundException;
+import org.tomato.gowithtomato.exception.db.UserNotFoundException;
 
 import java.util.Optional;
 

@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.tomato.gowithtomato.dao.UserDAOImpl;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.User;
-import org.tomato.gowithtomato.exception.WrongPasswordException;
+import org.tomato.gowithtomato.exception.auth.WrongPasswordException;
 import org.tomato.gowithtomato.util.PasswordUtil;
 
 @Slf4j

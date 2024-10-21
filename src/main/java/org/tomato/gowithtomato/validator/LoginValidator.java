@@ -3,7 +3,7 @@ package org.tomato.gowithtomato.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.tomato.gowithtomato.exception.UserNotFoundException;
+import org.tomato.gowithtomato.exception.db.UserNotFoundException;
 import org.tomato.gowithtomato.service.UserService;
 import org.tomato.gowithtomato.validator.annotations.ValidLogin;
 

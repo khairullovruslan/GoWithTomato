@@ -4,8 +4,8 @@ import lombok.Cleanup;
 import lombok.SneakyThrows;
 import org.tomato.gowithtomato.dao.daoInterface.UserDAO;
 import org.tomato.gowithtomato.entity.User;
-import org.tomato.gowithtomato.exception.DaoException;
-import org.tomato.gowithtomato.exception.UniqueSqlException;
+import org.tomato.gowithtomato.exception.db.DaoException;
+import org.tomato.gowithtomato.exception.db.UniqueSqlException;
 import static org.tomato.gowithtomato.dao.query.UserQueries.*;
 
 import java.sql.*;
