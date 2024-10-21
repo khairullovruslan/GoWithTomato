@@ -1,5 +1,6 @@
 package org.tomato.gowithtomato.dao.daoInterface;
 
+import org.tomato.gowithtomato.dao.daoInterface.base.CrudDao;
 import org.tomato.gowithtomato.entity.Route;
 import org.tomato.gowithtomato.entity.User;
 

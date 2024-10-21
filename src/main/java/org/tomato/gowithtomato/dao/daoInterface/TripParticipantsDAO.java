@@ -1,4 +1,6 @@
 package org.tomato.gowithtomato.dao.daoInterface;
 
-public interface TripParticipantsDAO extends CrudDao {
+import org.tomato.gowithtomato.dao.daoInterface.base.BaseDAO;
+
+public interface TripParticipantsDAO extends BaseDAO {
 }
