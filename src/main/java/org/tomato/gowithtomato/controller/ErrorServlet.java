@@ -9,7 +9,7 @@ import org.thymeleaf.context.WebContext;
 import java.io.IOException;
 
 @WebServlet("/error")
-public class ExceptionServlet extends BaseServlet {
+public class ErrorServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext context = thymeleafUtil.buildWebContext(req, resp, getServletContext());
