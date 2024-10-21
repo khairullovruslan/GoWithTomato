@@ -22,7 +22,8 @@ public class FlywayMigrationListener implements ServletContextListener {
             String user = propertiesUtil.get(USERNAME_KEY);
             String password = propertiesUtil.get(PASSWORD_KEY);
 
-            Flyway flyway = Flyway.configure()
+            Flyway flyway = Flyway
+                    .configure()
                     .dataSource(url, user, password)
                     .load();
             flyway.migrate();
