@@ -1,29 +1,23 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
-    margin: 0;
     background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
 }
-
-.container {
-    max-width: 960px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-
-h1 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 30px;
+header {
+    margin-bottom: 20px;
 }
 
 .filter-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 .filter-container input {
@@ -48,6 +42,26 @@ h1 {
     background-color: #1976D2;
 }
 
+
+.container {
+    flex: 1;
+    width: 80%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: #fff;
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+    border-radius: 10px;
+    margin: 20px auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+
+
 .trip-list {
     display: flex;
     flex-direction: column;
@@ -59,13 +73,13 @@ h1 {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-decoration: none;
     color: inherit;
     transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%; /* ширина карточки 100% */
 }
 
 .trip-card:hover {
@@ -74,6 +88,7 @@ h1 {
 }
 
 .trip-card .details {
+    padding: 20px;
     flex-grow: 1;
     margin-right: 20px;
 }
@@ -86,7 +101,11 @@ h1 {
 
 .trip-card .description {
     font-size: 14px;
-    color: #666;
+    color: #050505;
+}
+
+.trip-card .description p {
+    color: #050505;
 }
 
 .trip-card .price {
@@ -103,21 +122,6 @@ h1 {
     display: inline-block;
 }
 
-.trip-card .status.available {
-    background-color: #4CAF50;
-    color: #fff;
-}
-
-.trip-card .status.completed {
-    background-color: #2196F3;
-    color: #fff;
-}
-
-.trip-card .status.cancelled {
-    background-color: #f44336;
-    color: #fff;
-}
-
 .trip-card .route {
     margin-top: 10px;
 }
@@ -127,7 +131,6 @@ h1 {
     font-size: 12px;
     color: #666;
 }
-
 
 .no-trips {
     text-align: center;
