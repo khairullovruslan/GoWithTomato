@@ -1,7 +1,13 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f4f7fb;
     margin: 0;
+
 }
 
 .container {
