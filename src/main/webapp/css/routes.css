@@ -1,0 +1,105 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+}
+header {
+    background-size: cover;
+    background-position: center;
+    padding: 100px 20px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+h1 {
+    font-size: 2em;
+    margin: 0;
+}
+
+.routes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-gap: 20px;
+    margin-top: 30px;
+}
+
+.route-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.route-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.route-body {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.route-locations {
+    align-items: center;
+}
+
+.route-locations i {
+    margin-right: 5px;
+}
+.route-locations p {
+    color: black;
+    font-weight: bold;
+}
+.route-details {
+    margin-top: 15px;
+}
+
+.route-details p {
+    color: black;
+    margin-bottom: 5px;
+}
+
+.full-route {
+    font-size: 0.9em;
+    color: #5894c4;
+    margin-bottom: 10px;
+}
+
+.no-trips {
+    text-align: center;
+    font-size: 1.2em;
+    color: #000000;
+    margin-top: 30px;
+}
+
+.start-icon {
+    color: #007bff;
+}
+
+.end-icon {
+    color: #dc3545;
+}
+
+.route-locations .fa-arrow-right {
+    margin: 0 10px;
+}
