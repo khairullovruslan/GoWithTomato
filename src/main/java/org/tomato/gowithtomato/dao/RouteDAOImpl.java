@@ -9,10 +9,7 @@ import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.db.DaoException;
 import org.tomato.gowithtomato.exception.db.UniqueSqlException;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -156,9 +153,9 @@ public class RouteDAOImpl implements RouteDAO {
                 .phoneNumber(result.getString("user_phone_number"))
                 .build();
 
-        List<Point> others = routeAndPointsDao.findByRouteId(connection, result.getLong("id"));
+        List<Point> others = routeAndPointsDao.findByRouteId(connection, result.getLong("route_id"));
         return Route.builder()
-                .id(result.getLong("id"))
+                .id(result.getLong("route_id"))
                 .departurePoint(startPoint)
                 .destinationPoint(finishPoint)
                 .distance(result.getDouble("distance"))
