@@ -14,7 +14,7 @@
 <body>
 
 <%@include file="/templates/base/navbar.jsp" %>
-<header style=" background-image: url(<c:url value='/img/img.png'/>);">
+<header style=" background-image: url(<c:url value='/img/route-header.png'/>);">
 </header>
 <div class="container">
     <div class="routes-list">
