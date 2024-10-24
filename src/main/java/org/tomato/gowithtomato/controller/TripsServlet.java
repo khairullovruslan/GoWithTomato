@@ -1,6 +1,7 @@
 package org.tomato.gowithtomato.controller;
 
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,7 +11,8 @@ import org.tomato.gowithtomato.service.TripService;
 import org.tomato.gowithtomato.util.DateFormatter;
 import org.tomato.gowithtomato.util.FilterGenerator;
 
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @WebServlet("/trips")
@@ -28,16 +30,16 @@ public class TripsServlet extends BaseServlet{
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp){
-        WebContext context = thymeleafUtil.buildWebContext(req, resp, getServletContext());
-        List<TripDTO> tripList = tripService.findByFilter(filterGenerator.generateFilter(context, req));
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        var filter = filterGenerator.generateFilter(req);
+        List<TripDTO> tripList = tripService.findByFilter(filter);
         tripList.forEach(trip -> {
             String formattedDateTime = dateFormatter.format(trip.getTripDateTime());
             trip.setTripDateTimeFormatted(formattedDateTime);
         });
-
-        context.setVariable("tripList", tripList);
-        processTemplate(context, "trips", req, resp);
+        req.setAttribute("tripList", tripList);
+        req.setAttribute("totalPages",  tripService.getCountPage(filter));
+        getServletContext().getRequestDispatcher("/templates/trips.jsp").forward(req, resp);
     }
 
 
