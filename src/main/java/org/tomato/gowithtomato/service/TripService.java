@@ -28,7 +28,7 @@ public class TripService {
     public void saveTrip(UserDTO userDTO, TripDTO tripDTO, Long id){
         tripDTO.setOwner(userDTO);
         tripDTO.setRoute(routeService.findById(id));
-        tripDAO.save(tripMapper.convertDTOToTrip(tripDTO), id);
+        tripDAO.saveWithRouteId(tripMapper.convertDTOToTrip(tripDTO), id);
     }
     public List<TripDTO> findAll(){
         List<Trip> trips = tripDAO.findAll();
@@ -43,5 +43,8 @@ public class TripService {
         Optional<Trip> trip = tripDAO.findById(id);
         if(trip.isPresent()) return tripMapper.convertTripToDTO(trip.get());
         throw new RuntimeException();
+    }
+    public Long getCountPage(Map<String, String> filter){
+        return tripDAO.getCountPage(filter);
     }
 }
