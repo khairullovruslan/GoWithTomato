@@ -1,5 +1,6 @@
 package org.tomato.gowithtomato.dao;
 
+
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import org.tomato.gowithtomato.dao.daoInterface.TripDAO;
@@ -105,12 +106,29 @@ public class TripDAOImpl implements TripDAO {
             throw new DaoException("Ошибка при поиске с фильтром", e);
         }
     }
+    @SneakyThrows
+    public Long getCountPage(Map<String, String> filter) {
+        try (Connection connection = connectionManager.get()) {
+            return getCountPage(connection, filter);
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при подчете всех страниц", e);
+        }
+    }
 
 
     public List<Trip> findAllByFilter(Connection connection, Map<String, String> filter) throws SQLException {
-        String query = getQueryByFilter(filter);
-        @Cleanup var statement = connection.prepareStatement(query);
+        HashMap<String, String> data = getQueryByFilter(filter);
+        System.out.println(data);
+
+        @Cleanup var statement = connection.prepareStatement(data.get("query"));
         return convertResultSetToList(connection, statement.executeQuery());
+    }
+    public long getCountPage(Connection connection, Map<String, String> filter) throws SQLException {
+        HashMap<String, String> data = getQueryByFilter(filter);
+        System.out.println(data);
+        @Cleanup var statement = connection.prepareStatement(data.get("count_query"));
+        Long l = convertResultSetToCountPages(statement.executeQuery());
+        return (long) Math.ceil( l *1.0 / LIMIT);
     }
     @SneakyThrows
     public boolean addNewMember(Connection connection, Long tripId) {
@@ -127,12 +145,20 @@ public class TripDAOImpl implements TripDAO {
         }
         return points;
     }
+
+    private Long convertResultSetToCountPages(ResultSet result) throws SQLException {
+        while (result.next()) {
+            return result.getLong("count");
+        }
+        throw new DaoException("Ошибка при поиске количества значений");
+    }
     private Trip createTripFromResultSet(Connection connection, ResultSet result) throws SQLException {
         Optional<User> owner = userDAO.findById(connection, result.getLong("user_id"));
         Optional<Route> route = routeDAO.findById(connection, result.getLong("route_id"));
         if (owner.isEmpty() || route.isEmpty()){
             throw  new DaoException("Ошибка при поиске owner || route для поездки");
         }
+
         return Trip.builder()
                 .id(result.getLong("id"))
                 .price(result.getBigDecimal("price"))
@@ -146,8 +172,9 @@ public class TripDAOImpl implements TripDAO {
 
 
 
-    private String getQueryByFilter(Map<String, String> filter){
+    private HashMap<String, String> getQueryByFilter(Map<String, String> filter){
         StringBuilder query = new StringBuilder(SQL_FILTER);
+        StringBuilder queryForGetCountTotalPage = new StringBuilder(COUNT_SQL);
         List<String> conditions = new ArrayList<>();
         filter.forEach((key, value) -> {
             switch (key) {
@@ -161,12 +188,18 @@ public class TripDAOImpl implements TripDAO {
                 }
             }
         });
-
         if (!conditions.isEmpty()) {
-            query.append(" WHERE ").append(String.join(" AND ", conditions));
+            String fil = " WHERE " + String.join(" AND ", conditions);
+            query.append(fil);
+            queryForGetCountTotalPage.append(fil);
         }
-
-        return query.toString();
+        if (filter.containsKey("page")){
+            query.append(String.format(" limit %d offset %d", LIMIT, LIMIT * ( Integer.parseInt(filter.get("page")) - 1 )));
+        }
+        HashMap<String, String> tuple = new HashMap<>();
+        tuple.put("query", query.toString());
+        tuple.put("count_query", queryForGetCountTotalPage.toString());
+        return tuple;
     }
 
 
