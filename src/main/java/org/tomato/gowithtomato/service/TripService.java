@@ -1,6 +1,6 @@
 package org.tomato.gowithtomato.service;
 
-import org.tomato.gowithtomato.dao.TripDAOImpl;
+import org.tomato.gowithtomato.dao.impl.TripDAOImpl;
 import org.tomato.gowithtomato.dto.TripDTO;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.Trip;
@@ -46,5 +46,9 @@ public class TripService {
     }
     public Long getCountPage(Map<String, String> filter){
         return tripDAO.getCountPage(filter);
+    }
+
+    public void cancelTrip(Long id) {
+        tripDAO.cancelTrip(id);
     }
 }

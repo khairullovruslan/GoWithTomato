@@ -9,6 +9,7 @@ import org.tomato.gowithtomato.validator.annotations.ValidPhoneNumber;
 @Getter
 @Setter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO{

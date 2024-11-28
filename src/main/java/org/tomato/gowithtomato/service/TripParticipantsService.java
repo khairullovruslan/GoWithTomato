@@ -1,6 +1,6 @@
 package org.tomato.gowithtomato.service;
 
-import org.tomato.gowithtomato.dao.TripParticipantsDAOImpl;
+import org.tomato.gowithtomato.dao.impl.TripParticipantsDAOImpl;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.mapper.UserMapper;

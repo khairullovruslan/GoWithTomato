@@ -1,6 +1,6 @@
 package org.tomato.gowithtomato.service;
 
-import org.tomato.gowithtomato.dao.RouteDAOImpl;
+import org.tomato.gowithtomato.dao.impl.RouteDAOImpl;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.Route;
@@ -28,10 +28,7 @@ public class RouteService {
     public void saveRoute(Route route){
         routeDAO.save(route);
     }
-    public List<RouteDTO> findByUser(UserDTO user){
-        List<Route> routes =  routeDAO.findByUser(userMapper.convertDTOToUser(user));
-        return routes.stream().map(routeMapper::convertRouteToDTO).toList();
-    }
+
 
     public RouteDTO findById(Long id){
         Optional<Route> route =  routeDAO.findById(id);
@@ -39,5 +36,13 @@ public class RouteService {
             return routeMapper.convertRouteToDTO(route.get());
         }
         throw new RoutNotFoundException();
+    }
+
+    public List<RouteDTO> findByUserWithPagination(UserDTO user, int i) {
+        List<Route> routes =  routeDAO.findByUserWithPagination(userMapper.convertDTOToUser(user), i);
+        return routes.stream().map(routeMapper::convertRouteToDTO).toList();
+    }
+    public long getCountPage(UserDTO user) {
+       return routeDAO.getCountPage(userMapper.convertDTOToUser(user));
     }
 }

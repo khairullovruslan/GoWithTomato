@@ -38,6 +38,8 @@ header {
     transition: background-color 0.3s;
 }
 
+
+
 .filter-container button:hover {
     background-color: #1976D2;
 }
@@ -49,7 +51,6 @@ header {
     max-width: 1200px;
     padding: 20px;
     background-color: #fff;
-    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
     border-radius: 10px;
     margin: 20px auto;
 }
@@ -133,6 +134,7 @@ h1 {
     color: #666;
 }
 
+
 .no-trips {
     text-align: center;
     color: #777;
@@ -141,26 +143,27 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px 0; /* Отступ для пагинации */
+    margin: 20px 0;
 }
 
 .pagination-link {
     text-decoration: none;
-    color: #2196F3; /* Цвет ссылок */
-    padding: 10px 15px; /* Отступы для ссылок */
-    border: 1px solid #2196F3; /* Рамка */
-    border-radius: 5px; /* Закругленные углы */
-    margin: 0 5px; /* Отступ между ссылками */
-    transition: background-color 0.3s, color 0.3s; /* Плавные переходы */
+    color: #2196F3;
+    padding: 10px 15px;
+    border: 1px solid #2196F3;
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .pagination-link:hover {
-    background-color: #2196F3; /* Цвет фона при наведении */
-    color: #fff; /* Цвет текста при наведении */
+    background-color: #2196F3;
+    color: #fff;
 }
 
 .pagination-link.active {
-    background-color: #2196F3; /* Цвет фона для активной ссылки */
-    color: #fff; /* Цвет текста для активной ссылки */
-    pointer-events: none; /* Отключение клика для активной ссылки */
+    background-color: #2196F3;
+    color: #fff;
+    pointer-events: none;
 }
+

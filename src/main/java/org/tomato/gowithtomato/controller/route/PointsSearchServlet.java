@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.controller;
+package org.tomato.gowithtomato.controller.route;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.PointDTO;
 import org.tomato.gowithtomato.service.GraphHopperApiService;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @WebServlet("/points-search")
-public class PointsSearchServlet extends BaseServlet{
+public class PointsSearchServlet extends BaseServlet {
     private GraphHopperApiService graphHopperApiService;
     private ObjectMapper objectMapper;
 

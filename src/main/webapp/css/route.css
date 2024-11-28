@@ -7,16 +7,19 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #f4f7fb;
     margin: 0;
+    display: flex;
+    flex-direction: column;
 
 }
 
 .container {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 20px 20px auto;
     background: white;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
 }
 
 h1 {
@@ -133,13 +136,16 @@ label {
 }
 
 .mt-4 {
+
     margin-top: 20px;
 }
 
 .mb-2 {
+    color: black;
     margin-bottom: 10px;
 }
 
 .mt-2 {
+    color: black;
     margin-top: 10px;
 }

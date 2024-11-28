@@ -4,6 +4,7 @@ let currentField;
 let routeArray = [];
 let start;
 let finish;
+let distance;
 
 function openModal(field) {
     currentField = field;
@@ -14,10 +15,17 @@ function openModal(field) {
 function sendData() {
     console.log("отправляю данные")
     console.log(start.name)
+    getInfo();
+    console.log(distance)
     const data = {
-        start: start,
-        others: routeArray,
-        finish: finish
+        infoType: "location-info",
+        routeInfo: {
+            start: start,
+            others: routeArray,
+            finish: finish,
+            distance: distance
+        }
+
     }
     console.log(data)
     const path = contextPath + '/new-route';
@@ -38,6 +46,38 @@ function sendData() {
         }
     });
 }
+
+function getInfo() {
+    const data = {
+        infoType: "time-distance",
+        routeInfo: {
+            start: start,
+            others: routeArray,
+            finish: finish
+        }
+    }
+    const path = contextPath + '/graph-hopper-api';
+    $.ajax({
+        url: path,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (response) {
+            console.log("res" + response);
+            if (response) {
+                document.getElementById('routeTime').textContent = response.time;
+                document.getElementById('routeDistance').textContent = response.distance;
+                distance = response.distance;
+            } else {
+                console.error('info не найдена в ответе:', response);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Ошибка:', status, error);
+        }
+    });
+}
+
 
 function closeModal() {
     document.getElementById('myModal').style.display = "none";

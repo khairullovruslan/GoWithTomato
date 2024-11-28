@@ -103,3 +103,54 @@ h1 {
 .route-locations .fa-arrow-right {
     margin: 0 10px;
 }
+.create-route-button {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.create-route-button a {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.create-route-button a:hover {
+    background-color: #0069d9;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.pagination-link {
+    text-decoration: none;
+    color: #2196F3;
+    padding: 10px 15px;
+    border: 1px solid #2196F3;
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination-link:hover {
+    background-color: #2196F3;
+    color: #fff;
+}
+
+.pagination-link.active {
+    background-color: #2196F3;
+    color: #fff;
+    pointer-events: none;
+}
+
+

@@ -1,12 +1,12 @@
-$(document).ready(function () {
-    $('#search-btn').on('click', function (event) {
-        event.preventDefault();
+ function filterSend(){
 
         const contextPath = "/gowithtomato";
         const from = $('#from').val();
         const to = $('#to').val();
         const date = $('#date').val();
         const count = $('#count').val();
+        const organizer = $('#organizer').val();
+        const status = $('#status').val();
 
         let path = contextPath + '/trips';
         const params = [];
@@ -15,6 +15,12 @@ $(document).ready(function () {
         }
         if (to !== '') {
             params.push("to=" + encodeURIComponent(to));
+        }
+        if (organizer !== '') {
+            params.push("organizer=" + encodeURIComponent(organizer));
+        }
+        if (status !== '') {
+            params.push("status=" + encodeURIComponent(status));
         }
         if (date !== '') {
             params.push("date=" + encodeURIComponent(date));
@@ -27,8 +33,19 @@ $(document).ready(function () {
         }
 
         window.location.href = path;
-    });
-});
+}
+
+function filterStatusSend(status){
+    const statusInput = document.getElementById("status");
+    statusInput.value = status;
+    filterSend();
+}
+
+function clearFilter(){
+    const contextPath = "/gowithtomato";
+    window.location.href =contextPath + '/trips';
+}
+
 document.querySelectorAll('.trip-card').forEach(card => {
     const contextPath = "/gowithtomato";
     card.addEventListener('click', function () {
