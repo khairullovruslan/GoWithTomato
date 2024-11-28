@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.controller;
+package org.tomato.gowithtomato.controller.common;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

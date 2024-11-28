@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.controller;
+package org.tomato.gowithtomato.controller.common;
 
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +9,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-import org.tomato.gowithtomato.exception.ServletInitializationException;
+import org.tomato.gowithtomato.exception.common.ServletInitializationException;
 import org.tomato.gowithtomato.util.ExceptionHandler;
 import org.tomato.gowithtomato.util.ThymeleafUtil;
 

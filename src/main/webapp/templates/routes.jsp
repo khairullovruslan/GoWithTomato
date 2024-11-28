@@ -16,7 +16,11 @@
 <%@include file="/templates/base/navbar.jsp" %>
 <header style=" background-image: url(<c:url value='/img/route-header.png'/>);">
 </header>
+
 <div class="container">
+    <div class="create-route-button">
+        <a href="<c:url value='/new-route'/>" class="btn">Создать маршрут</a>
+    </div>
     <div class="routes-list">
         <c:if test="${not empty routeList}">
             <c:forEach var="route" items="${routeList}" varStatus="iterStat">
@@ -42,7 +46,6 @@
                         </div>
                         <input id="id" value="${route.id}" hidden="hidden">
                     </div>
-                    ${route.id}
 
                 </div>
             </c:forEach>
@@ -55,14 +58,26 @@
             <p class="no-trips">Нет доступных маршрутов.</p>
         </c:if>
     </div>
+
 </div>
+<div class="pagination">
+    <c:if test="${page > 1}">
+        <a href="?page=${page - 1}" class="pagination-link">« Предыдущая</a>
+    </c:if>
+
+    <c:forEach begin="1" end="${totalPages}" var="i">
+        <a href="?page=${i}" class="pagination-link <c:if test='${i == page}'>active</c:if>">${i}</a>
+    </c:forEach>
+
+    <c:if test="${page < totalPages}">
+        <a href="?page=${page + 1}" class="pagination-link">Следующая »</a>
+    </c:if>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<c:url value='/js/routes.js'/>"></script>
 <%@include file="/templates/base/footer.jsp" %>
 
 </body>
 </html>
-
-
-
 

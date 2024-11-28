@@ -12,7 +12,8 @@ public class RouteMapper {
     private static final RouteMapper routeMapper = new RouteMapper();
     private final PointMapper pointMapper;
     private final UserMapper userMapper;
-    private RouteMapper(){
+
+    private RouteMapper() {
         this.userMapper = UserMapper.getInstance();
         pointMapper = PointMapper.getInstance();
     }
@@ -20,15 +21,17 @@ public class RouteMapper {
     public static RouteMapper getInstance() {
         return routeMapper;
     }
-    public Route convertDTOToRoute(RouteDTO routeDTO){
+
+    public Route convertDTOToRoute(RouteDTO routeDTO) {
         Route route = Route
                 .builder()
                 .owner(userMapper.convertDTOToUser(routeDTO.getOwner()))
                 .departurePoint(pointMapper.convertDTOToPoint(routeDTO.getStart()))
                 .destinationPoint(pointMapper.convertDTOToPoint(routeDTO.getFinish()))
+                .distance(routeDTO.getDistance())
                 .build();
         List<Point> pointList = new ArrayList<>();
-        for(PointDTO pointDTO : routeDTO.getOthers()){
+        for (PointDTO pointDTO : routeDTO.getOthers()) {
             pointList.add(
                     pointMapper.convertDTOToPoint(pointDTO));
         }
@@ -36,7 +39,7 @@ public class RouteMapper {
         return route;
     }
 
-    public RouteDTO convertRouteToDTO(Route route){
+    public RouteDTO convertRouteToDTO(Route route) {
         RouteDTO routeDTO = RouteDTO
                 .builder()
                 .id(route.getId())
@@ -46,7 +49,7 @@ public class RouteMapper {
                 .distance(route.getDistance())
                 .build();
         List<PointDTO> pointList = new ArrayList<>();
-        for(Point point : route.getOther()){
+        for (Point point : route.getOther()) {
             pointList.add(
                     pointMapper.convertPointToDTO(point));
         }

@@ -10,9 +10,10 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-import org.tomato.gowithtomato.exception.*;
 import org.tomato.gowithtomato.exception.auth.RegistrationException;
 import org.tomato.gowithtomato.exception.auth.WrongPasswordException;
+import org.tomato.gowithtomato.exception.common.IncorrectRequestParametersException;
+import org.tomato.gowithtomato.exception.common.ServletInitializationException;
 import org.tomato.gowithtomato.exception.db.RoutNotFoundException;
 import org.tomato.gowithtomato.exception.db.UserNotFoundException;
 
@@ -24,6 +25,7 @@ import java.util.List;
 public class ExceptionHandler {
     private final TemplateEngine templateEngine;
     private final ServletContext context;
+
     public ExceptionHandler(TemplateEngine templateEngine, ServletContext servletContext) {
         this.templateEngine = templateEngine;
         this.context = servletContext;
@@ -59,10 +61,10 @@ public class ExceptionHandler {
                 case RoutNotFoundException ignored -> {
                     redirectToErrorPage(req, resp, "Маршрут не найден! Попробуйте еще раз.");
                 }
-                case IncorrectRequestParametersException ignored ->{
+                case IncorrectRequestParametersException ignored -> {
                     redirectToErrorPage(req, resp, "Некорретные параметры запроса! Попробуйте еще раз.");
                 }
-                default ->  throw new Exception();
+                default -> throw new Exception();
             }
 
         } catch (Exception notFoundException) {
@@ -79,12 +81,10 @@ public class ExceptionHandler {
     }
 
     @SneakyThrows
-    private void redirectToErrorPage(HttpServletRequest req, HttpServletResponse resp, String message){
+    private void redirectToErrorPage(HttpServletRequest req, HttpServletResponse resp, String message) {
         req.setAttribute("errorMessage", message);
         req.getRequestDispatcher("/error").forward(req, resp);
     }
-
-
 
 
 }

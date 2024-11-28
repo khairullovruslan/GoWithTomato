@@ -22,8 +22,9 @@ public class GoWithTomatoBaseListener implements ServletContextListener {
         servletContext.setAttribute("tripService", TripService.getInstance());
         servletContext.setAttribute("routeService", RouteService.getInstance());
         servletContext.setAttribute("graphHopperApiService", GraphHopperApiService.getInstance());
-        servletContext.setAttribute("sessionAndCookieService", SessionAndCookieService.getInstance());
+        servletContext.setAttribute("cookieService", CookieService.getInstance());
         servletContext.setAttribute("tripParticipantsService", TripParticipantsService.getInstance());
+        servletContext.setAttribute("reviewService", ReviewService.getInstance());
 
 
         servletContext.setAttribute("ajaxUtil", AjaxUtil.getInstance());

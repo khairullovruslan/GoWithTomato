@@ -24,14 +24,16 @@ public class ConnectionManager {
         try {
             initConnectionPool();
         } catch (Exception e) {
+
+            e.printStackTrace();
             log.error("Error connection");
         }
     }
 
-    private  void initConnectionPool() {
+    private  void initConnectionPool() throws ClassNotFoundException {
         String poolSize = propertiesUtil.get(POOL_SIZE_KEY);
         int size = poolSize == null ? DEFAULT_POOL_SIZE : Integer.parseInt(poolSize);
-
+        Class.forName("org.postgresql.Driver");
         pool = new ArrayBlockingQueue<>(size);
         log.info("connection added in pool...");
         for (int i = 0; i < size; i++) {

@@ -3,7 +3,7 @@ package org.tomato.gowithtomato.controller.auth;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.tomato.gowithtomato.controller.BaseServlet;
+import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.service.AuthService;
 
 import java.io.IOException;

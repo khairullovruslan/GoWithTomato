@@ -1,24 +1,25 @@
-package org.tomato.gowithtomato.controller;
+package org.tomato.gowithtomato.controller.trip;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.thymeleaf.context.WebContext;
+import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.dto.TripDTO;
 import org.tomato.gowithtomato.exception.db.UserNotFoundException;
+import org.tomato.gowithtomato.service.CookieService;
 import org.tomato.gowithtomato.service.RouteService;
-import org.tomato.gowithtomato.service.SessionAndCookieService;
 import org.tomato.gowithtomato.service.TripService;
 import org.tomato.gowithtomato.util.AjaxUtil;
 
 import java.io.IOException;
 
 @WebServlet("/create-trip")
-public class TripCreateServlet extends BaseServlet{
-    private SessionAndCookieService sessionAndCookieService;
+public class TripCreateServlet extends BaseServlet {
+    private CookieService cookieService;
     private AjaxUtil ajaxUtil;
     private TripService tripService;
     private RouteService routeService;
@@ -27,7 +28,7 @@ public class TripCreateServlet extends BaseServlet{
     @Override
     public void init() {
         super.init();
-        sessionAndCookieService = (SessionAndCookieService) this.getServletContext().getAttribute("sessionAndCookieService");
+        cookieService = (CookieService) this.getServletContext().getAttribute("cookieService");
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
         tripService = (TripService) this.getServletContext().getAttribute("tripService");
         routeService = (RouteService) this.getServletContext().getAttribute("routeService");
@@ -36,12 +37,11 @@ public class TripCreateServlet extends BaseServlet{
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp){
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long id = Long.valueOf(req.getParameter("id"));
-        WebContext context = thymeleafUtil.buildWebContext(req, resp, getServletContext());
         RouteDTO routeDTO = routeService.findById(id);
-        context.setVariable("route", routeDTO);
-        processTemplate(context,"create-trip",  req, resp);
+        req.setAttribute("routeId", routeDTO.getId());
+        req.getRequestDispatcher("/templates/create-trip.jsp").forward(req, resp);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class TripCreateServlet extends BaseServlet{
         TripDTO tripDTO = objectMapper.readValue(req.getInputStream(), TripDTO.class);
         Long id = Long.valueOf(req.getParameter("id"));
         try {
-            tripService.saveTrip(sessionAndCookieService.findUser(req), tripDTO, id);
+            tripService.saveTrip(cookieService.findUser(req), tripDTO, id);
 
             ajaxUtil.senderRespUrl(req.getContextPath() + "/profile", resp);
         }

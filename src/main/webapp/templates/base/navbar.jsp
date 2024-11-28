@@ -10,7 +10,7 @@
         <a href="<%= request.getContextPath() %>/trips">
             <i class="fas fa-search"></i> Поиск
         </a>
-        <a href="#">
+        <a href="<%= request.getContextPath() %>/profile/routes">
             <i class="fas fa-plus"></i> Опубликовать поездку
         </a>
         <a href="<%= request.getContextPath()%>/profile">

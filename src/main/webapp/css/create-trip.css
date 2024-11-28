@@ -1,22 +1,26 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f4f7fb;
-    margin: 0;
-    height: 100vh; /* Заполнение высоты окна */
+    background-color: #f4f4f4;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    padding: 0;
 }
 
 .container {
-    width: 70%; /* Изменено на 90% ширины экрана */
-    height: 40%; /* Изменено на 90% высоты экрана */
+    flex: 1;
+    width: 70%;
+    height: 40%;
     margin: 0 auto;
     background: white;
-    padding: 30px; /* Увеличиваем отступы */
-    border-radius: 10px; /* Углы более закругленные */
+    padding: 30px;
+    border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    overflow: auto; /* Добавлено для прокрутки при переполнении */
+    overflow: auto;
 }
 
 h1 {
@@ -26,7 +30,7 @@ h1 {
 }
 
 .form-group {
-    margin-bottom: 20px; /* Увеличиваем отступ между формами */
+    margin-bottom: 20px;
 }
 
 label {
@@ -39,33 +43,33 @@ label {
 .form-control {
     border: 1px solid #ccc;
     border-radius: 5px;
-    padding: 10px; /* Увеличиваем внутренние отступы */
-    font-size: 18px; /* Увеличиваем размер шрифта */
+    padding: 10px;
+    font-size: 18px;
     flex-grow: 1;
-    width: 100%; /* Полная ширина поля */
-    transition: border-color 0.3s; /* Анимация при фокусе */
+    width: 100%;
+    transition: border-color 0.3s;
 }
 
 .form-control:focus {
-    border-color: #28a745; /* Цвет рамки при фокусе */
-    outline: none; /* Убираем стандартное выделение */
+    border-color: #28a745;
+    outline: none;
 }
 
 .btn {
-    padding: 10px 20px; /* Увеличиваем отступы кнопок */
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    font-size: 18px; /* Увеличиваем размер шрифта */
+    font-size: 18px;
     cursor: pointer;
-    margin-top: 10px; /* Отступ сверху для кнопки */
+    margin-top: 10px;
 }
 
 .btn-success {
     background-color: #28a745;
     color: white;
-    width: 100%; /* Полная ширина кнопки */
+    width: 100%;
 }
 
 .btn-success:hover {
-    background-color: #218838; /* Цвет кнопки при наведении */
+    background-color: #218838;
 }

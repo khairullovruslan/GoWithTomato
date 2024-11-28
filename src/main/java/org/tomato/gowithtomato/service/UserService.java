@@ -2,7 +2,7 @@ package org.tomato.gowithtomato.service;
 
 
 import org.modelmapper.ModelMapper;
-import org.tomato.gowithtomato.dao.UserDAOImpl;
+import org.tomato.gowithtomato.dao.impl.UserDAOImpl;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.db.UserNotFoundException;
