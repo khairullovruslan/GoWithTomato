@@ -2,22 +2,17 @@ package org.tomato.gowithtomato.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.entity.Trip;
-import org.tomato.gowithtomato.entity.TripStatus;
-import org.tomato.gowithtomato.exception.db.UserNotFoundException;
-import org.tomato.gowithtomato.mapper.RouteMapper;
-import org.tomato.gowithtomato.service.SessionAndCookieService;
-import org.tomato.gowithtomato.service.TripService;
+import org.tomato.gowithtomato.service.CookieService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class FilterGenerator {
-    private SessionAndCookieService sessionAndCookieService = SessionAndCookieService.getInstance();
+    private CookieService cookieService = CookieService.getInstance();
+
     public Map<String, String> generateFilter(HttpServletRequest req) {
         Map<String, String> filter = new HashMap<>();
         processParameter(req, filter, "from");
@@ -44,7 +39,7 @@ public class FilterGenerator {
         if (userTrips) {
             req.setAttribute("owner_tickets", true);
             UserDTO user;
-            user = sessionAndCookieService.findUser(req);
+            user = cookieService.findUser(req);
             filter.put("owner_tickets", String.valueOf(user.getId()));
         }
 
