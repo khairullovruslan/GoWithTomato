@@ -1,0 +1,45 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8d7da;
+    color: #721c24;
+
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.error-container {
+    flex: 1;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.error-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+}
+
+.btn-home {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-home:hover {
+    background-color: #0056b3;
+}
