@@ -3,7 +3,7 @@ package org.tomato.gowithtomato.dao.impl;
 import org.tomato.gowithtomato.dao.daoInterface.ReviewDAO;
 import org.tomato.gowithtomato.entity.Review;
 import org.tomato.gowithtomato.exception.db.DaoException;
-import org.tomato.gowithtomato.mapper.mappers.ReviewMapper;
+import org.tomato.gowithtomato.mapper.ReviewMapper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -58,6 +58,19 @@ public class ReviewDAOImpl extends ReviewDAO {
 
             List<Review> reviews = convertResultSetToList(preparedStatement.executeQuery());
             return reviews.isEmpty() ? Optional.empty() : Optional.of(reviews.getFirst());
+
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при поиске отзыва по пользователю и поездке", e);
+        }
+    }
+
+    @Override
+    public List<Review> findByTripOwnerId(Long id) {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_TRIP_OWNER_ID_SQL)) {
+            preparedStatement.setLong(1, id);
+
+            return convertResultSetToList(preparedStatement.executeQuery());
 
         } catch (SQLException e) {
             throw new DaoException("Ошибка при поиске отзыва по пользователю и поездке", e);

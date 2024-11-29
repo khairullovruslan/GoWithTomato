@@ -1,8 +1,10 @@
 package org.tomato.gowithtomato.dao.daoInterface;
 
 import org.tomato.gowithtomato.dao.daoInterface.base.AbstractCrudDAO;
+import org.tomato.gowithtomato.dto.ReviewDTO;
 import org.tomato.gowithtomato.entity.Review;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,4 +29,6 @@ public abstract class ReviewDAO extends AbstractCrudDAO<Long, Review> {
      * @return Объект Optional, содержащий найденный отзыв, или empty, если отзыв не найден
      */
     public abstract Optional<Review> findByUserAndTripId(Long userId, Long tripId);
+
+    public abstract List<Review> findByTripOwnerId(Long id);
 }
