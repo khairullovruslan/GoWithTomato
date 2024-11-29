@@ -1,8 +1,8 @@
 package org.tomato.gowithtomato.util;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.service.CookieService;
+import org.tomato.gowithtomato.exception.auth.UnauthorizedException;
+import org.tomato.gowithtomato.service.AuthService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,10 +10,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FilterGenerator {
-    private CookieService cookieService = CookieService.getInstance();
+public final class FilterGenerator {
 
-    public Map<String, String> generateFilter(HttpServletRequest req) {
+
+    public Map<String, String> generateFilter(final HttpServletRequest req) {
         Map<String, String> filter = new HashMap<>();
         processParameter(req, filter, "from");
         processParameter(req, filter, "to");
@@ -38,9 +38,12 @@ public class FilterGenerator {
         boolean userTrips = Boolean.parseBoolean(req.getParameter("owner_tickets"));
         if (userTrips) {
             req.setAttribute("owner_tickets", true);
-            UserDTO user;
-            user = cookieService.findUser(req);
-            filter.put("owner_tickets", String.valueOf(user.getId()));
+            AuthService authService = AuthService.getInstance();
+            if (authService.authorizationCheck(req)) {
+                filter.put("owner_tickets", String.valueOf(authService.getUser(req).getId()));
+            } else {
+                throw new UnauthorizedException("Нет доступа к странице");
+            }
         }
 
         String date = req.getParameter("date");
@@ -55,7 +58,8 @@ public class FilterGenerator {
         return filter;
     }
 
-    private void processParameter(HttpServletRequest req, Map<String, String> filter, String paramName) {
+    private void processParameter(final HttpServletRequest req,
+                                  final Map<String, String> filter, final String paramName) {
         String paramValue = req.getParameter(paramName);
         if (paramValue != null) {
             req.setAttribute(paramName, paramValue);
@@ -63,7 +67,7 @@ public class FilterGenerator {
         }
     }
 
-    private String capitalizeString(String string) {
+    private String capitalizeString(final String string) {
         return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
     }
 }
