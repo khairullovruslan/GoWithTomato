@@ -56,19 +56,86 @@
         <div class="stat-card">
             <i class="fas fa-route icon"></i>
             <h3>Количество поездок</h3>
-            <span>123</span>
+            <span>${tripCount}</span>
         </div>
         <div class="stat-card">
             <i class="fas fa-comments icon"></i>
             <h3>Количество отзывов</h3>
-            <span>1234</span>
+            <span>${reviewCount}</span>
         </div>
         <div class="stat-card">
             <i class="fas fa-star icon"></i>
             <h3>Рейтинг</h3>
-            <span>4.5</span>
+            <span>${rating}</span>
         </div>
     </section>
+    <h2>Отзывы:</h2>
+
+    <div class="review-list">
+        <c:if test="${not empty reviewList}">
+            <c:forEach var="review" items="${reviewList}" varStatus="iterStat">
+                <div class="review-card">
+                    <div class="review-body">
+                        <div class="review-author">
+                            <p><strong style="color: black">Автор: </strong> <c:out value="${review.owner.login}"/></p>
+                        </div>
+                        <div class="review-details">
+                            <p><strong style="color: black">Описание:</strong></p>
+                            <p style="color: black">
+                                <c:out value="${review.description}"/>,
+                            </p>
+                            <p><strong style="color: black">Рейтинг: </strong> <c:out value="${review.rating}"/></p>
+
+                        </div>
+                    </div>
+
+                </div>
+               
+
+            </c:forEach>
+
+
+        </c:if>
+
+        <c:if test="${empty reviewList}">
+            <p class="no-review">Нет отзывов.</p>
+        </c:if>
+    </div>
+
+
+</div>
+
+<div class="pagination">
+
+    <c:choose>
+        <c:when test="${isOwner}">
+            <c:if test="${page > 1}">
+                <a href="?page=${page - 1}" class="pagination-link">« Предыдущая</a>
+            </c:if>
+
+            <c:forEach begin="1" end="${totalPages}" var="i">
+                <a href="?page=${i}" class="pagination-link <c:if test='${i == page}'>active</c:if>">${i}</a>
+            </c:forEach>
+
+            <c:if test="${page < totalPages}">
+                <a href="?page=${page + 1}" class="pagination-link">Следующая »</a>
+            </c:if>
+        </c:when>
+        <c:otherwise>
+            <c:if test="${page > 1}">
+                <a href="?page=${page - 1}&u=${user.login}" class="pagination-link">« Предыдущая</a>
+            </c:if>
+
+            <c:forEach begin="1" end="${totalPages}" var="i">
+                <a href="?page=${i}&u=${user.login}"
+                   class="pagination-link <c:if test='${i == page}'>active</c:if>">${i}</a>
+            </c:forEach>
+
+            <c:if test="${page < totalPages}">
+                <a href="?page=${page + 1}&u=${user.login}" class="pagination-link">Следующая »</a>
+            </c:if>
+        </c:otherwise>
+    </c:choose>
 
 
 </div>
