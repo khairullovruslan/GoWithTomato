@@ -83,7 +83,7 @@ public class TripQueries {
      */
     public static final String CANCEL_TRIP_SQL = """
             UPDATE trip
-            SET status = 'cancelled' 
+            SET status = 'cancelled'
             WHERE id = ? 
             """;
 
@@ -96,5 +96,13 @@ public class TripQueries {
             SET status = 'completed'
             WHERE status <> 'completed'
             AND trip_date_time > NOW() AT TIME ZONE 'Europe/Moscow';
+            """;
+
+
+    //language=sql
+    public static final String COUNT_BY_OWNER_ID_SQL = """
+            SELECT COUNT(*)
+            FROM trip
+            WHERE user_id = ?
             """;
 }
