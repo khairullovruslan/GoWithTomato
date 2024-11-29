@@ -11,8 +11,7 @@ import org.tomato.gowithtomato.dto.TripDTO;
 import org.tomato.gowithtomato.dto.UserDTO;
 import org.tomato.gowithtomato.entity.TripStatus;
 import org.tomato.gowithtomato.exception.common.IncorrectRequestParametersException;
-import org.tomato.gowithtomato.exception.db.UserNotFoundException;
-import org.tomato.gowithtomato.service.CookieService;
+import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.ReviewService;
 import org.tomato.gowithtomato.service.TripParticipantsService;
 import org.tomato.gowithtomato.service.TripService;
@@ -27,20 +26,22 @@ import java.util.List;
 public class TripServlet extends BaseServlet {
     private TripService tripService;
     private TripParticipantsService tripParticipantsService;
-    private CookieService cookieService;
     private DateFormatter dateFormatter;
     private AjaxUtil ajaxUtil;
     private ReviewService reviewService;
 
+    private AuthService authService;
+
     @Override
     public void init() {
         super.init();
-        cookieService = (CookieService) this.getServletContext().getAttribute("cookieService");
         tripService = (TripService) this.getServletContext().getAttribute("tripService");
         tripParticipantsService = (TripParticipantsService) this.getServletContext().getAttribute("tripParticipantsService");
         dateFormatter = (DateFormatter) this.getServletContext().getAttribute("dateFormatter");
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
         reviewService = (ReviewService) this.getServletContext().getAttribute("reviewService");
+        authService = (AuthService) this.getServletContext().getAttribute("authService");
+
     }
 
     @Override
@@ -49,12 +50,12 @@ public class TripServlet extends BaseServlet {
         long tripId = getTripId(req);
         TripDTO tripDTO = setFormattedDateTime(tripService.findById(tripId));
         List<UserDTO> members = tripParticipantsService.findUsersByTripId(tripId);
-        UserDTO user;
+        UserDTO user = authService.getUser(req);
         req.setAttribute("chosen", false);
         req.setAttribute("owner", false);
         req.setAttribute("leaveFeedback", false);
-        try {
-            user = cookieService.findUser(req);
+        if (user != null) {
+
             List<UserDTO> userDTOS = members.stream().filter(u -> u.getLogin().equals(user.getLogin())).toList();
             if (!userDTOS.isEmpty()) {
                 req.setAttribute("chosen", true);
@@ -62,12 +63,11 @@ public class TripServlet extends BaseServlet {
             if (user.getId().equals(tripDTO.getOwner().getId())) {
                 req.setAttribute("owner", true);
             }
-            if (tripDTO.getStatus().equals(TripStatus.completed)){
+            if (tripDTO.getStatus().equals(TripStatus.completed)) {
                 req.setAttribute("leaveFeedback", !reviewService.leftAReview(tripId, user.getId()));
             }
-
-        } catch (UserNotFoundException ignored) {
         }
+
         req.setAttribute("tripInfo", generateTripInfo(tripDTO));
         req.setAttribute("trip", tripDTO);
         req.setAttribute("members", members);
@@ -83,7 +83,7 @@ public class TripServlet extends BaseServlet {
         if (pathInfo != null && !pathInfo.isEmpty()) {
             String routeIdString = pathInfo.substring(1);
             long tripId = Long.parseLong(routeIdString);
-            UserDTO user = cookieService.findUser(req);
+            UserDTO user = authService.getUser(req);
             tripParticipantsService.save(tripId, user.getId());
             resp.sendRedirect(req.getContextPath() + "/profile");
         } else {
@@ -93,9 +93,9 @@ public class TripServlet extends BaseServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserDTO user = cookieService.findUser(req);
+        UserDTO user = authService.getUser(req);
         TripDTO tripDTO = setFormattedDateTime(tripService.findById(getTripId(req)));
-        if (tripDTO.getOwner().getId().equals(user.getId())){
+        if (tripDTO.getOwner().getId().equals(user.getId())) {
             tripService.cancelTrip(tripDTO.getId());
             ajaxUtil.senderRespUrl(req.getContextPath() + "/trip/" + tripDTO.getId(), resp);
         }

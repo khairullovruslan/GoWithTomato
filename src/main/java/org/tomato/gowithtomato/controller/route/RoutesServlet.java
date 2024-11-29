@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.dto.UserDTO;
+import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.RouteService;
 
 import java.io.IOException;
@@ -15,11 +16,13 @@ import java.util.List;
 @WebServlet("/profile/routes")
 public class RoutesServlet extends BaseServlet {
     private RouteService routeService;
+    private AuthService authService;
 
     @Override
     public void init() {
         super.init();
         routeService = RouteService.getInstance();
+        authService = AuthService.getInstance();
     }
 
     @Override
@@ -28,7 +31,7 @@ public class RoutesServlet extends BaseServlet {
         if (page == null) {
             page = "1";
         }
-        UserDTO user = (UserDTO) req.getAttribute("user");
+        UserDTO user = authService.getUser(req);
         List<RouteDTO> routeDTOList = routeService.findByUserWithPagination(user, Integer.parseInt(page));
         req.setAttribute("routeList", routeDTOList);
         req.setAttribute("totalPages", routeService.getCountPage(user));

@@ -9,8 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.dto.TripDTO;
-import org.tomato.gowithtomato.exception.db.UserNotFoundException;
-import org.tomato.gowithtomato.service.CookieService;
+import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.RouteService;
 import org.tomato.gowithtomato.service.TripService;
 import org.tomato.gowithtomato.util.AjaxUtil;
@@ -19,7 +18,7 @@ import java.io.IOException;
 
 @WebServlet("/create-trip")
 public class TripCreateServlet extends BaseServlet {
-    private CookieService cookieService;
+    private AuthService authService;
     private AjaxUtil ajaxUtil;
     private TripService tripService;
     private RouteService routeService;
@@ -28,7 +27,7 @@ public class TripCreateServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        cookieService = (CookieService) this.getServletContext().getAttribute("cookieService");
+        authService = (AuthService) this.getServletContext().getAttribute("authService");
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
         tripService = (TripService) this.getServletContext().getAttribute("tripService");
         routeService = (RouteService) this.getServletContext().getAttribute("routeService");
@@ -49,13 +48,10 @@ public class TripCreateServlet extends BaseServlet {
         objectMapper.registerModule(new JavaTimeModule());
         TripDTO tripDTO = objectMapper.readValue(req.getInputStream(), TripDTO.class);
         Long id = Long.valueOf(req.getParameter("id"));
-        try {
-            tripService.saveTrip(cookieService.findUser(req), tripDTO, id);
+        tripService.saveTrip(authService.getUser(req), tripDTO, id);
 
-            ajaxUtil.senderRespUrl(req.getContextPath() + "/profile", resp);
-        }
-        catch (UserNotFoundException e){
-            ajaxUtil.senderRespUrl(req.getContextPath() + "/login", resp);
-        }
+        ajaxUtil.senderRespUrl(req.getContextPath() + "/profile", resp);
+
+
     }
 }
