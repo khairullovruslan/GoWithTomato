@@ -18,4 +18,6 @@ public abstract class TripDAO extends AbstractCrudDAO<Long, Trip> {
      * @throws DaoException если произошла ошибка при сохранении поездки
      */
     public abstract Trip saveWithRouteId(Trip trip, Long routeId) throws DaoException;
+
+    public abstract long getCountByUserId(Long id);
 }

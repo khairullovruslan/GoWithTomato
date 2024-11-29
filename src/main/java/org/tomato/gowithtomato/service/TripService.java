@@ -15,7 +15,8 @@ public class TripService {
     private final TripDAOImpl tripDAO;
     private final TripMapper tripMapper;
     private final RouteService routeService;
-    private TripService(){
+
+    private TripService() {
         tripDAO = TripDAOImpl.getInstance();
         tripMapper = TripMapper.getInstance();
         routeService = RouteService.getInstance();
@@ -25,12 +26,13 @@ public class TripService {
         return INSTANCE;
     }
 
-    public void saveTrip(UserDTO userDTO, TripDTO tripDTO, Long id){
+    public void saveTrip(UserDTO userDTO, TripDTO tripDTO, Long id) {
         tripDTO.setOwner(userDTO);
         tripDTO.setRoute(routeService.findById(id));
         tripDAO.saveWithRouteId(tripMapper.convertDTOToTrip(tripDTO), id);
     }
-    public List<TripDTO> findAll(){
+
+    public List<TripDTO> findAll() {
         List<Trip> trips = tripDAO.findAll();
         return trips.stream().map(tripMapper::convertTripToDTO).toList();
     }
@@ -39,16 +41,22 @@ public class TripService {
         List<Trip> trips = tripDAO.findAllByFilter(filter);
         return trips.stream().map(tripMapper::convertTripToDTO).toList();
     }
-    public TripDTO findById(Long id){
+
+    public TripDTO findById(Long id) {
         Optional<Trip> trip = tripDAO.findById(id);
-        if(trip.isPresent()) return tripMapper.convertTripToDTO(trip.get());
+        if (trip.isPresent()) return tripMapper.convertTripToDTO(trip.get());
         throw new RuntimeException();
     }
-    public Long getCountPage(Map<String, String> filter){
+
+    public Long getCountPage(Map<String, String> filter) {
         return tripDAO.getCountPage(filter);
     }
 
     public void cancelTrip(Long id) {
         tripDAO.cancelTrip(id);
+    }
+
+    public long getCountByUserId(Long id) {
+        return tripDAO.getCountByUserId(id);
     }
 }
