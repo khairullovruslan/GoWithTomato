@@ -3,7 +3,7 @@ package org.tomato.gowithtomato.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.tomato.gowithtomato.exception.db.UserNotFoundException;
+import org.tomato.gowithtomato.exception.auth.UnauthorizedException;
 import org.tomato.gowithtomato.service.UserService;
 import org.tomato.gowithtomato.validator.annotations.ValidLogin;
 
@@ -14,11 +14,10 @@ public class LoginValidator implements ConstraintValidator<ValidLogin, String> {
         try {
             UserService.getInstance().findUserByLogin(login);
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("Пользватель с таким логином уже зарегистрирован")
+            context.buildConstraintViolationWithTemplate("Пользователь с таким логином уже зарегистрирован")
                     .addConstraintViolation();
             return false;
-        }
-        catch (UserNotFoundException e){
+        } catch (UnauthorizedException e) {
             return true;
         }
     }

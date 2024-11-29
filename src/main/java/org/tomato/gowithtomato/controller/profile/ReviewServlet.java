@@ -10,8 +10,7 @@ import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.ReviewDTO;
 import org.tomato.gowithtomato.dto.TripDTO;
 import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.exception.db.UserNotFoundException;
-import org.tomato.gowithtomato.service.CookieService;
+import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.ReviewService;
 import org.tomato.gowithtomato.service.TripService;
 import org.tomato.gowithtomato.util.AjaxUtil;
@@ -25,8 +24,9 @@ public class ReviewServlet extends BaseServlet {
     private TripService tripService;
     private ObjectMapper objectMapper;
     private AjaxUtil ajaxUtil;
-    private CookieService cookieService;
     private ReviewService reviewService;
+
+    private AuthService authService;
 
 
     @Override
@@ -35,8 +35,8 @@ public class ReviewServlet extends BaseServlet {
         objectMapper = (ObjectMapper) this.getServletContext().getAttribute("objectMapper");
         tripService = (TripService) this.getServletContext().getAttribute("tripService");
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
-        cookieService = (CookieService) this.getServletContext().getAttribute("cookieService");
         reviewService = (ReviewService) this.getServletContext().getAttribute("reviewService");
+        authService = (AuthService) this.getServletContext().getAttribute("authService");
     }
 
     @Override
@@ -55,19 +55,16 @@ public class ReviewServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            ReviewDTO reviewDTO = objectMapper.readValue(req.getInputStream(), ReviewDTO.class);
-            UserDTO user = cookieService.findUser(req);
-            TripDTO tripDTO = tripService.findById(Long.valueOf(req.getParameter("trip")));
-            reviewDTO.setOwner(user);
-            reviewDTO.setTrip(tripDTO);
-            if (!reviewService.leftAReview(tripDTO.getId(), user.getId())) {
-                reviewService.save(reviewDTO);
-            }
-            ajaxUtil.senderRespUrl(req.getContextPath() + "/review?trip=%d".formatted(tripDTO.getId()), resp);
-        } catch (UserNotFoundException ignored) {
-            ajaxUtil.senderRespUrl(req.getContextPath() + "/login", resp);
+        ReviewDTO reviewDTO = objectMapper.readValue(req.getInputStream(), ReviewDTO.class);
+        UserDTO user = authService.getUser(req);
+        TripDTO tripDTO = tripService.findById(Long.valueOf(req.getParameter("trip")));
+        reviewDTO.setOwner(user);
+        reviewDTO.setTrip(tripDTO);
+        if (!reviewService.leftAReview(tripDTO.getId(), user.getId())) {
+            reviewService.save(reviewDTO);
         }
+        ajaxUtil.senderRespUrl(req.getContextPath() + "/review?trip=%d".formatted(tripDTO.getId()), resp);
+
 
     }
 }
