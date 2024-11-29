@@ -34,4 +34,20 @@ public class ReviewQueries {
             FROM review
             WHERE user_id = ? AND trip_id = ?
             """;
+
+
+    //language=sql
+    public static final String FIND_BY_TRIP_OWNER_ID_SQL = """
+            SELECT
+                r.id as id,
+                r.user_id as user_id,
+                r.trip_id as trip_id,
+                r.rating as rating,
+                r.description as description
+            FROM review r
+            LEFT JOIN trip t ON r.trip_id = t.user_id
+            WHERE t.user_id = ?
+            """;
+
+
 }
