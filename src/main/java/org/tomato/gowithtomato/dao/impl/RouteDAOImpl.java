@@ -6,8 +6,8 @@ import org.tomato.gowithtomato.entity.Route;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.db.DaoException;
 import org.tomato.gowithtomato.exception.db.UniqueSqlException;
+import org.tomato.gowithtomato.mapper.RouteMapper;
 import org.tomato.gowithtomato.mapper.RowMapper;
-import org.tomato.gowithtomato.mapper.mappers.RouteMapper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -52,7 +52,12 @@ public class RouteDAOImpl extends RouteDAO {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             statement.setLong(1, id);
-            return Optional.ofNullable(rowMapper.mapRow(statement.executeQuery()));
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.ofNullable(rowMapper.mapRow(resultSet));
+            } else {
+                return Optional.empty();
+            }
         } catch (SQLException e) {
             throw new DaoException("Ошибка при поиске маршрута по id.", e);
         }

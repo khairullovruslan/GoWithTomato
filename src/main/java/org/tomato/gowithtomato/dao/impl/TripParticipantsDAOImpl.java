@@ -4,7 +4,7 @@ import org.tomato.gowithtomato.dao.daoInterface.m2m.TripParticipantsDAO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.db.DaoException;
 import org.tomato.gowithtomato.mapper.RowMapper;
-import org.tomato.gowithtomato.mapper.mappers.UserMapper;
+import org.tomato.gowithtomato.mapper.UserMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

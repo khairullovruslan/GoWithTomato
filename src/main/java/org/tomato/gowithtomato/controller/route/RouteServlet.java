@@ -9,9 +9,8 @@ import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.NewRouteResponse;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.exception.db.UserNotFoundException;
 import org.tomato.gowithtomato.mapper.RouteMapper;
-import org.tomato.gowithtomato.service.CookieService;
+import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.RouteService;
 import org.tomato.gowithtomato.util.AjaxUtil;
 
@@ -21,15 +20,16 @@ import java.io.IOException;
 public class RouteServlet extends BaseServlet {
     private AjaxUtil ajaxUtil;
     private RouteService routeService;
-    private CookieService cookieService;
     private ObjectMapper objectMapper;
+    private AuthService authService;
 
     @Override
     public void init() {
         super.init();
         routeService = (RouteService) this.getServletContext().getAttribute("routeService");
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
-        cookieService = (CookieService) this.getServletContext().getAttribute("cookieService");
+        authService = (AuthService) this.getServletContext().getAttribute("authService");
+
         objectMapper = (ObjectMapper) this.getServletContext().getAttribute("objectMapper");
     }
 
@@ -43,15 +43,10 @@ public class RouteServlet extends BaseServlet {
         NewRouteResponse routeResponse = objectMapper.readValue(req.getInputStream(), NewRouteResponse.class);
         RouteDTO routeDTO = routeResponse.getRouteDTO();
         if (routeResponse.getType().equals("location-info")) {
-            UserDTO user;
-            try {
-                user = cookieService.findUser(req);
-                routeDTO.setOwner(user);
-                routeService.saveRoute(RouteMapper.getInstance().convertDTOToRoute(routeDTO));
-                ajaxUtil.senderRespUrl(req.getContextPath() + "/profile", resp);
-            } catch (UserNotFoundException e) {
-                ajaxUtil.senderRespUrl(req.getContextPath() + "/login", resp);
-            }
+            UserDTO user = authService.getUser(req);
+            routeDTO.setOwner(user);
+            routeService.saveRoute(RouteMapper.getInstance().convertDTOToRoute(routeDTO));
+            ajaxUtil.senderRespUrl(req.getContextPath() + "/profile", resp);
         }
     }
 }
