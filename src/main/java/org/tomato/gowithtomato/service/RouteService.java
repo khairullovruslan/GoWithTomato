@@ -16,7 +16,8 @@ public class RouteService {
     private final RouteDAOImpl routeDAO;
     private final RouteMapper routeMapper;
     private final UserMapper userMapper;
-    private RouteService(){
+
+    private RouteService() {
         routeDAO = RouteDAOImpl.getInstance();
         routeMapper = RouteMapper.getInstance();
         userMapper = UserMapper.getInstance();
@@ -25,24 +26,26 @@ public class RouteService {
     public static RouteService getInstance() {
         return INSTANCE;
     }
-    public void saveRoute(Route route){
+
+    public void saveRoute(Route route) {
         routeDAO.save(route);
     }
 
 
-    public RouteDTO findById(Long id){
-        Optional<Route> route =  routeDAO.findById(id);
-        if (route.isPresent()){
+    public RouteDTO findById(Long id) {
+        Optional<Route> route = routeDAO.findById(id);
+        if (route.isPresent()) {
             return routeMapper.convertRouteToDTO(route.get());
         }
         throw new RoutNotFoundException();
     }
 
     public List<RouteDTO> findByUserWithPagination(UserDTO user, int i) {
-        List<Route> routes =  routeDAO.findByUserWithPagination(userMapper.convertDTOToUser(user), i);
+        List<Route> routes = routeDAO.findByUserWithPagination(userMapper.convertDTOToUser(user), i);
         return routes.stream().map(routeMapper::convertRouteToDTO).toList();
     }
+
     public long getCountPage(UserDTO user) {
-       return routeDAO.getCountPage(userMapper.convertDTOToUser(user));
+        return routeDAO.getCountPage(userMapper.convertDTOToUser(user));
     }
 }

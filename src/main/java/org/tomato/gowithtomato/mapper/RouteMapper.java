@@ -1,25 +1,69 @@
 package org.tomato.gowithtomato.mapper;
 
+import org.tomato.gowithtomato.dao.daoInterface.m2m.RouteAndPointsDao;
+import org.tomato.gowithtomato.dao.impl.RouteAndPointsDaoImpl;
 import org.tomato.gowithtomato.dto.PointDTO;
 import org.tomato.gowithtomato.dto.RouteDTO;
 import org.tomato.gowithtomato.entity.Point;
 import org.tomato.gowithtomato.entity.Route;
+import org.tomato.gowithtomato.entity.User;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RouteMapper {
-    private static final RouteMapper routeMapper = new RouteMapper();
-    private final PointMapper pointMapper;
+public class RouteMapper implements RowMapper<Route> {
+
+    private final static RouteMapper INSTANCE = new RouteMapper();
+    private final RouteAndPointsDao routeAndPointsDao;
     private final UserMapper userMapper;
+    private final PointMapper pointMapper;
 
     private RouteMapper() {
-        this.userMapper = UserMapper.getInstance();
+        routeAndPointsDao = RouteAndPointsDaoImpl.getInstance();
         pointMapper = PointMapper.getInstance();
+        userMapper = UserMapper.getInstance();
     }
 
     public static RouteMapper getInstance() {
-        return routeMapper;
+        return INSTANCE;
+    }
+
+    @Override
+    public Route mapRow(ResultSet resultSet) throws SQLException {
+        Point startPoint = createPointFromResultSet(resultSet, "start_");
+        Point finishPoint = createPointFromResultSet(resultSet, "finish_");
+
+        User owner = User.builder()
+                .id(resultSet.getLong("user_id"))
+                .login(resultSet.getString("user_login"))
+                .email(resultSet.getString("user_email"))
+                .phoneNumber(resultSet.getString("user_phone_number"))
+                .build();
+
+        List<Point> others = routeAndPointsDao.findByRouteId(resultSet.getLong("route_id"));
+        return Route.builder()
+                .id(resultSet.getLong("route_id"))
+                .departurePoint(startPoint)
+                .destinationPoint(finishPoint)
+                .distance(resultSet.getDouble("distance"))
+                .owner(owner)
+                .other(others)
+                .build();
+
+    }
+
+    private Point createPointFromResultSet(ResultSet result, String prefix) throws SQLException {
+        return Point.builder()
+                .id(result.getLong(prefix + "id"))
+                .lat(result.getDouble(prefix + "lat"))
+                .lng(result.getDouble(prefix + "lng"))
+                .name(result.getString(prefix + "name"))
+                .country(result.getString(prefix + "country"))
+                .state(result.getString(prefix + "state"))
+                .osmValue(result.getString(prefix + "osm_value"))
+                .build();
     }
 
     public Route convertDTOToRoute(RouteDTO routeDTO) {
@@ -56,5 +100,4 @@ public class RouteMapper {
         routeDTO.setOthers(pointList);
         return routeDTO;
     }
-
 }

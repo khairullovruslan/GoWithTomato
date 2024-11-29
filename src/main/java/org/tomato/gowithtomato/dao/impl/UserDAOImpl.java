@@ -4,7 +4,7 @@ import org.tomato.gowithtomato.dao.daoInterface.UserDAO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.db.DaoException;
 import org.tomato.gowithtomato.exception.db.UniqueSqlException;
-import org.tomato.gowithtomato.mapper.mappers.UserMapper;
+import org.tomato.gowithtomato.mapper.UserMapper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -128,6 +128,38 @@ public class UserDAOImpl extends UserDAO {
         } catch (SQLException e) {
             throw new DaoException("Ошибка при поиске пользователя по логину: " + login, e);
         }
+    }
+
+    @Override
+    public Optional<String> getPasswordByLogin(String login) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_PASSWORD_BY_LOGIN)) {
+
+            statement.setString(1, login);
+            return convertResultSetToPassword(statement.executeQuery());
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при поиске пользователя по логину: " + login, e);
+        }
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_BY_EMAIL_SQL)) {
+
+            statement.setString(1, email);
+            List<User> users = convertResultSetToList(statement.executeQuery());
+            return users.size() == 1 ? Optional.of(users.getFirst()) : Optional.empty();
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при поиске пользователя по email: " + email, e);
+        }
+    }
+
+    private Optional<String> convertResultSetToPassword(ResultSet resultSet) throws SQLException {
+        if (resultSet.next()) {
+            return Optional.ofNullable(resultSet.getString("password"));
+        }
+        return Optional.empty();
     }
 
     /**

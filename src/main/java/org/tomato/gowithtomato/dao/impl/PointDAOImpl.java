@@ -4,7 +4,7 @@ import org.tomato.gowithtomato.dao.daoInterface.PointDAO;
 import org.tomato.gowithtomato.entity.Point;
 import org.tomato.gowithtomato.exception.db.DaoException;
 import org.tomato.gowithtomato.exception.db.UniqueSqlException;
-import org.tomato.gowithtomato.mapper.mappers.PointMapper;
+import org.tomato.gowithtomato.mapper.PointMapper;
 
 import java.sql.*;
 import java.util.ArrayList;

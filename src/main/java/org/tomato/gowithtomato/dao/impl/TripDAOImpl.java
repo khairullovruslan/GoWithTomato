@@ -6,7 +6,7 @@ import org.tomato.gowithtomato.dto.FilterQueriesDTO;
 import org.tomato.gowithtomato.entity.Trip;
 import org.tomato.gowithtomato.entity.TripStatus;
 import org.tomato.gowithtomato.exception.db.DaoException;
-import org.tomato.gowithtomato.mapper.mappers.TripMapper;
+import org.tomato.gowithtomato.mapper.TripMapper;
 import org.tomato.gowithtomato.util.FilterTripDaoUtil;
 
 import java.sql.*;
@@ -64,6 +64,19 @@ public class TripDAOImpl extends TripDAO {
             throw new DaoException("Не удалось получить ID для новой поездки.");
         } catch (SQLException e) {
             throw new DaoException("Ошибка при сохранении поездки.", e);
+        }
+    }
+
+    @Override
+    public long getCountByUserId(Long id) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(COUNT_BY_OWNER_ID_SQL)) {
+            statement.setLong(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+            return convertResultSetToCountByUserId(resultSet);
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при поиске поездки по ID: " + id, e);
         }
     }
 
@@ -219,5 +232,12 @@ public class TripDAOImpl extends TripDAO {
             trips.add(mapper.mapRow(resultSet));
         }
         return trips;
+    }
+
+    private long convertResultSetToCountByUserId(ResultSet result) throws SQLException {
+        if (result.next()) {
+            return result.getLong("count");
+        }
+        throw new DaoException("Ошибка при поиске количества поездок");
     }
 }
