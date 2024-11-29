@@ -57,7 +57,8 @@ CREATE TABLE review
     user_id     INT REFERENCES users (id) ON DELETE CASCADE,
     trip_id     INT REFERENCES trip (id) ON DELETE CASCADE,
     rating      INT CHECK (rating BETWEEN 1 AND 5),
-    description text
+    description text CHECK (length(description) <= 350)
+
 );
 
 
