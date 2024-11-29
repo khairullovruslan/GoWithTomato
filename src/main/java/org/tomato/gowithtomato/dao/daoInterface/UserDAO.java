@@ -19,4 +19,8 @@ public abstract class UserDAO extends AbstractCrudDAO<Long, User> {
      * @throws DaoException если произошла ошибка при выполнении запроса к базе данных
      */
     public abstract Optional<User> findByLogin(String login) throws DaoException;
+
+    public abstract Optional<String> getPasswordByLogin(String login);
+
+    public abstract Optional<User> findByEmail(String email);
 }
