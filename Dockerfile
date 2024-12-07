@@ -1,12 +1,17 @@
-FROM maven:3.8.3-openjdk-21 as build
+# Используем OpenJDK 21
+FROM openjdk:21-jdk-slim as build
+
+# Устанавливаем Maven
+RUN apt-get update && apt-get install -y maven
 
 # Копируем исходные файлы и POM в каталог приложения
 COPY src /home/app/src
-COPY pom.xml /home/app/  # Добавлен слеш для правильного пути
+COPY pom.xml /home/app/
 
 # Выполняем сборку проекта
 RUN mvn -f /home/app/pom.xml clean package
 
+# Используем Tomcat с JDK 21
 FROM tomcat:9.0.65-jdk21-corretto
 
 # Устанавливаем рабочий каталог для Tomcat
