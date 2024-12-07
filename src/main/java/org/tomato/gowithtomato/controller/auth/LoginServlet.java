@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class LoginServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        authService = (AuthService) this.getServletContext().getAttribute("authService");
+        authService = ServiceFactory.getAuthService();
     }
 
     @Override

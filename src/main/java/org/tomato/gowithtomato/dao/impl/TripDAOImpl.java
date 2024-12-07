@@ -17,9 +17,6 @@ import java.util.Optional;
 
 import static org.tomato.gowithtomato.dao.query.TripQueries.*;
 
-/**
- * Реализация интерфейса TripDAO для управления поездками.
- */
 public class TripDAOImpl extends TripDAO {
     private static final TripDAOImpl INSTANCE = new TripDAOImpl();
     private final FilterTripDaoUtil filterUtil;
@@ -29,23 +26,12 @@ public class TripDAOImpl extends TripDAO {
         mapper = TripMapper.getInstance();
     }
 
-    /**
-     * Получает экземпляр синглтона TripDAOImpl.
-     *
-     * @return экземпляр синглтона
-     */
+
     public static TripDAOImpl getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Сохраняет поездку с заданным ID маршрута.
-     *
-     * @param trip объект поездки
-     * @param id   ID маршрута
-     * @return сохранённый объект поездки с присвоенным ID
-     * @throws DaoException если произошла ошибка при сохранении поездки
-     */
+
     public Trip saveWithRouteId(Trip trip, Long id) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -80,13 +66,7 @@ public class TripDAOImpl extends TripDAO {
         }
     }
 
-    /**
-     * Находит поездку по заданному ID.
-     *
-     * @param id ID поездки
-     * @return объект поездки, если найдено, иначе пустой Optional
-     * @throws DaoException если произошла ошибка при поиске поездки
-     */
+
     @Override
     public Optional<Trip> findById(Long id) {
         try (Connection connection = getConnection();
@@ -103,12 +83,7 @@ public class TripDAOImpl extends TripDAO {
         }
     }
 
-    /**
-     * Находит все поездки.
-     *
-     * @return список всех поездок
-     * @throws DaoException если произошла ошибка при получении поездок
-     */
+
     public List<Trip> findAll() {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
@@ -125,22 +100,15 @@ public class TripDAOImpl extends TripDAO {
     }
 
     @Override
-    public Trip update(Trip entity) {
-        return null;
+    public void update(Trip entity) {
+
     }
 
     @Override
     public void delete(Long id) {
-        // Реализация удаления поездки может быть добавлена здесь
     }
 
-    /**
-     * Находит все поездки по заданным фильтрам.
-     *
-     * @param filter карта с фильтрами
-     * @return список поездок, соответствующих фильтру
-     * @throws DaoException если произошла ошибка при применении фильтра
-     */
+
     @SneakyThrows
     public List<Trip> findAllByFilter(Map<String, String> filter) {
         try (Connection connection = getConnection()) {
@@ -154,13 +122,7 @@ public class TripDAOImpl extends TripDAO {
         }
     }
 
-    /**
-     * Получает количество страниц на основе фильтров.
-     *
-     * @param filter карта с фильтрами
-     * @return количество страниц
-     * @throws DaoException если произошла ошибка при подсчете страниц
-     */
+
     public Long getCountPage(Map<String, String> filter) {
         try (Connection connection = getConnection()) {
             FilterQueriesDTO filterQueriesDTO = filterUtil.getQueryByFilter(filter);
@@ -174,12 +136,6 @@ public class TripDAOImpl extends TripDAO {
     }
 
 
-    /**
-     * Отменяет поездку по заданному ID.
-     *
-     * @param id ID поездки
-     * @throws DaoException если произошла ошибка при отмене поездки
-     */
     public void cancelTrip(Long id) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(CANCEL_TRIP_SQL)) {
@@ -190,11 +146,7 @@ public class TripDAOImpl extends TripDAO {
         }
     }
 
-    /**
-     * Проверяет актуальность статуса поездки и обновляет его при необходимости.
-     *
-     * @throws DaoException если произошла ошибка при обновлении статуса
-     */
+
     public void checkTheRelevanceOfTheTripStatus() {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_STATUS_FOR_COMPLETED_TRIPS_SQL)) {
@@ -205,13 +157,6 @@ public class TripDAOImpl extends TripDAO {
     }
 
 
-    /**
-     * Получает общее количество страниц для пагинации.
-     *
-     * @param result ResultSet, откуда берется данные
-     * @return Количество страниц
-     * @throws SQLException если произошла ошибка
-     */
     private Long convertResultSetToCountPages(ResultSet result) throws SQLException {
         if (result.next()) {
             return result.getLong("count");
@@ -219,13 +164,6 @@ public class TripDAOImpl extends TripDAO {
         throw new DaoException("Ошибка при поиске количества значений");
     }
 
-    /**
-     * Получаем список поездок из ResultSet
-     *
-     * @param resultSet ResultSet, откуда берется данные
-     * @return Список поездок
-     * @throws SQLException если произошла ошибка
-     */
     private List<Trip> getTripByResultSet(ResultSet resultSet) throws SQLException {
         List<Trip> trips = new ArrayList<>();
         while (resultSet.next()) {

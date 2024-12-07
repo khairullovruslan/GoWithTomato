@@ -15,6 +15,8 @@ public class CharacterEncodingFilter extends HttpFilter {
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         req.setCharacterEncoding("utf-8");
         res.setCharacterEncoding("utf-8");
+
+        req.setAttribute("contextPath", req.getContextPath());
         chain.doFilter(req, res);
     }
 }

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const contextPath = "/gowithtomato"; // Consider making this dynamic
+    const contextPath = $('#contextId').val()
     const routeCards = document.querySelectorAll('.route-card');
 
     routeCards.forEach(card => {

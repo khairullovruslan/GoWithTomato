@@ -1,7 +1,8 @@
 package org.tomato.gowithtomato.mapper;
 
-import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.dto.UserRegistrationDto;
+import org.tomato.gowithtomato.dto.user.UserDTO;
+import org.tomato.gowithtomato.dto.user.UserEditDTO;
+import org.tomato.gowithtomato.dto.user.UserRegistrationDTO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.util.PasswordUtil;
 
@@ -52,13 +53,23 @@ public class UserMapper implements RowMapper<User> {
 
     }
 
-    public User convertUserRegistrationDTOToUser(UserRegistrationDto user) {
+    public User convertUserRegistrationDTOToUser(UserRegistrationDTO user) {
         return User
                 .builder()
                 .login(user.login())
                 .phoneNumber(user.phoneNumber())
                 .email(user.email())
                 .password(PasswordUtil.hashPassword(user.password()))
+                .build();
+    }
+
+    public User convertUserEditDTOToUser(UserEditDTO userEditDTO, long userId) {
+        return User
+                .builder()
+                    .id(userId)
+                    .phoneNumber(userEditDTO.phoneNumber())
+                    .email(userEditDTO.email())
+                    .login(userEditDTO.login())
                 .build();
     }
 }

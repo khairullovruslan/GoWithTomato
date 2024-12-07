@@ -15,9 +15,6 @@ import java.util.List;
 import static org.tomato.gowithtomato.dao.query.m2m.RouteAndPointsQueries.FIND_BY_ID_SQL;
 import static org.tomato.gowithtomato.dao.query.m2m.RouteAndPointsQueries.ROUTE_INTERMEDIATE_INSERT_SQL;
 
-/**
- * Реализация интерфейса RouteAndPointsDao для управления промежуточными точками маршрута.
- */
 public class RouteAndPointsDaoImpl extends RouteAndPointsDao {
     private static final RouteAndPointsDaoImpl INSTANCE = new RouteAndPointsDaoImpl();
     private final PointDAOImpl pointDAO;
@@ -26,22 +23,10 @@ public class RouteAndPointsDaoImpl extends RouteAndPointsDao {
         pointDAO = PointDAOImpl.getInstance();
     }
 
-    /**
-     * Получает экземпляр синглтона RouteAndPointsDaoImpl.
-     *
-     * @return экземпляр синглтона
-     */
     public static RouteAndPointsDaoImpl getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Сохраняет все точки маршрута.
-     *
-     * @param pointList список точек
-     * @param routeId   ID маршрута
-     * @throws SQLException если произошла ошибка при сохранении точек
-     */
     @Override
     public void saveAll(List<Point> pointList, Long routeId) throws SQLException {
         try (Connection connection = getConnection();
@@ -56,13 +41,7 @@ public class RouteAndPointsDaoImpl extends RouteAndPointsDao {
         }
     }
 
-    /**
-     * Находит точки по ID маршрута.
-     *
-     * @param id ID маршрута
-     * @return список точек
-     * @throws DaoException если произошла ошибка при поиске точек
-     */
+
     @Override
     public List<Point> findByRouteId(Long id) {
         try (Connection connection = getConnection();

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
 
 import java.io.IOException;
@@ -24,21 +25,20 @@ public class AuthFilter extends HttpFilter {
     @Override
     public void init() throws ServletException {
         super.init();
-        authService = (AuthService) this.getServletContext().getAttribute("authService");
+        authService = ServiceFactory.getAuthService();
     }
 
     private static final Map<String, List<String>> pagesForAuthorizedUser = new HashMap<>(Map.of(
-            "PUT", List.of("/trip/.*"),
+            "PUT", List.of("/trip/.*", "/profile/edit"),
             "DELETE", List.of(),
-            "POST", List.of("/review", "/new-route", "/create-trip", "/trip/.*"),
-            "GET", List.of("/review", "/new-route", "/profile/routes", "/create-trip"),
+            "POST", List.of("/review", "/new-route", "/create-trip", "/trip/.*", "/profile/edit", "/profile/upload"),
+            "GET", List.of("/review", "/new-route", "/profile/routes", "/create-trip", "/profile/edit"),
             "PATCH", List.of()));
 
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         boolean isPagesForAuthorizedUser = false;
-        System.out.println(req.getRequestURI().substring(req.getContextPath().length()));
         for (String s : pagesForAuthorizedUser.get(req.getMethod())) {
             Pattern pattern = Pattern.compile(s);
             if (pattern.matcher(req.getRequestURI().substring(req.getContextPath().length())).matches()) {
@@ -46,7 +46,9 @@ public class AuthFilter extends HttpFilter {
             }
         }
         log.info("isAuthorizedPage? : {}", isPagesForAuthorizedUser);
-        if (isPagesForAuthorizedUser && authService.authorizationCheck(req)) {
+        boolean userIsAuthorized = authService.authorizationCheck(req);
+        req.setAttribute("userIsAuthorized", userIsAuthorized);
+        if (isPagesForAuthorizedUser && userIsAuthorized) {
             chain.doFilter(req, res);
         } else if (isPagesForAuthorizedUser && req.getMethod().equals("GET")) {
             req.getRequestDispatcher("/templates/login.jsp").forward(req, res);

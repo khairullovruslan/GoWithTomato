@@ -7,12 +7,12 @@ $(document).ready(function () {
             availableSeats: $('#availableSeats').val(),
             price: parseFloat($('#price').val())
         };
-        const contextPath = "/gowithtomato";
+        const contextPath = $('#contextId').val()
         const routeId = $('#routeId').val();
 
         console.log(routeId);
 
-        const path = contextPath + '/create-trip?id=' + routeId ;
+        const path = contextPath + '/create-trip?id=' + routeId;
         console.log(path);
 
         $.ajax({

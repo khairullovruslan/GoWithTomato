@@ -3,6 +3,8 @@ package org.tomato.gowithtomato.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.tomato.gowithtomato.dto.route.RouteDTO;
+import org.tomato.gowithtomato.dto.user.UserDTO;
 import org.tomato.gowithtomato.entity.TripStatus;
 
 import java.math.BigDecimal;

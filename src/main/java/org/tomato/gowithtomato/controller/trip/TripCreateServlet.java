@@ -7,8 +7,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
-import org.tomato.gowithtomato.dto.RouteDTO;
+import org.tomato.gowithtomato.dto.route.RouteDTO;
 import org.tomato.gowithtomato.dto.TripDTO;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.RouteService;
 import org.tomato.gowithtomato.service.TripService;
@@ -27,10 +28,10 @@ public class TripCreateServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        authService = (AuthService) this.getServletContext().getAttribute("authService");
+        authService = ServiceFactory.getAuthService();
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
-        tripService = (TripService) this.getServletContext().getAttribute("tripService");
-        routeService = (RouteService) this.getServletContext().getAttribute("routeService");
+        tripService = ServiceFactory.getTripService();
+        routeService = ServiceFactory.getRouteService();
         objectMapper = (ObjectMapper) this.getServletContext().getAttribute("objectMapper");
 
     }

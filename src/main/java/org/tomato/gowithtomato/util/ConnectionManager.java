@@ -19,7 +19,7 @@ public class ConnectionManager {
     private static ArrayBlockingQueue<Connection> pool;
     private final PropertiesUtil propertiesUtil;
 
-    private ConnectionManager(){
+    private ConnectionManager() {
         propertiesUtil = PropertiesUtil.getInstance();
         try {
             initConnectionPool();
@@ -30,7 +30,7 @@ public class ConnectionManager {
         }
     }
 
-    private  void initConnectionPool() throws ClassNotFoundException {
+    private void initConnectionPool() throws ClassNotFoundException {
         String poolSize = propertiesUtil.get(POOL_SIZE_KEY);
         int size = poolSize == null ? DEFAULT_POOL_SIZE : Integer.parseInt(poolSize);
         Class.forName("org.postgresql.Driver");
@@ -49,7 +49,7 @@ public class ConnectionManager {
 
     }
 
-    private  Connection open() {
+    private Connection open() {
         try {
             return DriverManager.getConnection(propertiesUtil.get(URL_KEY), propertiesUtil.get(USERNAME_KEY), propertiesUtil.get(PASSWORD_KEY));
         } catch (SQLException e) {
@@ -57,7 +57,7 @@ public class ConnectionManager {
         }
     }
 
-    public  Connection get() {
+    public Connection get() {
         try {
             return pool.take();
         } catch (InterruptedException e) {
@@ -65,7 +65,7 @@ public class ConnectionManager {
         }
     }
 
-    public  int size() {
+    public int size() {
         return pool.size();
     }
 

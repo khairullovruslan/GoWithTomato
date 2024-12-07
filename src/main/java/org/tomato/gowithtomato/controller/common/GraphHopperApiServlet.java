@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.tomato.gowithtomato.dto.NewRouteResponse;
-import org.tomato.gowithtomato.dto.RouteDTO;
+import org.tomato.gowithtomato.dto.route.NewRouteResponse;
+import org.tomato.gowithtomato.dto.route.RouteDTO;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.GraphHopperApiService;
 import org.tomato.gowithtomato.util.AjaxUtil;
 
@@ -22,7 +23,7 @@ public class GraphHopperApiServlet extends BaseServlet {
         super.init();
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
         objectMapper = (ObjectMapper) this.getServletContext().getAttribute("objectMapper");
-        graphHopperApiService = (GraphHopperApiService) this.getServletContext().getAttribute("graphHopperApiService");
+        graphHopperApiService = ServiceFactory.getGraphHopperApiService();
     }
 
     @Override

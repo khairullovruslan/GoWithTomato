@@ -13,9 +13,6 @@ import java.util.Optional;
 
 import static org.tomato.gowithtomato.dao.query.PointQueries.*;
 
-/**
- * Реализация DAO для работы с сущностями типа Point
- */
 public class PointDAOImpl extends PointDAO {
     private static final PointDAOImpl INSTANCE = new PointDAOImpl();
 
@@ -23,22 +20,10 @@ public class PointDAOImpl extends PointDAO {
         this.mapper = PointMapper.getInstance();
     }
 
-    /**
-     * Получает единственный экземпляр PointDAOImpl
-     *
-     * @return единственный экземпляр данного DAO
-     */
     public static PointDAOImpl getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Сохраняет точку в базе данных
-     *
-     * @param entity Сущность Point, которую необходимо сохранить
-     * @return Сохраненная точка с присвоенным идентификатором
-     * @throws DaoException если не удалось сохранить точку
-     */
     public Point save(Point entity) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -66,13 +51,6 @@ public class PointDAOImpl extends PointDAO {
         }
     }
 
-    /**
-     * Находит точку по её координатам (широта и долгота)
-     *
-     * @param lat Широта точки
-     * @param lng Долгота точки
-     * @return Optional<Point>, содержащий найденную точку, или empty, если точка не найдена
-     */
     public Optional<Point> findByLatLng(Double lat, Double lng) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_COORDINATE_SQL)) {
@@ -85,12 +63,6 @@ public class PointDAOImpl extends PointDAO {
         }
     }
 
-    /**
-     * Находит точку по идентификатору
-     *
-     * @param id Идентификатор точки
-     * @return Optional<Point> содержащий найденную точку, или empty, если точка не найдена
-     */
     public Optional<Point> findById(Long id) {
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             statement.setLong(1, id);
@@ -101,25 +73,11 @@ public class PointDAOImpl extends PointDAO {
         }
     }
 
-    /**
-     * Преобразует ResultSet в Optional<Point>
-     *
-     * @param result Результат выполнения SQL-запроса
-     * @return Optional<Point>, содержащий точку, если она найдена
-     * @throws SQLException если произошла ошибка при обработке ResultSet
-     */
     private Optional<Point> convertResultSetToOptional(ResultSet result) throws SQLException {
         List<Point> points = convertResultSetToList(result);
         return points.isEmpty() ? Optional.empty() : Optional.of(points.getFirst());
     }
 
-    /**
-     * Преобразует ResultSet в список точек
-     *
-     * @param result Результат выполнения SQL-запроса
-     * @return Список точек
-     * @throws SQLException если произошла ошибка при обработке ResultSet
-     */
     private List<Point> convertResultSetToList(ResultSet result) throws SQLException {
         List<Point> points = new ArrayList<>();
         while (result.next()) {
@@ -128,12 +86,6 @@ public class PointDAOImpl extends PointDAO {
         return points;
     }
 
-    /**
-     * Обрабатывает исключения, связанные с SQL
-     *
-     * @param e Исключение, которое необходимо обработать
-     * @throws UniqueSqlException если возникает ошибка уникальности
-     */
     private void handleSQLException(SQLException e) throws UniqueSqlException {
         if ("23505".equals(e.getSQLState())) {
             throw new UniqueSqlException("Ошибка уникальности", e);

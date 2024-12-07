@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trip Details</title>
+    <title>Поездка</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/trip.css'/>">
 </head>
@@ -74,7 +74,10 @@
         </c:when>
         <c:when test="${chosen}">
             <c:if test="${trip.status == 'completed'}">
-                <button style="color: white" class="button" type="submit"  onclick="window.location.href='<%=request.getContextPath()%>/review?trip=${trip.id}'"> Братанчик, оставь отзыв!</button>
+                <button style="color: white" class="button" type="submit"
+                        onclick="window.location.href='<%=request.getContextPath()%>/review?trip=${trip.id}'">
+                    Братанчик, оставь отзыв!
+                </button>
             </c:if>
             <c:if test="${trip.status == 'available' && leaveFeedback}">
                 <button style="color: white" class="button" type="submit" disabled>Вы уже забронировали</button>
@@ -94,6 +97,8 @@
 
 
 </div>
+<input id="contextId" value="${contextPath}" hidden="hidden">
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<c:url value='/js/trip.js'/>"></script>
 <%@include file="/templates/base/footer.jsp" %>

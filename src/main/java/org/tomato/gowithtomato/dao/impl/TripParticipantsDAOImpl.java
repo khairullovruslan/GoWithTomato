@@ -17,9 +17,6 @@ import static org.tomato.gowithtomato.dao.query.TripQueries.ADD_NEW_MEMBER_SQL;
 import static org.tomato.gowithtomato.dao.query.m2m.TripParticipantsQueries.FIND_USERS_BY_TRIP_ID_SQL;
 import static org.tomato.gowithtomato.dao.query.m2m.TripParticipantsQueries.SAVE_SQL;
 
-/**
- * Реализация интерфейса TripParticipantsDAO для управления участниками поездки и самими поездками.
- */
 public class TripParticipantsDAOImpl extends TripParticipantsDAO {
     private static final TripParticipantsDAOImpl INSTANCE = new TripParticipantsDAOImpl();
     private final RowMapper<User> userRowMapper;
@@ -28,22 +25,10 @@ public class TripParticipantsDAOImpl extends TripParticipantsDAO {
         userRowMapper = UserMapper.getInstance();
     }
 
-    /**
-     * Получает экземпляр синглтона TripParticipantsDAOImpl.
-     *
-     * @return экземпляр синглтона
-     */
     public static TripParticipantsDAOImpl getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Находит пользователей по ID поездки.
-     *
-     * @param tripId ID поездки
-     * @return список пользователей, связанных с поездкой
-     * @throws DaoException если произошла ошибка во время работы с базой данных
-     */
     public List<User> findUsersByTripId(Long tripId) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_USERS_BY_TRIP_ID_SQL)) {
@@ -59,13 +44,7 @@ public class TripParticipantsDAOImpl extends TripParticipantsDAO {
         }
     }
 
-    /**
-     * Сохраняет участника в поездке.
-     *
-     * @param tripId ID поездки
-     * @param userId ID пользователя, которого нужно добавить
-     * @throws DaoException если произошла ошибка во время работы с базой данных
-     */
+
     public void save(Long tripId, Long userId) {
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);

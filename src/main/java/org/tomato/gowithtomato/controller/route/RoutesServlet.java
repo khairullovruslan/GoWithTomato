@@ -5,8 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
-import org.tomato.gowithtomato.dto.RouteDTO;
-import org.tomato.gowithtomato.dto.UserDTO;
+import org.tomato.gowithtomato.dto.route.RouteDTO;
+import org.tomato.gowithtomato.dto.user.UserDTO;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.RouteService;
 
@@ -21,8 +22,8 @@ public class RoutesServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        routeService = RouteService.getInstance();
-        authService = AuthService.getInstance();
+        routeService = ServiceFactory.getRouteService();
+        authService = ServiceFactory.getAuthService();
     }
 
     @Override
@@ -31,6 +32,8 @@ public class RoutesServlet extends BaseServlet {
         if (page == null) {
             page = "1";
         }
+        System.out.println("hello");
+
         UserDTO user = authService.getUser(req);
         List<RouteDTO> routeDTOList = routeService.findByUserWithPagination(user, Integer.parseInt(page));
         req.setAttribute("routeList", routeDTOList);

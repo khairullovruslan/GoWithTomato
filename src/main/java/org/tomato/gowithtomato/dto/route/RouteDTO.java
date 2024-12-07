@@ -1,8 +1,10 @@
-package org.tomato.gowithtomato.dto;
+package org.tomato.gowithtomato.dto.route;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.tomato.gowithtomato.dto.PointDTO;
+import org.tomato.gowithtomato.dto.user.UserDTO;
 
 import java.util.List;
 

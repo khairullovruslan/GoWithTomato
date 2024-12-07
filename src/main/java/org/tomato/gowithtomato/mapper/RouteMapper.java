@@ -1,12 +1,12 @@
 package org.tomato.gowithtomato.mapper;
 
 import org.tomato.gowithtomato.dao.daoInterface.m2m.RouteAndPointsDao;
-import org.tomato.gowithtomato.dao.impl.RouteAndPointsDaoImpl;
 import org.tomato.gowithtomato.dto.PointDTO;
-import org.tomato.gowithtomato.dto.RouteDTO;
+import org.tomato.gowithtomato.dto.route.RouteDTO;
 import org.tomato.gowithtomato.entity.Point;
 import org.tomato.gowithtomato.entity.Route;
 import org.tomato.gowithtomato.entity.User;
+import org.tomato.gowithtomato.factory.DaoFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +21,7 @@ public class RouteMapper implements RowMapper<Route> {
     private final PointMapper pointMapper;
 
     private RouteMapper() {
-        routeAndPointsDao = RouteAndPointsDaoImpl.getInstance();
+        routeAndPointsDao = DaoFactory.getRouteAndPointsDAO();
         pointMapper = PointMapper.getInstance();
         userMapper = UserMapper.getInstance();
     }

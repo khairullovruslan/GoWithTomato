@@ -12,9 +12,6 @@ import java.util.Optional;
 
 import static org.tomato.gowithtomato.dao.query.ReviewQueries.*;
 
-/**
- * Реализация интерфейса ReviewDAO для управления отзывами.
- */
 public class ReviewDAOImpl extends ReviewDAO {
     private static final ReviewDAOImpl INSTANCE = new ReviewDAOImpl();
 
@@ -22,34 +19,15 @@ public class ReviewDAOImpl extends ReviewDAO {
         mapper = ReviewMapper.getInstance();
     }
 
-    /**
-     * Получает экземпляр синглтона ReviewDAOImpl.
-     *
-     * @return экземпляр синглтона
-     */
     public static ReviewDAOImpl getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Находит отзыв по заданному ID.
-     *
-     * @param id ID отзыва
-     * @return объект отзыва, если найдено, иначе пустой Optional
-     */
     @Override
     public Optional<Review> findById(Long id) {
         return Optional.empty(); // Реализация может быть добавлена при необходимости
     }
 
-    /**
-     * Находит отзыв по ID пользователя и ID поездки.
-     *
-     * @param userId ID пользователя
-     * @param tripId ID поездки
-     * @return объект отзыва или пустой Optional, если отзыв не найден
-     * @throws DaoException если произошла ошибка при доступе к базе данных
-     */
     public Optional<Review> findByUserAndTripId(Long userId, Long tripId) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USER_AND_TRIP_ID_SQL)) {
@@ -77,13 +55,7 @@ public class ReviewDAOImpl extends ReviewDAO {
         }
     }
 
-    /**
-     * Сохраняет новый отзыв.
-     *
-     * @param entity объект отзыва для сохранения
-     * @return сохраненный объект отзыва с присвоенным ID
-     * @throws DaoException если произошла ошибка при сохранении отзыва
-     */
+
     @Override
     public Review save(Review entity) {
         try (Connection connection = getConnection();
@@ -107,8 +79,7 @@ public class ReviewDAOImpl extends ReviewDAO {
     }
 
     @Override
-    public Review update(Review entity) {
-        return null; // Реализация может быть добавлена при необходимости
+    public void update(Review entity) {
     }
 
     @Override
@@ -116,14 +87,7 @@ public class ReviewDAOImpl extends ReviewDAO {
         // Реализация удаления отзыва может быть добавлена при необходимости
     }
 
-    /**
-     * Проверяет, существует ли отзыв пользователя по данному tripId.
-     *
-     * @param tripId ID поездки
-     * @param userId ID пользователя
-     * @return true, если отзыв существует, иначе false
-     * @throws DaoException если произошла ошибка при поиске отзыва
-     */
+
     @Override
     public boolean searchForUserInReviews(long tripId, long userId) {
         try (Connection connection = getConnection();
@@ -142,13 +106,7 @@ public class ReviewDAOImpl extends ReviewDAO {
         }
     }
 
-    /**
-     * Преобразует ResultSet в список отзывов.
-     *
-     * @param result ResultSet для преобразования
-     * @return список отзывов
-     * @throws SQLException если произошла ошибка при доступе к ResultSet
-     */
+
     private List<Review> convertResultSetToList(ResultSet result) throws SQLException {
         List<Review> reviews = new ArrayList<>();
         while (result.next()) {
