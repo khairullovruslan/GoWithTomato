@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.dto;
+package org.tomato.gowithtomato.dto.user;
 
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import org.tomato.gowithtomato.validator.annotations.ValidPhoneNumber;
 
 
 @Builder
-public record UserRegistrationDto(
+public record UserRegistrationDTO(
         @ValidLogin String login,
         @ValidPassword
         String password,

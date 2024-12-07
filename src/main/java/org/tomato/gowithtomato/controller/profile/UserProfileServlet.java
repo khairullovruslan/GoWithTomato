@@ -6,8 +6,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.ReviewDTO;
-import org.tomato.gowithtomato.dto.UserDTO;
+import org.tomato.gowithtomato.dto.user.UserDTO;
 import org.tomato.gowithtomato.exception.auth.UnauthorizedException;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.ReviewService;
 import org.tomato.gowithtomato.service.TripService;
@@ -31,10 +32,10 @@ public class UserProfileServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        userService = (UserService) this.getServletContext().getAttribute("userService");
-        authService = (AuthService) this.getServletContext().getAttribute("authService");
-        tripService = TripService.getInstance();
-        reviewService = ReviewService.getInstance();
+        userService = ServiceFactory.getUserService();
+        authService = ServiceFactory.getAuthService();
+        tripService = ServiceFactory.getTripService();
+        reviewService = ServiceFactory.getReviewService();
     }
 
     @Override

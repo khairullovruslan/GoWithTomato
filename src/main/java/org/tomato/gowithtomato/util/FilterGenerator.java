@@ -2,6 +2,7 @@ package org.tomato.gowithtomato.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.tomato.gowithtomato.exception.auth.UnauthorizedException;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
 
 import java.time.LocalDate;
@@ -11,6 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class FilterGenerator {
+    private final AuthService authService;
+
+    public FilterGenerator() {
+        authService = ServiceFactory.getAuthService();
+    }
 
 
     public Map<String, String> generateFilter(final HttpServletRequest req) {
@@ -38,7 +44,6 @@ public final class FilterGenerator {
         boolean userTrips = Boolean.parseBoolean(req.getParameter("owner_tickets"));
         if (userTrips) {
             req.setAttribute("owner_tickets", true);
-            AuthService authService = AuthService.getInstance();
             if (authService.authorizationCheck(req)) {
                 filter.put("owner_tickets", String.valueOf(authService.getUser(req).getId()));
             } else {

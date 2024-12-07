@@ -10,6 +10,7 @@ import org.tomato.gowithtomato.entity.Trip;
 import org.tomato.gowithtomato.entity.TripStatus;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.db.DaoException;
+import org.tomato.gowithtomato.factory.DaoFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,8 +26,8 @@ public class TripMapper implements RowMapper<Trip> {
     private final RouteMapper routeMapper;
 
     private TripMapper() {
-        userDAO = UserDAOImpl.getInstance();
-        routeDAO = RouteDAOImpl.getInstance();
+        userDAO = DaoFactory.getUserDAO();
+        routeDAO = DaoFactory.getRouteDAO();
         routeMapper = RouteMapper.getInstance();
         userMapper = UserMapper.getInstance();
 
@@ -39,13 +40,10 @@ public class TripMapper implements RowMapper<Trip> {
     @Override
     public Trip mapRow(ResultSet result) throws SQLException {
         Optional<User> owner = userDAO.findById(result.getLong("user_id"));
-        System.out.println(owner);
         Optional<Route> route = routeDAO.findById(result.getLong("route_id"));
-        System.out.println("pu pu pu");
         if (owner.isEmpty() || route.isEmpty()) {
             throw new DaoException("Route or User are null");
         }
-
         return Trip.builder()
                 .id(result.getLong("id"))
                 .price(result.getBigDecimal("price"))

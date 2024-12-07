@@ -30,10 +30,12 @@
         </div>
 
         <button type="submit" class="btn btn-success">Создать маршрут</button>
-        <input id="routeId" th:value="${routeId}" hidden="hidden">
+        <input id="routeId" value="${routeId}" type="hidden">
 
     </form>
 </div>
+<input id="contextId" value="${contextPath}" hidden="hidden">
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<c:url value='/js/create-trip.js'/>"></script>
 

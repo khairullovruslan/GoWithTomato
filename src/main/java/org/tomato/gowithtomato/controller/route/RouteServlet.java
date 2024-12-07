@@ -6,9 +6,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
-import org.tomato.gowithtomato.dto.NewRouteResponse;
-import org.tomato.gowithtomato.dto.RouteDTO;
-import org.tomato.gowithtomato.dto.UserDTO;
+import org.tomato.gowithtomato.dto.route.NewRouteResponse;
+import org.tomato.gowithtomato.dto.route.RouteDTO;
+import org.tomato.gowithtomato.dto.user.UserDTO;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.mapper.RouteMapper;
 import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.RouteService;
@@ -26,9 +27,9 @@ public class RouteServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        routeService = (RouteService) this.getServletContext().getAttribute("routeService");
+        routeService = ServiceFactory.getRouteService();
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
-        authService = (AuthService) this.getServletContext().getAttribute("authService");
+        authService = ServiceFactory.getAuthService();
 
         objectMapper = (ObjectMapper) this.getServletContext().getAttribute("objectMapper");
     }

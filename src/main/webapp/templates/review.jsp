@@ -33,28 +33,58 @@
 
         <div class="review-form">
             <h3>Оставьте отзыв</h3>
-            <form>
+            <div>
 
                 <div class="rating">
                     <div class="rating-area">
                         <input type="radio" id="star-5" name="rating" value="1"
-                               <c:if test="${review != null && review.rating == 1}">checked</c:if> disabled>
+                            <c:if test="${review != null}">
+                                   disabled
+                                <c:if test="${review.rating == 5}">
+                                       checked
+                                </c:if>
+                            </c:if>
+                        >
                         <label for="star-5"></label>
 
                         <input type="radio" id="star-4" name="rating" value="2"
-                               <c:if test="${review != null && review.rating == 2}">checked</c:if> disabled>
+                            <c:if test="${review != null}">
+                                   disabled
+                                <c:if test="${review.rating == 4}">
+                                       checked
+                                </c:if>
+                            </c:if>
+                        >
                         <label for="star-4"></label>
 
                         <input type="radio" id="star-3" name="rating" value="3"
-                               <c:if test="${review != null && review.rating == 3}">checked</c:if> disabled>
+                            <c:if test="${review != null}">
+                                   disabled
+                                <c:if test="${review.rating == 3}">
+                                       checked
+                                </c:if>
+                            </c:if>
+                        >
                         <label for="star-3"></label>
 
                         <input type="radio" id="star-2" name="rating" value="4"
-                               <c:if test="${review != null && review.rating == 4}">checked</c:if> disabled>
+                            <c:if test="${review != null}">
+                                   disabled
+                                <c:if test="${review.rating == 2}">
+                                       checked
+                                </c:if>
+                            </c:if>
+                        >
                         <label for="star-2"></label>
 
                         <input type="radio" id="star-1" name="rating" value="5"
-                               <c:if test="${review != null && review.rating == 5}">checked</c:if> disabled>
+                            <c:if test="${review != null}">
+                                   disabled
+                                <c:if test="${review.rating == 1}">
+                                       checked
+                                </c:if>
+                            </c:if>
+                        >
                         <label for="star-1"></label>
                     </div>
                 </div>
@@ -66,7 +96,8 @@
                 </c:if>
                 > Отправить отзыв
                 </button>
-            </form>
+            </div>
+
         </div>
 
     </c:if>
@@ -75,6 +106,8 @@
         <p class="no-trips">Поездка не найдена.</p>
     </c:if>
 </div>
+<input id="contextId" value="${contextPath}" hidden="hidden">
+
 <script src="<c:url value='/js/review.js'/>"></script>
 <%@include file="/templates/base/footer.jsp" %>
 </body>

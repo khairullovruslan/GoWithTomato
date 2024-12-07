@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.PointDTO;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.GraphHopperApiService;
 
 import java.io.PrintWriter;
@@ -24,23 +25,22 @@ public class PointsSearchServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        graphHopperApiService = (GraphHopperApiService) this.getServletContext().getAttribute("graphHopperApiService");
+        graphHopperApiService = ServiceFactory.getGraphHopperApiService();
         objectMapper = (ObjectMapper) this.getServletContext().getAttribute("objectMapper");
 
     }
 
     @SneakyThrows
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp){
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         String query = req.getParameter("q");
         resp.setContentType("application/json");
         PrintWriter out = resp.getWriter();
-        if (query != null){
+        if (query != null) {
             List<PointDTO> points = graphHopperApiService.getPointsByName(query);
             log.info("Количество найденных точек по названию {} - {}", query, points.size());
             out.print(objectMapper.writeValueAsString(points));
-        }
-        else {
+        } else {
             log.error("Параметр query пуст!");
             out.print(objectMapper.writeValueAsString(new ArrayList<>()));
         }

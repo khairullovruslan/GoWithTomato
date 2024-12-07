@@ -44,9 +44,9 @@
 
         <input type="hidden" id="routeData" name="routeData">
         <button onclick="sendData()" class="btn btn-success">Создать маршрут</button>
-        <button onclick="getInfo()" class="btn btn-success">Получить актуальную дистанцию и среднее время поездки</button>
+        <button onclick="getInfo()" class="btn btn-success">Получить актуальную дистанцию и среднее время поездки
+        </button>
     </div>
-
     <div class="mt-4" id="routeDisplay">
         <h5 class="mb-2">Маршрут:</h5>
         <p style="color: black" id="routeOutput">Не указан</p>
@@ -66,9 +66,12 @@
         <button class="btn btn-secondary mt-2" onclick="closeModal()">Закрыть</button>
     </div>
 </div>
+<input id="contextId" value="${contextPath}" hidden="hidden">
+
 <script src="<%= request.getContextPath() %>/js/route.js"></script>
 <%--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--%>
 <%@include file="/templates/base/footer.jsp" %>
+
 
 </body>
 

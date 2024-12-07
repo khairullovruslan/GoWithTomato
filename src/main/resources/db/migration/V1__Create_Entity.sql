@@ -4,7 +4,9 @@ CREATE TABLE users
     login        VARCHAR(100) UNIQUE NOT NULL,
     password     VARCHAR(255),
     email        VARCHAR(255) UNIQUE NOT NULL,
-    phone_number VARCHAR(15)
+    phone_number VARCHAR(15),
+    photo_url varchar(256)
+
 );
 
 CREATE TABLE rating

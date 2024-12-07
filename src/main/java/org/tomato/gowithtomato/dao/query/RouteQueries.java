@@ -1,25 +1,17 @@
 package org.tomato.gowithtomato.dao.query;
 
-/**
- * Класс, содержащий SQL-запросы для работы с маршрутами RouteDAO
- */
+
 public class RouteQueries {
 
     //language=sql
-    /**
-     * Запрос для сохранения маршрута
-     */
     public static final String SAVE_SQL =
             """
                     INSERT INTO route(start_point_id, finish_point_id, distance, user_id) 
                     VALUES (?, ?, ?, ?)
                     """;
     //language=sql
-    /**
-     * Шаблон для выбора полей
-     */
     private static final String FIND_TEMPLATE = """
-            SELECT 
+            SELECT
                 r.id AS route_id,
                 r.start_point_id,
                 r.finish_point_id,
@@ -53,9 +45,6 @@ public class RouteQueries {
             """;
 
     //language=sql
-    /**
-     * Запрос для поиска маршрутов по идентификатору пользователя
-     */
     public static final String FIND_BY_USER_ID_SQL =
             FIND_TEMPLATE +
             """
@@ -63,9 +52,6 @@ public class RouteQueries {
                     """;
 
     //language=sql
-    /**
-     * Запрос для подсчета маршрутов по идентификатору пользователя
-     */
     public static final String COUNT_SQL = """
             SELECT COUNT(*)
             FROM route r
@@ -76,17 +62,11 @@ public class RouteQueries {
             """;
 
     //language=sql
-    /**
-     * Запрос для поиска маршрута по его идентификатору
-     */
     public static final String FIND_BY_ID_SQL =
             FIND_TEMPLATE +
             """
                     WHERE r.id = ?
                     """;
 
-    /**
-     * Максимальное количество маршрутов для выборки
-     */
     public static final Integer LIMIT = 8;
 }

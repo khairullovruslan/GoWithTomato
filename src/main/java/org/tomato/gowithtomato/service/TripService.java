@@ -1,62 +1,24 @@
 package org.tomato.gowithtomato.service;
 
-import org.tomato.gowithtomato.dao.impl.TripDAOImpl;
 import org.tomato.gowithtomato.dto.TripDTO;
-import org.tomato.gowithtomato.dto.UserDTO;
-import org.tomato.gowithtomato.entity.Trip;
-import org.tomato.gowithtomato.mapper.TripMapper;
+import org.tomato.gowithtomato.dto.user.UserDTO;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-public class TripService {
-    private final static TripService INSTANCE = new TripService();
-    private final TripDAOImpl tripDAO;
-    private final TripMapper tripMapper;
-    private final RouteService routeService;
+public interface TripService {
 
-    private TripService() {
-        tripDAO = TripDAOImpl.getInstance();
-        tripMapper = TripMapper.getInstance();
-        routeService = RouteService.getInstance();
-    }
+    void saveTrip(UserDTO userDTO, TripDTO tripDTO, Long id);
 
-    public static TripService getInstance() {
-        return INSTANCE;
-    }
+    List<TripDTO> findAll();
 
-    public void saveTrip(UserDTO userDTO, TripDTO tripDTO, Long id) {
-        tripDTO.setOwner(userDTO);
-        tripDTO.setRoute(routeService.findById(id));
-        tripDAO.saveWithRouteId(tripMapper.convertDTOToTrip(tripDTO), id);
-    }
+    List<TripDTO> findByFilter(Map<String, String> filter);
 
-    public List<TripDTO> findAll() {
-        List<Trip> trips = tripDAO.findAll();
-        return trips.stream().map(tripMapper::convertTripToDTO).toList();
-    }
+    TripDTO findById(Long id);
 
-    public List<TripDTO> findByFilter(Map<String, String> filter) {
-        List<Trip> trips = tripDAO.findAllByFilter(filter);
-        return trips.stream().map(tripMapper::convertTripToDTO).toList();
-    }
+    Long getCountPage(Map<String, String> filter);
 
-    public TripDTO findById(Long id) {
-        Optional<Trip> trip = tripDAO.findById(id);
-        if (trip.isPresent()) return tripMapper.convertTripToDTO(trip.get());
-        throw new RuntimeException();
-    }
+    void cancelTrip(Long id);
 
-    public Long getCountPage(Map<String, String> filter) {
-        return tripDAO.getCountPage(filter);
-    }
-
-    public void cancelTrip(Long id) {
-        tripDAO.cancelTrip(id);
-    }
-
-    public long getCountByUserId(Long id) {
-        return tripDAO.getCountByUserId(id);
-    }
+    long getCountByUserId(Long id);
 }

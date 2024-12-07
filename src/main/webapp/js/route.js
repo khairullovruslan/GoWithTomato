@@ -1,5 +1,4 @@
-const contextPath = "/gowithtomato";
-
+const contextPath = $('#contextId').val()
 let currentField;
 let routeArray = [];
 let start;

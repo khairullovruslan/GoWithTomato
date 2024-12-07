@@ -8,10 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
-import org.tomato.gowithtomato.dto.UserRegistrationDto;
+import org.tomato.gowithtomato.dto.user.UserRegistrationDTO;
 import org.tomato.gowithtomato.exception.auth.RegistrationException;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
-import org.tomato.gowithtomato.util.UserRegistrationUtil;
+import org.tomato.gowithtomato.util.UserUtil;
 
 import java.io.IOException;
 import java.util.Set;
@@ -24,7 +25,7 @@ public class SignUpServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        authService = (AuthService) this.getServletContext().getAttribute("authService");
+        authService = ServiceFactory.getAuthService();
     }
 
     @Override
@@ -34,8 +35,8 @@ public class SignUpServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserRegistrationDto userRegistrationDto = UserRegistrationUtil.getInstance().buildUserDTO(req);
-        Set<ConstraintViolation<UserRegistrationDto>> violations = validator.validate(userRegistrationDto);
+        UserRegistrationDTO userRegistrationDto = UserUtil.getInstance().buildUserRegistrationDTO(req);
+        Set<ConstraintViolation<UserRegistrationDTO>> violations = validator.validate(userRegistrationDto);
         if (!violations.isEmpty()) {
             log.error("Пользователь ввел невалидные данные!");
             throw new RegistrationException(violations);

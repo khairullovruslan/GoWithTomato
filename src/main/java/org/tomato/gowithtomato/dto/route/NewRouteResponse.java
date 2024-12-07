@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.dto;
+package org.tomato.gowithtomato.dto.route;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

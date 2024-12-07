@@ -2,13 +2,12 @@ package org.tomato.gowithtomato.mapper;
 
 import org.tomato.gowithtomato.dao.daoInterface.TripDAO;
 import org.tomato.gowithtomato.dao.daoInterface.UserDAO;
-import org.tomato.gowithtomato.dao.impl.TripDAOImpl;
-import org.tomato.gowithtomato.dao.impl.UserDAOImpl;
 import org.tomato.gowithtomato.dto.ReviewDTO;
 import org.tomato.gowithtomato.entity.Review;
 import org.tomato.gowithtomato.entity.Trip;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.db.DaoException;
+import org.tomato.gowithtomato.factory.DaoFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,8 +23,8 @@ public class ReviewMapper implements RowMapper<Review> {
 
     private ReviewMapper() {
         userMapper = UserMapper.getInstance();
-        tripDAO = TripDAOImpl.getInstance();
-        userDAO = UserDAOImpl.getInstance();
+        tripDAO = DaoFactory.getTripDAO();
+        userDAO = DaoFactory.getUserDAO();
         tripMapper = TripMapper.getInstance();
     }
 
@@ -45,30 +44,31 @@ public class ReviewMapper implements RowMapper<Review> {
         }
         return Review
                 .builder()
-                .owner(userOptional.get())
-                .trip(tripOptional.get())
-                .description(resultSet.getString("description"))
-                .rating(resultSet.getInt("rating"))
+                    .owner(userOptional.get())
+                    .trip(tripOptional.get())
+                    .description(resultSet.getString("description"))
+                    .rating(resultSet.getInt("rating"))
                 .build();
     }
 
     public Review convertDTOToReview(ReviewDTO reviewDTO) {
         return Review
                 .builder()
-                .rating(reviewDTO.getRating())
-                .description(reviewDTO.getDescription())
-                .owner(userMapper.convertDTOToUser(reviewDTO.getOwner()))
-                .trip(tripMapper.convertDTOToTrip(reviewDTO.getTrip()))
+                    .rating(reviewDTO.getRating())
+                    .description(reviewDTO.getDescription())
+                    .owner(userMapper.convertDTOToUser(reviewDTO.getOwner()))
+                    .trip(tripMapper.convertDTOToTrip(reviewDTO.getTrip()))
                 .build();
     }
 
     public ReviewDTO convertReviewToDto(Review review) {
         return ReviewDTO
                 .builder()
-                .rating(review.getRating())
-                .description(review.getDescription())
-                .owner(userMapper.convertUserToDTO(review.getOwner()))
-                .trip(tripMapper.convertTripToDTO(review.getTrip())).build();
+                    .rating(review.getRating())
+                    .description(review.getDescription())
+                    .owner(userMapper.convertUserToDTO(review.getOwner()))
+                    .trip(tripMapper.convertTripToDTO(review.getTrip()))
+                .build();
     }
 
 }

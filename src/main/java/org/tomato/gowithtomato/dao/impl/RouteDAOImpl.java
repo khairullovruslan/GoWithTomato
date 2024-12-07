@@ -16,9 +16,6 @@ import java.util.Optional;
 
 import static org.tomato.gowithtomato.dao.query.RouteQueries.*;
 
-/**
- * Реализация интерфейса RouteDAO для управления маршрутами.
- */
 public class RouteDAOImpl extends RouteDAO {
     private static final RouteDAOImpl INSTANCE = new RouteDAOImpl();
     private final PointDAOImpl pointDAO;
@@ -30,23 +27,10 @@ public class RouteDAOImpl extends RouteDAO {
         routeAndPointsDao = RouteAndPointsDaoImpl.getInstance();
         rowMapper = RouteMapper.getInstance();
     }
-
-    /**
-     * Получает экземпляр синглтона RouteDAOImpl.
-     *
-     * @return экземпляр синглтона
-     */
     public static RouteDAOImpl getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Находит маршрут по заданному ID.
-     *
-     * @param id ID маршрута
-     * @return объект маршрут, если найдено, иначе пустой Optional
-     * @throws DaoException если произошла ошибка при поиске маршрута
-     */
     @Override
     public Optional<Route> findById(Long id) {
         try (Connection connection = getConnection();
@@ -63,13 +47,7 @@ public class RouteDAOImpl extends RouteDAO {
         }
     }
 
-    /**
-     * Сохраняет маршрут.
-     *
-     * @param route объект маршрута
-     * @return сохранённый объект маршрута
-     * @throws DaoException если произошла ошибка при сохранении маршрута
-     */
+
     @Override
     public Route save(Route route) {
         try {
@@ -88,14 +66,6 @@ public class RouteDAOImpl extends RouteDAO {
         }
     }
 
-    /**
-     * Находит маршруты пользователя с пагинацией.
-     *
-     * @param user объект пользователя
-     * @param page номер страницы
-     * @return список маршрутов пользователя
-     * @throws DaoException если произошла ошибка при поиске маршрутов пользователя
-     */
     public List<Route> findByUserWithPagination(User user, int page) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(
@@ -112,13 +82,7 @@ public class RouteDAOImpl extends RouteDAO {
         }
     }
 
-    /**
-     * Получает количество страниц маршрутов для указанного пользователя.
-     *
-     * @param user объект пользователя
-     * @return количество страниц
-     * @throws DaoException если произошла ошибка при подсчете страниц
-     */
+
     public long getCountPage(User user) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(COUNT_SQL)) {
@@ -131,21 +95,14 @@ public class RouteDAOImpl extends RouteDAO {
     }
 
     @Override
-    public Route update(Route entity) {
-        return null;
+    public void update(Route entity) {
     }
 
     @Override
     public void delete(Long id) {
     }
 
-    /**
-     * Получение ID обекъта, сохранение, если его нет в бд
-     *
-     * @param point Объект для сохранения
-     * @return Возвращает ID для данного point
-     * @throws SQLException если объект уже есть в бд
-     */
+
     private Long saveOrFindPoint(Point point) throws SQLException {
         try {
             return pointDAO.save(point).getId();
@@ -156,16 +113,7 @@ public class RouteDAOImpl extends RouteDAO {
     }
 
 
-    /**
-     * Сохранение маршрута
-     *
-     * @param startPointId  ID начальной точки
-     * @param finishPointId ID конечной точки
-     * @param ownerId       ID владельца
-     * @param distance      Дистанция маршрута
-     * @return ID созданного маршрута
-     * @throws SQLException если произошла ошибка в бд
-     */
+
     private long insertRoute(long startPointId, long finishPointId, long ownerId, long distance) throws SQLException {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -184,12 +132,7 @@ public class RouteDAOImpl extends RouteDAO {
         }
     }
 
-    /**
-     * Конвертирование ResultSet в общее количество страниц
-     *
-     * @return количество страниц
-     * @throws SQLException если возникнет ошибка в бд
-     */
+
     private Long convertResultSetToCountPages(ResultSet result) throws SQLException {
         if (result.next()) {
             return result.getLong("count");

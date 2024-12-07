@@ -7,19 +7,11 @@ import org.tomato.gowithtomato.util.ConnectionManager;
 
 import java.sql.Connection;
 
-/**
- * Абстрактный базовый класс для DAO с общей функциональностью
- */
+
 @Slf4j
 public abstract class AbstractBaseDAO<T> {
     protected RowMapper<T> mapper;
 
-    /**
-     * Получает соединение с базой данных
-     *
-     * @return Connection объект соединения
-     * @throws NullConnectionException если соединение не может быть получено
-     */
     public Connection getConnection() {
         Connection connection = ConnectionManager.getInstance().get();
         if (connection == null) {

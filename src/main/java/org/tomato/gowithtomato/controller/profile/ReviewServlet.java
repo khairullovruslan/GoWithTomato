@@ -6,10 +6,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import lombok.extern.slf4j.Slf4j;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.ReviewDTO;
 import org.tomato.gowithtomato.dto.TripDTO;
-import org.tomato.gowithtomato.dto.UserDTO;
+import org.tomato.gowithtomato.dto.user.UserDTO;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.ReviewService;
 import org.tomato.gowithtomato.service.TripService;
@@ -17,7 +20,11 @@ import org.tomato.gowithtomato.util.AjaxUtil;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+
+@Slf4j
 @WebServlet("/review")
 public class ReviewServlet extends BaseServlet {
 
@@ -33,17 +40,17 @@ public class ReviewServlet extends BaseServlet {
     public void init() {
         super.init();
         objectMapper = (ObjectMapper) this.getServletContext().getAttribute("objectMapper");
-        tripService = (TripService) this.getServletContext().getAttribute("tripService");
+        tripService = ServiceFactory.getTripService();
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
-        reviewService = (ReviewService) this.getServletContext().getAttribute("reviewService");
-        authService = (AuthService) this.getServletContext().getAttribute("authService");
+        reviewService = ServiceFactory.getReviewService();
+        authService = ServiceFactory.getAuthService();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-        UserDTO user = (UserDTO) req.getAttribute("user");
+        UserDTO user = authService.getUser(req);
         TripDTO tripDTO = tripService.findById(Long.valueOf(req.getParameter("trip")));
         Optional<ReviewDTO> reviewDTO = reviewService.findByUserAndTripId(tripDTO.getId(), user.getId());
         req.setAttribute("review", reviewDTO.orElse(null));
@@ -56,6 +63,14 @@ public class ReviewServlet extends BaseServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ReviewDTO reviewDTO = objectMapper.readValue(req.getInputStream(), ReviewDTO.class);
+        Set<ConstraintViolation<ReviewDTO>> violations = validator.validate(reviewDTO);
+        if (!violations.isEmpty()) {
+            log.error("Пользователь ввел невалидные данные!");
+            ajaxUtil.senderErrorMessage(violations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .collect(Collectors.joining(", ")), resp);
+            return;
+        }
         UserDTO user = authService.getUser(req);
         TripDTO tripDTO = tripService.findById(Long.valueOf(req.getParameter("trip")));
         reviewDTO.setOwner(user);

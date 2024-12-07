@@ -8,9 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.TripDTO;
-import org.tomato.gowithtomato.dto.UserDTO;
+import org.tomato.gowithtomato.dto.user.UserDTO;
 import org.tomato.gowithtomato.entity.TripStatus;
 import org.tomato.gowithtomato.exception.common.IncorrectRequestParametersException;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
 import org.tomato.gowithtomato.service.ReviewService;
 import org.tomato.gowithtomato.service.TripParticipantsService;
@@ -35,12 +36,12 @@ public class TripServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        tripService = (TripService) this.getServletContext().getAttribute("tripService");
-        tripParticipantsService = (TripParticipantsService) this.getServletContext().getAttribute("tripParticipantsService");
+        tripService = ServiceFactory.getTripService();
+        tripParticipantsService = ServiceFactory.getTripParticipantsService();
         dateFormatter = (DateFormatter) this.getServletContext().getAttribute("dateFormatter");
         ajaxUtil = (AjaxUtil) this.getServletContext().getAttribute("ajaxUtil");
-        reviewService = (ReviewService) this.getServletContext().getAttribute("reviewService");
-        authService = (AuthService) this.getServletContext().getAttribute("authService");
+        reviewService = ServiceFactory.getReviewService();
+        authService = ServiceFactory.getAuthService();
 
     }
 

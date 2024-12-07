@@ -10,14 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
           integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <link rel="stylesheet" type="text/css" href="css/profile.css">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/profile.css'/>">
 </head>
 <body>
 <%@include file="/templates/base/navbar.jsp" %>
 <div class="container">
     <header class="profile-header">
         <h1>Мой профиль</h1>
-        <a href="/edit" class="edit-button"><i class="fas fa-edit"></i> Редактировать</a>
+        <a href="<%= request.getContextPath() %>/profile/edit" class="edit-button"><i class="fas fa-edit"></i> Редактировать</a>
 
         <a href="<%= request.getContextPath() %>/trips?organize=${user.login}" class="edit-button">
             <c:choose>
@@ -29,13 +29,15 @@
                 </c:otherwise>
             </c:choose>
         </a>
-        <a href="<%= request.getContextPath() %>/trips?owner_tickets=${true}" class="edit-button">
-            <c:choose>
-                <c:when test="${isOwner}">
-                    Посмотреть ваши поездки
-                </c:when>
-            </c:choose>
-        </a>
+        <c:if test="${isOwner}">
+            <a href="<%= request.getContextPath() %>/trips?owner_tickets=${true}" class="edit-button">
+                Посмотреть ваши поездки
+            </a>
+            <a style="background-color: red" href="<%= request.getContextPath() %>/logout" class="edit-button">
+                Выйти
+            </a>
+
+        </c:if>
 
 
     </header>
@@ -90,7 +92,7 @@
                     </div>
 
                 </div>
-               
+
 
             </c:forEach>
 

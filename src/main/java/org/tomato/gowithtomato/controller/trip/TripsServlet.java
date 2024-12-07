@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.tomato.gowithtomato.controller.common.BaseServlet;
 import org.tomato.gowithtomato.dto.TripDTO;
+import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.TripService;
 import org.tomato.gowithtomato.util.DateFormatter;
 import org.tomato.gowithtomato.util.FilterGenerator;
@@ -24,7 +25,7 @@ public class TripsServlet extends BaseServlet {
     @Override
     public void init() {
         super.init();
-        tripService = (TripService) this.getServletContext().getAttribute("tripService");
+        tripService = ServiceFactory.getTripService();
         filterGenerator = (FilterGenerator) this.getServletContext().getAttribute("filterGenerator");
         dateFormatter = (DateFormatter) this.getServletContext().getAttribute("dateFormatter");
 
@@ -38,8 +39,13 @@ public class TripsServlet extends BaseServlet {
             String formattedDateTime = dateFormatter.format(trip.getTripDateTime());
             trip.setTripDateTimeFormatted(formattedDateTime);
         });
+        tripList.stream()
+                .map(TripDTO::getId)
+                .forEach(System.out::println);
+
         req.setAttribute("tripList", tripList);
         req.setAttribute("totalPages", tripService.getCountPage(filter));
+
         getServletContext().getRequestDispatcher("/templates/trips.jsp").forward(req, resp);
     }
 

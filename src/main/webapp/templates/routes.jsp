@@ -73,6 +73,7 @@
         <a href="?page=${page + 1}" class="pagination-link">Следующая »</a>
     </c:if>
 </div>
+<input id="contextId" value="${contextPath}" hidden="hidden">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<c:url value='/js/routes.js'/>"></script>

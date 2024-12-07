@@ -13,9 +13,6 @@ import java.util.Optional;
 
 import static org.tomato.gowithtomato.dao.query.UserQueries.*;
 
-/**
- * Реализация DAO для работы с сущностями типа User.
- */
 public class UserDAOImpl extends UserDAO {
     private final static UserDAOImpl INSTANCE = new UserDAOImpl();
 
@@ -23,21 +20,10 @@ public class UserDAOImpl extends UserDAO {
         mapper = UserMapper.getInstance();
     }
 
-    /**
-     * Получает единственный экземпляр UserDAOImpl.
-     *
-     * @return единственный экземпляр данного DAO.
-     */
     public static UserDAOImpl getInstance() {
         return INSTANCE;
     }
 
-    /**
-     * Находит пользователя по его идентификатору.
-     *
-     * @param id идентификатор пользователя.
-     * @return Optional<User>, содержащий найденного пользователя, или empty, если пользователь не найден.
-     */
     @Override
     public Optional<User> findById(Long id) {
         try (Connection connection = getConnection();
@@ -53,13 +39,7 @@ public class UserDAOImpl extends UserDAO {
     }
 
 
-    /**
-     * Сохраняет нового пользователя в базе данных.
-     *
-     * @param user пользователь для сохранения.
-     * @return сохраненный пользователь с присвоенным идентификатором.
-     * @throws DaoException если возникла ошибка при сохранении пользователя.
-     */
+
     @Override
     public User save(User user) {
         try (Connection connection = getConnection();
@@ -89,34 +69,27 @@ public class UserDAOImpl extends UserDAO {
         }
     }
 
-    /**
-     * Обновляет информацию о пользователе.
-     *
-     * @param entity пользователь, данные которого следует обновить.
-     * @return обновленный пользователь, или null, если пользователь не найден.
-     */
+
     @Override
-    public User update(User entity) {
-        // Метод еще не реализован.
-        return null;
+    public void update(User entity) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_SQL)) {
+
+            statement.setString(1, entity.getLogin());
+            statement.setString(2, entity.getPhoneNumber());
+            statement.setString(3, entity.getEmail());
+            statement.setLong(4, entity.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при обновления пользователя по логину: " + entity.getLogin(), e);
+        }
     }
 
-    /**
-     * Удаляет пользователя по его идентификатору.
-     *
-     * @param id идентификатор пользователя, которого нужно удалить.
-     */
     @Override
     public void delete(Long id) {
         // Метод еще не реализован.
     }
 
-    /**
-     * Находит пользователя по его логину.
-     *
-     * @param login логин пользователя.
-     * @return Optional<User>, содержащий найденного пользователя, или пустой, если пользователь не найден.
-     */
     @Override
     public Optional<User> findByLogin(String login) {
         try (Connection connection = getConnection();
@@ -162,13 +135,6 @@ public class UserDAOImpl extends UserDAO {
         return Optional.empty();
     }
 
-    /**
-     * Преобразует ResultSet в список пользователей.
-     *
-     * @param result Результат выполнения SQL-запроса.
-     * @return Список пользователей.
-     * @throws SQLException если произошла ошибка при обработке ResultSet.
-     */
     private List<User> convertResultSetToList(ResultSet result) throws SQLException {
         List<User> users = new ArrayList<>();
         while (result.next()) {
@@ -177,12 +143,6 @@ public class UserDAOImpl extends UserDAO {
         return users;
     }
 
-    /**
-     * Обрабатывает SQL-исключения.
-     *
-     * @param e Исключение SQL.
-     * @throws UniqueSqlException если ошибка связана с уникальностью записи.
-     */
     private void handleSQLException(SQLException e) throws UniqueSqlException {
         if ("23505".equals(e.getSQLState())) {
             throw new UniqueSqlException("Ошибка уникальности: " + e.getMessage(), e);

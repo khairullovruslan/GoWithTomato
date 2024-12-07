@@ -1,4 +1,4 @@
-package org.tomato.gowithtomato.dto;
+package org.tomato.gowithtomato.dto.user;
 
 import lombok.*;
 
