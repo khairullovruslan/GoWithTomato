@@ -1,28 +1,38 @@
-function sendReview() {
-
-    const reviewData = {
-        rating: $('input[name="rating"]:checked').val(),
-        reviewText: $('textarea[name="review"]').val()
+function sendUserRegData() {
+    const userRegData = {
+        loginUser: $('#login').val(),
+        password: $('#pwd').val(),
+        email: $('#email').val(),
+        phoneNumber: $('#phone').val()
     };
-    console.log('Данные отзыва:', reviewData);
-
     const contextPath = $('#contextId').val()
 
-    const tripId = $('#tripId').val();
+    const path = contextPath + '/sign-up';
 
-    const errorContainer = document.getElementById('error-container');
+    const errorContainer = document.querySelector('.error-container');
     const errorListElement = errorContainer.querySelector('.error-list');
 
 
     errorListElement.innerHTML = '';
     errorContainer.style.display = 'none';
 
+    errorListElement.innerHTML = '';
+    errorContainer.style.display = 'none';
+
     const errors = [];
 
-    if (!reviewData.rating) {
-        errors.push("Поставьте балл от 1 до 5.");
+    if (!userRegData.loginUser) {
+        errors.push("Логин не может быть пустым.");
     }
-
+    if (!userRegData.password) {
+        errors.push("Пароль не может быть пустым.");
+    }
+    if (!userRegData.email) {
+        errors.push("Email не может быть пустым.");
+    }
+    if (!userRegData.phoneNumber) {
+        errors.push("Телефон не может быть пустым.");
+    }
 
     if (errors.length > 0) {
         errors.forEach(function (error) {
@@ -35,29 +45,21 @@ function sendReview() {
     }
 
 
-
-    const path = contextPath + '/review?trip=' + tripId;
     $.ajax({
         url: path,
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(reviewData),
+        data: JSON.stringify(userRegData),
         success: function (response) {
             if (response && response.url) {
                 window.location.href = response.url;
-            }
-            else if(response && response.error){
-                console.log("ошибочка " + response.error);
-            }
-            else {
-                console.error('URL не найден в ответе:', response);
             }
         },
         error: function (xhr) {
             const responseJson = JSON.parse(xhr.responseText);
             console.log(responseJson)
 
-            const errorList = responseJson.error.split(", ");
+            const errorList = responseJson.error.split(";");
             console.log(errorList)
             errorList.forEach(function (error) {
                 const li = document.createElement('li');
@@ -66,7 +68,6 @@ function sendReview() {
             });
 
             errorContainer.style.display = 'block';
-
         }
     });
 }

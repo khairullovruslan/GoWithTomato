@@ -14,6 +14,13 @@ $(document).ready(function () {
 
         const path = contextPath + '/create-trip?id=' + routeId;
         console.log(path);
+        const errorContainer = document.querySelector('.error-container');
+        const errorListElement = errorContainer.querySelector('.error-list');
+
+
+        errorListElement.innerHTML = '';
+        errorContainer.style.display = 'none';
+
 
         $.ajax({
             url: path,
@@ -27,8 +34,19 @@ $(document).ready(function () {
                     console.error('URL не найден в ответе:', response);
                 }
             },
-            error: function (xhr, status, error) {
-                console.error('Ошибка:', status, error);
+            error: function (xhr) {
+                const responseJson = JSON.parse(xhr.responseText);
+                console.log(responseJson)
+
+                const errorList = responseJson.error.split(";");
+                console.log(errorList)
+                errorList.forEach(function (error) {
+                    const li = document.createElement('li');
+                    li.textContent = error;
+                    errorListElement.appendChild(li);
+                });
+
+                errorContainer.style.display = 'block';
             }
         });
     });

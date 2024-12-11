@@ -8,9 +8,12 @@ function filterSend() {
     const count = $('#count').val();
     const organizer = $('#organizer').val();
     const status = $('#status').val();
+    const owner_tickets = $('#owner_tickets').val();
+
 
     let path = contextPath + '/trips';
     console.log(path)
+    console.log(owner_tickets)
     const params = [];
     if (from !== '') {
         params.push("from=" + encodeURIComponent(from));
@@ -26,6 +29,9 @@ function filterSend() {
     }
     if (date !== '') {
         params.push("date=" + encodeURIComponent(date));
+    }
+    if (owner_tickets !== '') {
+        params.push("owner_tickets=" + encodeURIComponent(owner_tickets));
     }
     if (count !== '' && count > 0) {
         params.push("count=" + encodeURIComponent(count));
