@@ -2,12 +2,11 @@ package org.tomato.gowithtomato.service;
 
 import org.tomato.gowithtomato.dto.route.RouteDTO;
 import org.tomato.gowithtomato.dto.user.UserDTO;
-import org.tomato.gowithtomato.entity.Route;
 
 import java.util.List;
 
 public interface RouteService {
-    void saveRoute(Route route);
+    void saveRoute(RouteDTO route, Long ownerId);
 
     RouteDTO findById(Long id);
 

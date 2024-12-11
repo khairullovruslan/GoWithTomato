@@ -7,7 +7,9 @@ import org.tomato.gowithtomato.util.ConnectionManager;
 
 import java.sql.Connection;
 
-
+/*
+Базовый абстрактный класс для всех DAO
+ */
 @Slf4j
 public abstract class AbstractBaseDAO<T> {
     protected RowMapper<T> mapper;
