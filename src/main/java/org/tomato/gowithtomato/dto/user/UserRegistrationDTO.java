@@ -1,19 +1,31 @@
 package org.tomato.gowithtomato.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
-import org.tomato.gowithtomato.validator.annotations.ValidEmail;
-import org.tomato.gowithtomato.validator.annotations.ValidLogin;
-import org.tomato.gowithtomato.validator.annotations.ValidPassword;
-import org.tomato.gowithtomato.validator.annotations.ValidPhoneNumber;
+import org.tomato.gowithtomato.validator.annotations.auth.ValidEmail;
+import org.tomato.gowithtomato.validator.annotations.auth.ValidLogin;
+import org.tomato.gowithtomato.validator.annotations.auth.ValidPassword;
+import org.tomato.gowithtomato.validator.annotations.auth.ValidPhoneNumber;
 
 
 @Builder
-public record UserRegistrationDTO(
-        @ValidLogin String login,
-        @ValidPassword
-        String password,
-        @Email @ValidEmail String email,
-        @ValidPhoneNumber
-        String phoneNumber) {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record UserRegistrationDTO
+
+        (
+                @ValidLogin
+                @JsonProperty("loginUser")
+                String login,
+                @ValidPassword
+                @JsonProperty("password")
+                String password,
+                @Email(message = "Email имеет некорректный формат")
+                @ValidEmail
+                @JsonProperty("email")
+                String email,
+                @ValidPhoneNumber
+                @JsonProperty("phoneNumber")
+                String phoneNumber) {
 }

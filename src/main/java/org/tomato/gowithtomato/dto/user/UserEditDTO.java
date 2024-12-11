@@ -2,7 +2,7 @@ package org.tomato.gowithtomato.dto.user;
 
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
-import org.tomato.gowithtomato.validator.annotations.ValidPhoneNumber;
+import org.tomato.gowithtomato.validator.annotations.auth.ValidPhoneNumber;
 
 @Builder
 public record UserEditDTO(
