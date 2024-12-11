@@ -30,21 +30,19 @@ public class TripServiceImpl implements TripService {
         return INSTANCE;
     }
 
-    public void saveTrip(UserDTO userDTO, TripDTO tripDTO, Long id) {
-        tripDTO.setOwner(userDTO);
+    public Long saveTrip(UserDTO userDTO, TripDTO tripDTO, Long id) {
         tripDTO.setRoute(routeService.findById(id));
-        tripDAO.saveWithRouteId(tripMapper.convertDTOToTrip(tripDTO), id);
+        return tripDAO.saveWithRouteId(tripMapper.convertDTOToTrip(tripDTO), id, userDTO.getId()).getId();
     }
 
-    public List<TripDTO> findAll() {
-        List<Trip> trips = tripDAO.findAll();
-        return trips.stream().map(tripMapper::convertTripToDTO).toList();
-    }
+    @Override
 
     public List<TripDTO> findByFilter(Map<String, String> filter) {
         List<Trip> trips = tripDAO.findAllByFilter(filter);
         return trips.stream().map(tripMapper::convertTripToDTO).toList();
     }
+
+    @Override
 
     public TripDTO findById(Long id) {
         Optional<Trip> trip = tripDAO.findById(id);
@@ -52,13 +50,19 @@ public class TripServiceImpl implements TripService {
         throw new RuntimeException();
     }
 
+    @Override
+
     public Long getCountPage(Map<String, String> filter) {
         return tripDAO.getCountPage(filter);
     }
 
+    @Override
+
     public void cancelTrip(Long id) {
         tripDAO.cancelTrip(id);
     }
+
+    @Override
 
     public long getCountByUserId(Long id) {
         return tripDAO.getCountByUserId(id);

@@ -23,10 +23,14 @@ public class TripParticipantsServiceImpl implements TripParticipantsService {
         return INSTANCE;
     }
 
+    @Override
+
     public List<UserDTO> findUsersByTripId(Long id) {
         List<User> users = tripParticipantsDAO.findUsersByTripId(id);
         return users.stream().map(userMapper::convertUserToDTO).toList();
     }
+
+    @Override
 
     public void save(Long tripId, Long userId) {
         tripParticipantsDAO.save(tripId, userId);

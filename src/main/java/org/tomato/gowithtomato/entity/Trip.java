@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Trip {
     private Long id;
-    private User owner;
     private Route route;
     private LocalDateTime tripDateTime;
     private int availableSeats;

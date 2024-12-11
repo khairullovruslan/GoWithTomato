@@ -1,6 +1,5 @@
 package org.tomato.gowithtomato.dao.impl;
 
-import lombok.SneakyThrows;
 import org.tomato.gowithtomato.dao.daoInterface.TripDAO;
 import org.tomato.gowithtomato.dto.FilterQueriesDTO;
 import org.tomato.gowithtomato.entity.Trip;
@@ -10,7 +9,6 @@ import org.tomato.gowithtomato.mapper.TripMapper;
 import org.tomato.gowithtomato.util.FilterTripDaoUtil;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,10 +30,11 @@ public class TripDAOImpl extends TripDAO {
     }
 
 
-    public Trip saveWithRouteId(Trip trip, Long id) {
+    @Override
+    public Trip saveWithRouteId(Trip trip, Long id, Long userId) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setLong(1, trip.getOwner().getId());
+            statement.setLong(1, userId);
             statement.setLong(2, id);
             statement.setObject(3, trip.getTripDateTime());
             statement.setInt(4, trip.getAvailableSeats());
@@ -62,10 +61,9 @@ public class TripDAOImpl extends TripDAO {
             ResultSet resultSet = statement.executeQuery();
             return convertResultSetToCountByUserId(resultSet);
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при поиске поездки по ID: " + id, e);
+            throw new DaoException("Ошибка при поиске поездки по ID: %s".formatted(id), e);
         }
     }
-
 
     @Override
     public Optional<Trip> findById(Long id) {
@@ -79,42 +77,16 @@ public class TripDAOImpl extends TripDAO {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при поиске поездки по ID: " + id, e);
-        }
-    }
-
-
-    public List<Trip> findAll() {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL)) {
-
-            return getTripByResultSet(statement.executeQuery());
-        } catch (SQLException e) {
-            throw new DaoException("Ошибка при получении всех поездок", e);
+            throw new DaoException("Ошибка при поиске поездки по ID: %s".formatted(id), e);
         }
     }
 
     @Override
-    public Trip save(Trip entity) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public void update(Trip entity) {
-
-    }
-
-    @Override
-    public void delete(Long id) {
-    }
-
-
-    @SneakyThrows
     public List<Trip> findAllByFilter(Map<String, String> filter) {
         try (Connection connection = getConnection()) {
             FilterQueriesDTO filterQueriesDTO = filterUtil.getQueryByFilter(filter);
+            System.out.println("sql query : " + filterQueriesDTO.findByFilterSql());
             PreparedStatement statement = connection.prepareStatement(filterQueriesDTO.findByFilterSql());
-
             filterUtil.insertValueFromFilterIntoPreparedStatement(filter, statement, filterQueriesDTO);
             return getTripByResultSet(statement.executeQuery());
         } catch (SQLException e) {
@@ -122,7 +94,7 @@ public class TripDAOImpl extends TripDAO {
         }
     }
 
-
+    @Override
     public Long getCountPage(Map<String, String> filter) {
         try (Connection connection = getConnection()) {
             FilterQueriesDTO filterQueriesDTO = filterUtil.getQueryByFilter(filter);
@@ -135,7 +107,7 @@ public class TripDAOImpl extends TripDAO {
         }
     }
 
-
+    @Override
     public void cancelTrip(Long id) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(CANCEL_TRIP_SQL)) {
@@ -147,6 +119,7 @@ public class TripDAOImpl extends TripDAO {
     }
 
 
+    @Override
     public void checkTheRelevanceOfTheTripStatus() {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_STATUS_FOR_COMPLETED_TRIPS_SQL)) {
@@ -154,28 +127,5 @@ public class TripDAOImpl extends TripDAO {
         } catch (SQLException e) {
             throw new DaoException("Ошибка при обновлении статуса поездки", e);
         }
-    }
-
-
-    private Long convertResultSetToCountPages(ResultSet result) throws SQLException {
-        if (result.next()) {
-            return result.getLong("count");
-        }
-        throw new DaoException("Ошибка при поиске количества значений");
-    }
-
-    private List<Trip> getTripByResultSet(ResultSet resultSet) throws SQLException {
-        List<Trip> trips = new ArrayList<>();
-        while (resultSet.next()) {
-            trips.add(mapper.mapRow(resultSet));
-        }
-        return trips;
-    }
-
-    private long convertResultSetToCountByUserId(ResultSet result) throws SQLException {
-        if (result.next()) {
-            return result.getLong("count");
-        }
-        throw new DaoException("Ошибка при поиске количества поездок");
     }
 }
