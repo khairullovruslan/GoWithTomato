@@ -29,6 +29,8 @@ public class TripParticipantsDAOImpl extends TripParticipantsDAO {
         return INSTANCE;
     }
 
+
+    @Override
     public List<User> findUsersByTripId(Long tripId) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_USERS_BY_TRIP_ID_SQL)) {
@@ -45,6 +47,7 @@ public class TripParticipantsDAOImpl extends TripParticipantsDAO {
     }
 
 
+    @Override
     public void save(Long tripId, Long userId) {
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
@@ -65,7 +68,7 @@ public class TripParticipantsDAOImpl extends TripParticipantsDAO {
                 throw new DaoException("Ошибка при сохранении участника в поездке", e);
             }
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при подключении к базе данных: " + e.getMessage(), e);
+            throw new DaoException("Ошибка при подключении к базе данных: %s".formatted(e.getMessage()), e);
         }
     }
 }
