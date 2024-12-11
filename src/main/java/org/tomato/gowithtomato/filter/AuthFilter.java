@@ -29,10 +29,10 @@ public class AuthFilter extends HttpFilter {
     }
 
     private static final Map<String, List<String>> pagesForAuthorizedUser = new HashMap<>(Map.of(
-            "PUT", List.of("/trip/.*", "/profile/edit"),
-            "DELETE", List.of(),
-            "POST", List.of("/review", "/new-route", "/create-trip", "/trip/.*", "/profile/edit", "/profile/upload"),
-            "GET", List.of("/review", "/new-route", "/profile/routes", "/create-trip", "/profile/edit"),
+            "PUT", List.of("/trip/.*", "/profile/.*"),
+            "DELETE", List.of("profile/.*"),
+            "POST", List.of("/review", "/new-route", "/create-trip", "/trip/.*", "/profile/.*"),
+            "GET", List.of("/review", "/new-route", "/profile/routes", "/create-trip", "/profile/.*"),
             "PATCH", List.of()));
 
 
@@ -51,9 +51,9 @@ public class AuthFilter extends HttpFilter {
         if (isPagesForAuthorizedUser && userIsAuthorized) {
             chain.doFilter(req, res);
         } else if (isPagesForAuthorizedUser && req.getMethod().equals("GET")) {
-            req.getRequestDispatcher("/templates/login.jsp").forward(req, res);
+            req.getRequestDispatcher("/WEB-INF/templates/login.jsp").forward(req, res);
         } else if (isPagesForAuthorizedUser) {
-            res.sendRedirect(req.getContextPath() + "/login");
+            res.sendRedirect("%s/login".formatted(req.getContextPath()));
         } else {
             chain.doFilter(req, res);
         }
