@@ -19,7 +19,7 @@ public class AjaxUtil {
     public void senderRespUrl(String url, HttpServletResponse resp) {
         String template = "{\"url\": \"%s\"}";
         String json = template.formatted(url);
-        send(resp, HttpServletResponse.SC_MOVED_PERMANENTLY, json);
+        send(resp, 200, json);
 
     }
 
@@ -38,9 +38,9 @@ public class AjaxUtil {
 
     }
 
-    public void senderRespSuccessTitle(HttpServletResponse resp) {
+    public void senderRespSuccessTitle(HttpServletResponse resp, int code) {
         String template = "{\"message\": \"%s\"}".formatted("Данные успешно обновлены");
-        send(resp, HttpServletResponse.SC_CREATED, template);
+        send(resp, code, template);
     }
 
     private void send(HttpServletResponse resp, int code, String json) {
