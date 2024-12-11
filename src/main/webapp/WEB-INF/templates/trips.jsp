@@ -10,7 +10,7 @@
     <title>Найдите свою поездку</title>
 </head>
 <body>
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 
 <header>
     <div class="container">
@@ -29,6 +29,9 @@
             <input hidden="hidden"
                    value="<%= request.getParameter("status") != null ? request.getParameter("status") : "" %>"
                    id="status" type="text"/>
+            <input hidden="hidden"
+                   value="<%= request.getParameter("owner_tickets") != null ? request.getParameter("owner_tickets") : "" %>"
+                   id="owner_tickets" type="text"/>
             <button id="search-btn" onclick="filterSend()">Поиск</button>
         </div>
         <div id="filter-status" class="filter-container">
@@ -46,7 +49,6 @@
     <div class="trip-list">
         <c:if test="${not empty tripList}">
             <c:forEach var="trip" items="${tripList}">
-                ${trip.id}
                 <div class="trip-card" style="${trip.status == 'cancelled' ? ' background-color: red;' : ''}" onclick="openTrip(${trip.id})">
                     <div class="details">
                         <h2>From: ${trip.route.start.name} To: ${trip.route.finish.name}</h2>
@@ -91,6 +93,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<c:url value='/js/trips.js'/>"></script>
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 </body>
 </html>

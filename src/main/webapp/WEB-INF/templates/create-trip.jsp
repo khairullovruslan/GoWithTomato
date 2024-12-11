@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/create-trip.css'/>">
 </head>
 <body>
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <div class="container">
     <h1 class="text-center">Создание поездки</h1>
 
@@ -28,6 +28,10 @@
             <label for="price">Цена:</label>
             <input type="number" class="form-control" id="price" name="price" step="0.01" required>
         </div>
+        <div id="error-container" class="error-container" style="display:none;">
+            <ul class="error-list">
+            </ul>
+        </div>
 
         <button type="submit" class="btn btn-success">Создать маршрут</button>
         <input id="routeId" value="${routeId}" type="hidden">
@@ -39,6 +43,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<c:url value='/js/create-trip.js'/>"></script>
 
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 </body>
 </html>

@@ -13,7 +13,7 @@
 </head>
 
 <body>
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <div class="container">
     <h1 class="text-center">Создание маршрута</h1>
 
@@ -55,6 +55,11 @@
         <h5 class="mb-2">Дистанция (км):</h5>
         <p style="color: black" id="routeDistance">Не указан</p>
     </div>
+    <div id="error-container" class="error-container" style="display:none;">
+        <ul class="error-list">
+        </ul>
+    </div>
+
 </div>
 
 <div id="myModal" class="modal">
@@ -68,9 +73,9 @@
 </div>
 <input id="contextId" value="${contextPath}" hidden="hidden">
 
-<script src="<%= request.getContextPath() %>/js/route.js"></script>
+<script src="<c:url value='/js/route.js'/>"></script>
 <%--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--%>
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 
 
 </body>

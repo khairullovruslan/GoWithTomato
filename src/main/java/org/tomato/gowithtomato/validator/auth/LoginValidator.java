@@ -1,30 +1,29 @@
-package org.tomato.gowithtomato.validator;
+package org.tomato.gowithtomato.validator.auth;
 
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.tomato.gowithtomato.exception.db.UserNotFoundException;
+import org.tomato.gowithtomato.exception.auth.UnauthorizedException;
 import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.UserService;
-import org.tomato.gowithtomato.validator.annotations.ValidEmail;
+import org.tomato.gowithtomato.validator.annotations.auth.ValidLogin;
 
-public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
+public class LoginValidator implements ConstraintValidator<ValidLogin, String> {
     private final UserService userService;
 
-    public EmailValidator() {
+    public LoginValidator() {
         this.userService = ServiceFactory.getUserService();
     }
-
 
     @Override
     public boolean isValid(String login, ConstraintValidatorContext context) {
         try {
-            userService.findByEmail(login);
+            userService.findUserByLogin(login);
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("Пользователь с таким email уже зарегистрирован")
+            context.buildConstraintViolationWithTemplate("Пользователь с таким логином уже зарегистрирован")
                     .addConstraintViolation();
             return false;
-        } catch (UserNotFoundException e) {
+        } catch (UnauthorizedException e) {
             return true;
         }
     }

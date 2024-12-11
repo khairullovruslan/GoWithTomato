@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <header style=" background-image: url(<c:url value='/img/header-image.png'/>);">
     <h1>Платформа для Совместных Поездок</h1>
     <h2>Путешествуйте комфортно и дешево!</h2>
@@ -33,7 +33,7 @@
     </div>
 </div>
 
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 
 </body>
 </html>

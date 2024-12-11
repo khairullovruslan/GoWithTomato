@@ -10,15 +10,21 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <div class="form-container">
-    <h1>Редактирование</h1>
     <div>
+        <h4>Загрузить новую фотографию профиля</h4>
         <form id="uploadForm" enctype="multipart/form-data">
             <input type="file" name="image" accept="image/*" required>
             <button type="button" id="uploadButton" onclick="uploadNewPhoto()">Загрузить</button>
         </form>
-
+        <div id="successMessageUserPhoto" class="success-message" style="display:none; color: green; margin-top: 10px;">
+        </div>
+        <div id="image-error-container" class="error-container" style="display:none;">
+            <ul class="error-list">
+            </ul>
+        </div>
+        <br>
 
         <div class="form-group">
             <label for="login">Логин:</label>
@@ -42,9 +48,9 @@
             <button onclick="sendNewUserData()">Сменить данные</button>
         </div>
 
-        <div class="success-message" style="display:none; color: green; margin-top: 10px;">
+        <div id="successMessageUserData" class="success-message" style="display:none; color: green; margin-top: 10px;">
         </div>
-        <div class="error-container" style="display:none;">
+        <div id="edit-error-container" class="error-container" style="display:none;">
             <ul class="error-list">
             </ul>
         </div>
@@ -66,18 +72,23 @@
             <input type="password" id="new_pwd_rep" name="new_pwd_rep" required>
         </div>
         <div class="button-container">
-            <button type="submit" style="background-color: #6c757d">Сменить пароль</button>
+            <button onclick="sendNewPasswordData()" style="background-color: #6c757d">Сменить пароль</button>
         </div>
-        <div class="error-container" style="display:none;">
+        <div id="password-error-container" class="error-container" style="display:none;">
             <ul class="error-list">
             </ul>
+        </div>
+        <div id="successMessageUserPasswordData" class="success-message"
+             style="display:none; color: green; margin-top: 10px;">
         </div>
 
         <br>
         <br>
-        <div class="button-container" >
-            <button type="submit" style="background-color: #e70e0e">Удалить аккаунт</button>
-        </div>
+        <form action="${pageContext.request.contextPath}/profile/edit/delete" method="post">
+            <div class="button-container">
+                <button type="submit" style="background-color: #e70e0e">Удалить аккаунт</button>
+            </div>
+        </form>
 
 
     </div>
@@ -85,6 +96,6 @@
 <input id="contextId" value="${contextPath}" hidden="hidden">
 
 <script src="<c:url value='/js/edit.js'/>"></script>
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 </body>
 </html>

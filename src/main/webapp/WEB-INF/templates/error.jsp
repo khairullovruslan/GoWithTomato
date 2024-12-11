@@ -10,7 +10,7 @@
 </head>
 
 <body>
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <div class="error-container">
     <h1 class="error-title">Упс! Что-то пошло не так...</h1>
     <p class="error-message">
@@ -25,6 +25,6 @@
     </p>
     <a class="btn-home" href="${pageContext.request.contextPath}/">Вернуться на главную</a>
 </div>
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 </body>
 </html>
