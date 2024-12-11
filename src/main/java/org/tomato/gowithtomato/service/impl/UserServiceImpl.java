@@ -1,7 +1,6 @@
 package org.tomato.gowithtomato.service.impl;
 
 
-import org.modelmapper.ModelMapper;
 import org.tomato.gowithtomato.dao.daoInterface.UserDAO;
 import org.tomato.gowithtomato.dto.user.UserDTO;
 import org.tomato.gowithtomato.dto.user.UserEditDTO;
@@ -17,10 +16,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final static UserServiceImpl INSTANCE = new UserServiceImpl();
     private final UserDAO userDao;
-    private final ModelMapper mapper;
+
+    private final UserMapper mapper;
 
     public UserServiceImpl() {
-        this.mapper = new ModelMapper();
+        this.mapper = UserMapper.getInstance();
         this.userDao = DaoFactory.getUserDAO();
     }
 
@@ -28,22 +28,28 @@ public class UserServiceImpl implements UserService {
         return INSTANCE;
     }
 
+    @Override
+
     public UserDTO findUserByLogin(String login) {
         Optional<User> user = userDao.findByLogin(login);
         if (user.isPresent()) {
-            return mapper.map(user.get(), UserDTO.class);
+            return mapper.convertUserToDTO(user.get());
         }
         throw new UnauthorizedException("Нет доступа к странице");
     }
+
+    @Override
 
     public String getPasswordByLogin(String login) {
         return userDao.getPasswordByLogin(login).orElseThrow(UserNotFoundException::new);
     }
 
+    @Override
+
     public UserDTO findByEmail(String email) {
         Optional<User> user = userDao.findByEmail(email);
         if (user.isPresent()) {
-            return mapper.map(user.get(), UserDTO.class);
+            return mapper.convertUserToDTO(user.get());
         }
         throw new UserNotFoundException();
 
@@ -57,4 +63,30 @@ public class UserServiceImpl implements UserService {
         origUser.setPhoneNumber(userEditDTO.phoneNumber());
         return origUser;
     }
+
+    @Override
+    public UserDTO updatePhotoUrl(UserDTO origUser, String url, Long userId) {
+        userDao.updatePhotoUrl(url, userId);
+        origUser.setAvatarUrl(url);
+        return origUser;
+    }
+
+    @Override
+    public void delete(Long id) {
+        userDao.delete(id);
+    }
+
+    @Override
+    public Optional<UserDTO> getByTripId(Long tripId) {
+
+        Optional<User> optionalUser = userDao.getByTripId(tripId);
+        return optionalUser.map(mapper::convertUserToDTO);
+    }
+
+    @Override
+    public Optional<UserDTO> getByRouteId(Long routeId) {
+        Optional<User> optionalUser = userDao.getByRouteId(routeId);
+        return optionalUser.map(mapper::convertUserToDTO);
+    }
+
 }
