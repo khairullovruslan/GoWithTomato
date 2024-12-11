@@ -13,7 +13,7 @@
 </head>
 
 <body>
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <div class="container">
     <c:if test="${not empty trip}">
         <div class="trip-card" style="${trip.status == 'cancelled' ? ' background-color: red;' : ''}">
@@ -96,6 +96,10 @@
                 </c:if>
                 > Отправить отзыв
                 </button>
+                <div id="error-container" class="error-container" style="display:none;">
+                    <ul class="error-list">
+                    </ul>
+                </div>
             </div>
 
         </div>
@@ -109,7 +113,7 @@
 <input id="contextId" value="${contextPath}" hidden="hidden">
 
 <script src="<c:url value='/js/review.js'/>"></script>
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 </body>
 
 </html>

@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <header style=" background-image: url(<c:url value='/img/route-header.png'/>);">
 </header>
 
@@ -77,7 +77,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<c:url value='/js/routes.js'/>"></script>
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 
 </body>
 </html>

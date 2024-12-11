@@ -10,10 +10,10 @@
 </head>
 
 <body>
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <div class="form-container">
     <h2>Регистрация</h2>
-    <form action="${pageContext.request.contextPath}/sign-up" method="post">
+    <div>
         <div class="form-group">
             <label for="login">Логин:</label>
             <input type="text" id="login" name="login" required>
@@ -34,23 +34,23 @@
             <input type="text" id="phone" name="phone" required>
         </div>
 
-        <c:if test="${not empty errorList}">
-            <div class="error-container">
-                <ul class="error-list">
-                    <c:forEach var="error" items="${errorList}">
-                        <li>${error}</li>
-                    </c:forEach>
-                </ul>
-            </div>
-        </c:if>
+        <div class="error-container" style="display:none;">
+            <ul class="error-list">
+            </ul>
+        </div>
 
         <div class="button-container">
-            <button type="submit">Зарегистрироваться</button>
+            <button onclick="sendUserRegData()">Зарегистрироваться</button>
             <a href="${pageContext.request.contextPath}/login" class="register-button">Уже есть аккаунт</a>
         </div>
-    </form>
+    </div>
 </div>
 
-<%@include file="/templates/base/footer.jsp" %>
+<input id="contextId" value="${contextPath}" hidden="hidden">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="<c:url value='/js/registration.js'/>"></script>
+
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 </body>
 </html>

@@ -5,14 +5,14 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <img src="<c:url value='/img/logo.png'/>" alt="Logo"
-         onclick="window.location.href='<%=request.getContextPath()%>/'">
+         onclick="window.location.href='${contextPath}/'">
     <h1>GoWithTomato</h1>
     <div class="search">
 
-        <a href="<%= request.getContextPath() %>/trips">
+        <a href="${contextPath}/trips">
             <i class="fas fa-search"></i> Поиск
         </a>
-        <a href="<%= request.getContextPath() %>/profile/routes">
+        <a href="${contextPath}/profile/routes">
             <i class="fas fa-plus"></i> Опубликовать поездку
         </a>
 
@@ -20,13 +20,13 @@
         <c:choose>
 
             <c:when test="${userIsAuthorized}">
-                <a href="<%= request.getContextPath()%>/profile">
+                <a href="${contextPath}/profile">
                     <i class="fas fa-user"></i> Профиль
                 </a>
             </c:when>
 
             <c:otherwise>
-                <a href="<%= request.getContextPath()%>/login">
+                <a href="${contextPath}/login">
                     <i class="fas fa-user"></i> Войти
                 </a>
             </c:otherwise>

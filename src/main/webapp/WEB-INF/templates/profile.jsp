@@ -13,13 +13,19 @@
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/profile.css'/>">
 </head>
 <body>
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <div class="container">
+    <h1>Мой профиль</h1>
     <header class="profile-header">
-        <h1>Мой профиль</h1>
-        <a href="<%= request.getContextPath() %>/profile/edit" class="edit-button"><i class="fas fa-edit"></i> Редактировать</a>
+        <img src="<c:url value='${photo}'/>" alt="" width="200" height="200">
 
-        <a href="<%= request.getContextPath() %>/trips?organize=${user.login}" class="edit-button">
+        <c:if test="${isOwner}">
+            <a href="${contextPath}/profile/edit" class="edit-button"><i class="fas fa-edit"></i>
+                Редактировать</a>
+        </c:if>
+
+
+        <a href="${contextPath}/trips?organizer=${user.login}" class="edit-button">
             <c:choose>
                 <c:when test="${isOwner}">
                     Посмотреть созданные вами поездки
@@ -30,10 +36,10 @@
             </c:choose>
         </a>
         <c:if test="${isOwner}">
-            <a href="<%= request.getContextPath() %>/trips?owner_tickets=${true}" class="edit-button">
+            <a href="${contextPath}/trips?owner_tickets=${true}" class="edit-button">
                 Посмотреть ваши поездки
             </a>
-            <a style="background-color: red" href="<%= request.getContextPath() %>/logout" class="edit-button">
+            <a style="background-color: red" href="${contextPath}/logout" class="edit-button">
                 Выйти
             </a>
 
@@ -143,6 +149,6 @@
 </div>
 
 
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 </body>
 </html>

@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/trip.css'/>">
 </head>
 <body>
-<%@include file="/templates/base/navbar.jsp" %>
+<%@include file="/WEB-INF/templates/base/navbar.jsp" %>
 <div class="container">
     <div class="header">
         <h1>${trip.tripDateTimeFormatted}</h1>
@@ -42,9 +42,17 @@
     <div class="creator-info">
         <h2>Организатор:</h2>
         <div class="creator-details">
-            <span>Никнейм: ${trip.owner.login}</span><br>
-            <span>Почта: ${trip.owner.email}</span><br>
-            <span>Телефон: ${trip.owner.phoneNumber}</span>
+            <c:choose>
+                <c:when test="${not empty ownerTrip}">
+                    <span>Никнейм: ${ownerTrip.login}</span><br>
+                    <span>Почта: ${ownerTrip.email}</span><br>
+                    <span>Телефон: ${ownerTrip.phoneNumber}</span>
+                </c:when>
+                <c:otherwise>
+                    <span>Видимо, организатор решил удалить свой аккаунт. Пу-пу-пу</span>
+                </c:otherwise>
+            </c:choose>
+
         </div>
     </div>
 
@@ -68,7 +76,6 @@
         <c:when test="${trip.status == 'cancelled'}">
         </c:when>
         <c:when test="${owner}">
-            ${trip.id}
             <input id="tripId" value="${trip.id}" hidden="hidden">
             <button style="color: white" class="button cancellation" onclick="sendPutMethod()">Отменить поездку</button>
         </c:when>
@@ -83,7 +90,7 @@
                 <button style="color: white" class="button" type="submit" disabled>Вы уже забронировали</button>
             </c:if>
         </c:when>
-        <c:when test="${trip.availableSeats > 0 && !chosen}">
+        <c:when test="${trip.availableSeats > 0 && !chosen && trip.status == 'available'}">
             <form action="${pageContext.request.contextPath}/trip/${trip.id}" method="post" class="price-section">
                 <span class="price">${trip.price} ₽</span>
                 <button class="button" type="submit">Забронировать</button>
@@ -101,6 +108,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<c:url value='/js/trip.js'/>"></script>
-<%@include file="/templates/base/footer.jsp" %>
+<%@include file="/WEB-INF/templates/base/footer.jsp" %>
 </body>
 </html>

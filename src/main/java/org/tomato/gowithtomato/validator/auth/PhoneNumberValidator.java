@@ -1,8 +1,8 @@
-package org.tomato.gowithtomato.validator;
+package org.tomato.gowithtomato.validator.auth;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.tomato.gowithtomato.validator.annotations.ValidPhoneNumber;
+import org.tomato.gowithtomato.validator.annotations.auth.ValidPhoneNumber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,12 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
         List<String> errorMessages = new ArrayList<>();
         if (phoneNumber == null) {
             errorMessages.add("Номер не может быть пустым.");
-        }
-        else{
-            if (phoneNumber.charAt(0) != '+'){
+        } else {
+            if (phoneNumber.charAt(0) != '+') {
                 errorMessages.add("Телефонный номер должен начинаться с '+'");
             }
             String regex = "^\\+\\d{1,3}\\d{9,15}$";
-            if (!phoneNumber.matches(regex)){
+            if (!phoneNumber.matches(regex)) {
                 errorMessages.add("Неверный формат номера телефона");
             }
         }

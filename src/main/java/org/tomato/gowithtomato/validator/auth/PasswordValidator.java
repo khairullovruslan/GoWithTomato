@@ -1,11 +1,12 @@
-package org.tomato.gowithtomato.validator;
+package org.tomato.gowithtomato.validator.auth;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.tomato.gowithtomato.validator.annotations.ValidPassword;
+import org.tomato.gowithtomato.validator.annotations.auth.ValidPassword;
 
 import java.util.ArrayList;
 import java.util.List;
+
 public class PasswordValidator implements ConstraintValidator<ValidPassword, String> {
 
     @Override
