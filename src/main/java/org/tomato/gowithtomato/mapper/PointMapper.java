@@ -30,7 +30,7 @@ public class PointMapper implements RowMapper<Point> {
                 .build();
     }
 
-    public Point convertDTOToPoint(PointDTO pointDTO){
+    public Point convertDTOToPoint(PointDTO pointDTO) {
         return Point
                 .builder()
                 .name(pointDTO.getName())
@@ -41,7 +41,8 @@ public class PointMapper implements RowMapper<Point> {
                 .state(pointDTO.getState())
                 .build();
     }
-    public PointDTO convertPointToDTO(Point point){
+
+    public PointDTO convertPointToDTO(Point point) {
         return PointDTO
                 .builder()
                 .name(point.getName())

@@ -16,6 +16,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Поиск точки
+ */
 @Slf4j
 @WebServlet("/points-search")
 public class PointsSearchServlet extends BaseServlet {
@@ -34,8 +37,10 @@ public class PointsSearchServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         String query = req.getParameter("q");
-        resp.setContentType("application/json");
+        log.info("Поиск точек по названию - {}", query);
+
         PrintWriter out = resp.getWriter();
+
         if (query != null) {
             List<PointDTO> points = graphHopperApiService.getPointsByName(query);
             log.info("Количество найденных точек по названию {} - {}", query, points.size());
@@ -44,6 +49,8 @@ public class PointsSearchServlet extends BaseServlet {
             log.error("Параметр query пуст!");
             out.print(objectMapper.writeValueAsString(new ArrayList<>()));
         }
+
+        resp.setContentType("application/json");
         out.flush();
     }
 }
