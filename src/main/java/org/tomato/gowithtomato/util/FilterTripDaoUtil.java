@@ -29,9 +29,16 @@ public class FilterTripDaoUtil {
         StringBuilder query = new StringBuilder(SQL_FILTER);
         StringBuilder queryForGetCountTotalPage = new StringBuilder(COUNT_SQL);
         HashMap<String, Integer> keyIdxForPreparedStatement = new HashMap<>();
+
         List<String> conditions = buildConditions(filter, keyIdxForPreparedStatement);
         if (!conditions.isEmpty()) {
-            String fil = " WHERE " + String.join(" AND ", conditions);
+            String fil = " WHERE %s".formatted(String.join(" AND ", conditions));
+            if (filter.containsKey("organizer")) {
+                fil = "JOIN users u ON t.user_id = u.id %s".formatted(fil);
+            }
+            if (filter.containsKey("owner_tickets")) {
+                fil = "JOIN trip_participants tp on tp.trip_id = t.id %s".formatted(fil);
+            }
             query.append(fil);
             queryForGetCountTotalPage.append(fil);
         }
@@ -39,6 +46,7 @@ public class FilterTripDaoUtil {
             query.append(String.format(" limit %d offset %d", LIMIT,
                     LIMIT * (Integer.parseInt(filter.get("page")) - 1)));
         }
+
 
         return FilterQueriesDTO
                 .builder()
@@ -60,6 +68,7 @@ public class FilterTripDaoUtil {
                 case "organizer" -> conditions.add("u.login = ?");
                 case "status" -> conditions.add("status = ?");
                 case "date" -> conditions.add("t.trip_date_time >= ?");
+                case "owner_tickets" -> conditions.add("tp.user_id = ?");
 
             }
             if (!key.equals("page")) keyIdxForPreparedStatement.put(key, count++);
@@ -80,6 +89,7 @@ public class FilterTripDaoUtil {
                         Timestamp.valueOf(LocalDateTime.parse(filter.get(key))));
                 case "status" -> preparedStatement.setObject(idx.get(key),
                         TripStatus.valueOf(filter.get(key)), Types.OTHER);
+                case "owner_tickets" -> preparedStatement.setLong(idx.get(key), Long.parseLong(filter.get(key)));
             }
         }
     }
