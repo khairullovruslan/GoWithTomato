@@ -12,67 +12,69 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class FilterGenerator {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final String DEFAULT_PAGE = "1";
     private final AuthService authService;
 
     public FilterGenerator() {
-        authService = ServiceFactory.getAuthService();
+        this.authService = ServiceFactory.getAuthService();
     }
 
 
     public Map<String, String> generateFilter(final HttpServletRequest req) {
         Map<String, String> filter = new HashMap<>();
-        processParameter(req, filter, "from");
-        processParameter(req, filter, "to");
-        processParameter(req, filter, "count");
-        String page = req.getParameter("currentPage");
-        page = page == null ? "1" : page;
-        filter.put("page", page);
 
-        String organizer = req.getParameter("organizer");
-        if (organizer != null) {
-            req.setAttribute("organizer", organizer);
-            filter.put("organizer", organizer);
-        }
+        extractAndProcessParameter(req, filter, "from");
+        extractAndProcessParameter(req, filter, "to");
+        extractAndProcessParameter(req, filter, "count");
 
+        String pageParam = req.getParameter("currentPage");
+        int page = Integer.parseInt(pageParam != null ? pageParam : DEFAULT_PAGE);
+        filter.put("page", String.valueOf(page));
+        req.setAttribute("page", page);
 
-        String status = req.getParameter("status");
-        if (status != null) {
-            req.setAttribute("status", status);
-            filter.put("status", status);
-        }
+        extractAndProcessParameter(req, filter, "organizer");
+        extractAndProcessParameter(req, filter, "status");
 
-        boolean userTrips = Boolean.parseBoolean(req.getParameter("owner_tickets"));
-        if (userTrips) {
-            req.setAttribute("owner_tickets", true);
-            if (authService.authorizationCheck(req)) {
-                filter.put("owner_tickets", String.valueOf(authService.getUser(req).getId()));
-            } else {
-                throw new UnauthorizedException("Нет доступа к странице");
-            }
-        }
-
-        String date = req.getParameter("date");
-        if (date != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDateTime localDateTime = LocalDate.parse(date, formatter).atStartOfDay();
-            req.setAttribute("date", localDateTime.format(formatter));
-            filter.put("date", localDateTime.toString());
-        }
-        req.setAttribute("page", Integer.parseInt(page));
+        processOwnerTicketsParameter(req, filter);
+        processDateParameter(req, filter);
 
         return filter;
     }
 
-    private void processParameter(final HttpServletRequest req,
-                                  final Map<String, String> filter, final String paramName) {
-        String paramValue = req.getParameter(paramName);
-        if (paramValue != null) {
-            req.setAttribute(paramName, paramValue);
-            filter.put(paramName, capitalizeString(paramValue));
+    private void processOwnerTicketsParameter(final HttpServletRequest req, final Map<String, String> filter) {
+        String ownerTicketsParam = req.getParameter("owner_tickets");
+        if (ownerTicketsParam != null && Boolean.parseBoolean(ownerTicketsParam)) {
+            req.setAttribute("owner_tickets", true);
+            try {
+                filter.put("owner_tickets", String.valueOf(authService.getUser(req).getId()));
+            } catch (UnauthorizedException e) {
+                throw new UnauthorizedException("Доступ запрещен");
+            }
         }
     }
 
-    private String capitalizeString(final String string) {
-        return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+    private void processDateParameter(HttpServletRequest req, Map<String, String> filter) {
+        String dateParam = req.getParameter("date");
+        if (dateParam != null) {
+            try {
+                LocalDate date = LocalDate.parse(dateParam, DATE_FORMATTER);
+                LocalDateTime localDateTime = date.atStartOfDay();
+                req.setAttribute("date", date.format(DATE_FORMATTER));
+                filter.put("date", localDateTime.toString());
+            } catch (Exception e) {
+                System.err.println("Ошибка парсинга даты: %s, %s".formatted(dateParam, e.getMessage()));
+            }
+        }
     }
+
+
+    private void extractAndProcessParameter(HttpServletRequest req, Map<String, String> filter, String paramName) {
+        String paramValue = req.getParameter(paramName);
+        if (paramValue != null) {
+            req.setAttribute(paramName, paramValue);
+            filter.put(paramName, paramValue);
+        }
+    }
+
 }
