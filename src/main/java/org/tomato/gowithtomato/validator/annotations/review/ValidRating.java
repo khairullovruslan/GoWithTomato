@@ -1,20 +1,19 @@
-package org.tomato.gowithtomato.validator.annotations;
-
+package org.tomato.gowithtomato.validator.annotations.review;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import org.tomato.gowithtomato.validator.review.ReviewDescriptionValidator;
+import org.tomato.gowithtomato.validator.review.RatingValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = ReviewDescriptionValidator.class)
+@Constraint(validatedBy = RatingValidator.class)
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidReviewDescription {
-    String message() default "Длина текста не должна превышать 350 символов";
+public @interface ValidRating {
+    String message() default "Рейтинг должен иметь значение  не менее 1 и не более 5.";
 
     Class<?>[] groups() default {};
 

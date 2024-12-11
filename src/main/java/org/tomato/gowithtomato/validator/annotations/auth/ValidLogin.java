@@ -1,8 +1,8 @@
-package org.tomato.gowithtomato.validator.annotations;
+package org.tomato.gowithtomato.validator.annotations.auth;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import org.tomato.gowithtomato.validator.LoginValidator;
+import org.tomato.gowithtomato.validator.auth.LoginValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
