@@ -30,11 +30,12 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     }
 
     @Override
-    public String uploadPhoto(HttpServletRequest req) throws ServletException, IOException {
+    public String uploadPhoto(HttpServletRequest req, boolean needToUpdate) throws ServletException, IOException {
         Part part = req.getPart("image");
         String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
-        File file = new File(FILE_PREFIX + File.separator + filename.hashCode() % DIRECTORIES_COUNT
-                + File.separator + filename);
+        File file = new File("%s%s%s%s%s".formatted(
+                FILE_PREFIX,
+                File.separator,filename.hashCode() % DIRECTORIES_COUNT, File.separator, filename));
 
         InputStream content = part.getInputStream();
         file.getParentFile().mkdirs();
@@ -45,8 +46,21 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         content.read(buffer);
         outputStream.write(buffer);
         outputStream.close();
+        if (needToUpdate) {
+            return replaceImage((String) req.getAttribute("oldPhotoId"), file);
+        }
+        return uploadPhoto(file);
+    }
 
+    private String uploadPhoto(File file) throws IOException {
         Map<String, Object> uploadResult = cloudinary.uploader().upload(file, new HashMap<>());
         return uploadResult.get("secure_url").toString();
     }
+
+    private String replaceImage(String oldUrl, File newImageFile) throws IOException {
+        cloudinary.uploader().destroy(oldUrl, new HashMap());
+        Map<String, Object> uploadResult = cloudinary.uploader().upload(newImageFile, new HashMap());
+        return uploadResult.get("secure_url").toString();
+    }
+
 }
