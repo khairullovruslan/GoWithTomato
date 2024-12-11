@@ -25,17 +25,24 @@ public class ReviewServiceImpl implements ReviewService {
         return INSTANCE;
     }
 
+    @Override
     public boolean leftAReview(long tripId, Long userId) {
         return reviewDAO.searchForUserInReviews(tripId, userId);
     }
+
+    @Override
 
     public void save(ReviewDTO tripDTO) {
         reviewDAO.save(reviewMapper.convertDTOToReview(tripDTO));
     }
 
+    @Override
+
     public Optional<ReviewDTO> findByUserAndTripId(long tripId, Long userId) {
         return reviewDAO.findByUserAndTripId(userId, tripId).map(reviewMapper::convertReviewToDto);
     }
+
+    @Override
 
     public List<ReviewDTO> findByTripOwnerId(Long id) {
         return reviewDAO.findByTripOwnerId(id).stream().map(reviewMapper::convertReviewToDto).toList();

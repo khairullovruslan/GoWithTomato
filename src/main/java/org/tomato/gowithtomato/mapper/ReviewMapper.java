@@ -44,30 +44,30 @@ public class ReviewMapper implements RowMapper<Review> {
         }
         return Review
                 .builder()
-                    .owner(userOptional.get())
-                    .trip(tripOptional.get())
-                    .description(resultSet.getString("description"))
-                    .rating(resultSet.getInt("rating"))
+                .owner(userOptional.get())
+                .trip(tripOptional.get())
+                .description(resultSet.getString("description"))
+                .rating(resultSet.getInt("rating"))
                 .build();
     }
 
     public Review convertDTOToReview(ReviewDTO reviewDTO) {
         return Review
                 .builder()
-                    .rating(reviewDTO.getRating())
-                    .description(reviewDTO.getDescription())
-                    .owner(userMapper.convertDTOToUser(reviewDTO.getOwner()))
-                    .trip(tripMapper.convertDTOToTrip(reviewDTO.getTrip()))
+                .rating(reviewDTO.getRating())
+                .description(reviewDTO.getDescription())
+                .owner(userMapper.convertDTOToUser(reviewDTO.getOwner()))
+                .trip(tripMapper.convertDTOToTrip(reviewDTO.getTrip()))
                 .build();
     }
 
     public ReviewDTO convertReviewToDto(Review review) {
         return ReviewDTO
                 .builder()
-                    .rating(review.getRating())
-                    .description(review.getDescription())
-                    .owner(userMapper.convertUserToDTO(review.getOwner()))
-                    .trip(tripMapper.convertTripToDTO(review.getTrip()))
+                .rating(review.getRating())
+                .description(review.getDescription())
+                .owner(userMapper.convertUserToDTO(review.getOwner()))
+                .trip(tripMapper.convertTripToDTO(review.getTrip()))
                 .build();
     }
 

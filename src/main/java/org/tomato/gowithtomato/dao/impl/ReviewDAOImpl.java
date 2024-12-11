@@ -6,7 +6,6 @@ import org.tomato.gowithtomato.exception.db.DaoException;
 import org.tomato.gowithtomato.mapper.ReviewMapper;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,11 +22,8 @@ public class ReviewDAOImpl extends ReviewDAO {
         return INSTANCE;
     }
 
-    @Override
-    public Optional<Review> findById(Long id) {
-        return Optional.empty(); // Реализация может быть добавлена при необходимости
-    }
 
+    @Override
     public Optional<Review> findByUserAndTripId(Long userId, Long tripId) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USER_AND_TRIP_ID_SQL)) {
@@ -78,16 +74,9 @@ public class ReviewDAOImpl extends ReviewDAO {
         }
     }
 
-    @Override
-    public void update(Review entity) {
-    }
-
-    @Override
-    public void delete(Long id) {
-        // Реализация удаления отзыва может быть добавлена при необходимости
-    }
-
-
+    /*
+    поиск отзыва по юзеру
+     */
     @Override
     public boolean searchForUserInReviews(long tripId, long userId) {
         try (Connection connection = getConnection();
@@ -107,11 +96,4 @@ public class ReviewDAOImpl extends ReviewDAO {
     }
 
 
-    private List<Review> convertResultSetToList(ResultSet result) throws SQLException {
-        List<Review> reviews = new ArrayList<>();
-        while (result.next()) {
-            reviews.add(mapper.mapRow(result));
-        }
-        return reviews;
-    }
 }

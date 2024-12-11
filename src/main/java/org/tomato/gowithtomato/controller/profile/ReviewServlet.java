@@ -24,6 +24,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
+/*
+Отображение отзыва поездки
+ */
 @Slf4j
 @WebServlet("/review")
 public class ReviewServlet extends BaseServlet {
@@ -53,9 +56,14 @@ public class ReviewServlet extends BaseServlet {
         UserDTO user = authService.getUser(req);
         TripDTO tripDTO = tripService.findById(Long.valueOf(req.getParameter("trip")));
         Optional<ReviewDTO> reviewDTO = reviewService.findByUserAndTripId(tripDTO.getId(), user.getId());
+
+        /*
+        Если reviewDto == null, то в html выведется форма, иначе подставятся значения
+         */
         req.setAttribute("review", reviewDTO.orElse(null));
         req.setAttribute("trip", tripDTO);
-        req.getRequestDispatcher("/templates/review.jsp").forward(req, resp);
+
+        req.getRequestDispatcher("/WEB-INF/templates/review.jsp").forward(req, resp);
 
 
     }
@@ -64,6 +72,9 @@ public class ReviewServlet extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ReviewDTO reviewDTO = objectMapper.readValue(req.getInputStream(), ReviewDTO.class);
         Set<ConstraintViolation<ReviewDTO>> violations = validator.validate(reviewDTO);
+
+        log.info("Создание нового отзыва");
+
         if (!violations.isEmpty()) {
             log.error("Пользователь ввел невалидные данные!");
             ajaxUtil.senderErrorMessage(violations.stream()
@@ -71,14 +82,20 @@ public class ReviewServlet extends BaseServlet {
                     .collect(Collectors.joining(", ")), resp);
             return;
         }
+
         UserDTO user = authService.getUser(req);
         TripDTO tripDTO = tripService.findById(Long.valueOf(req.getParameter("trip")));
+
         reviewDTO.setOwner(user);
         reviewDTO.setTrip(tripDTO);
+
+        /*
+        Проверка на то, что юзер не оставлял уже отзыв
+         */
         if (!reviewService.leftAReview(tripDTO.getId(), user.getId())) {
             reviewService.save(reviewDTO);
         }
-        ajaxUtil.senderRespUrl(req.getContextPath() + "/review?trip=%d".formatted(tripDTO.getId()), resp);
+        ajaxUtil.senderRespUrl("%s/review?trip=%d".formatted(req.getContextPath(), tripDTO.getId()), resp);
 
 
     }
