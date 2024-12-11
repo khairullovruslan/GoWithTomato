@@ -9,6 +9,7 @@ import org.tomato.gowithtomato.util.AjaxUtil;
 import org.tomato.gowithtomato.util.DateFormatter;
 import org.tomato.gowithtomato.util.ExceptionHandler;
 import org.tomato.gowithtomato.util.FilterGenerator;
+import org.tomato.gowithtomato.validator.auth.PasswordUserValidator;
 import org.tomato.gowithtomato.validator.UserEditValidator;
 
 @WebListener
@@ -24,6 +25,7 @@ public class GoWithTomatoBaseListener implements ServletContextListener {
         servletContext.setAttribute("exceptionHandler", new ExceptionHandler());
         servletContext.setAttribute("objectMapper", new ObjectMapper());
         servletContext.setAttribute("userEditValidator", new UserEditValidator());
+        servletContext.setAttribute("passwordUserValidator", new PasswordUserValidator());
 
 
     }
