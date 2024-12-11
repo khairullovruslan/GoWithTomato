@@ -1,21 +1,15 @@
 package org.tomato.gowithtomato.dto.route;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Builder;
 
 
-@Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class NewRouteResponse {
+public record NewRouteResponse(
 
-    @JsonProperty("routeInfo")
-    private RouteDTO routeDTO;
+        @JsonProperty("routeInfo")
+        RouteDTO routeDTO,
 
-    @JsonProperty("infoType")
-    private String type;
-
-
+        @JsonProperty("infoType")
+        String type) {
 }
