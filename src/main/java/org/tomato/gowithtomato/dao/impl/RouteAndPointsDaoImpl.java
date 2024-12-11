@@ -1,15 +1,16 @@
 package org.tomato.gowithtomato.dao.impl;
 
+import org.tomato.gowithtomato.dao.daoInterface.PointDAO;
 import org.tomato.gowithtomato.dao.daoInterface.m2m.RouteAndPointsDao;
 import org.tomato.gowithtomato.entity.Point;
 import org.tomato.gowithtomato.exception.db.DaoException;
 import org.tomato.gowithtomato.exception.db.UniqueSqlException;
+import org.tomato.gowithtomato.factory.DaoFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.tomato.gowithtomato.dao.query.m2m.RouteAndPointsQueries.FIND_BY_ID_SQL;
@@ -17,10 +18,10 @@ import static org.tomato.gowithtomato.dao.query.m2m.RouteAndPointsQueries.ROUTE_
 
 public class RouteAndPointsDaoImpl extends RouteAndPointsDao {
     private static final RouteAndPointsDaoImpl INSTANCE = new RouteAndPointsDaoImpl();
-    private final PointDAOImpl pointDAO;
+    private final PointDAO pointDAO;
 
     private RouteAndPointsDaoImpl() {
-        pointDAO = PointDAOImpl.getInstance();
+        pointDAO = DaoFactory.getPointDAO();
     }
 
     public static RouteAndPointsDaoImpl getInstance() {
@@ -50,7 +51,7 @@ public class RouteAndPointsDaoImpl extends RouteAndPointsDao {
             ResultSet result = statement.executeQuery();
             return convertResultSetToList(result);
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при поиске точек по id маршрута: " + id, e);
+            throw new DaoException("Ошибка при поиске точек по id маршрута: %s".formatted(id), e);
         }
     }
 
@@ -70,31 +71,4 @@ public class RouteAndPointsDaoImpl extends RouteAndPointsDao {
         }
     }
 
-    private void executeBatchWithHandling(PreparedStatement statement) {
-        try {
-            statement.executeBatch();
-        } catch (SQLException e) {
-            throw new DaoException("Ошибка при выполнении пакетной вставки.", e);
-        }
-    }
-
-    private List<Point> convertResultSetToList(ResultSet result) throws SQLException {
-        List<Point> points = new ArrayList<>();
-        while (result.next()) {
-            points.add(createPointFromResultSet(result));
-        }
-        return points;
-    }
-
-    private Point createPointFromResultSet(ResultSet result) throws SQLException {
-        return Point.builder()
-                .id(result.getLong("id"))
-                .lng(result.getDouble("lng"))
-                .lat(result.getDouble("lat"))
-                .name(result.getString("title"))
-                .state(result.getString("state"))
-                .osmValue(result.getString("osm_value"))
-                .country(result.getString("country"))
-                .build();
-    }
 }

@@ -29,10 +29,14 @@ public class RouteServiceImpl implements RouteService {
         return INSTANCE;
     }
 
-    public void saveRoute(Route route) {
-        routeDAO.save(route);
+    @Override
+
+    public void saveRoute(RouteDTO route, Long ownerId) {
+        System.out.println("route " + route);
+        routeDAO.save(routeMapper.convertDTOToRoute(route), ownerId);
     }
 
+    @Override
 
     public RouteDTO findById(Long id) {
         Optional<Route> route = routeDAO.findById(id);
@@ -42,10 +46,14 @@ public class RouteServiceImpl implements RouteService {
         throw new RoutNotFoundException();
     }
 
-    public List<RouteDTO> findByUserWithPagination(UserDTO user, int i) {
-        List<Route> routes = routeDAO.findByUserWithPagination(userMapper.convertDTOToUser(user), i);
+    @Override
+
+    public List<RouteDTO> findByUserWithPagination(UserDTO user, int page) {
+        List<Route> routes = routeDAO.findByUserWithPagination(userMapper.convertDTOToUser(user), page);
         return routes.stream().map(routeMapper::convertRouteToDTO).toList();
     }
+
+    @Override
 
     public long getCountPage(UserDTO user) {
         return routeDAO.getCountPage(userMapper.convertDTOToUser(user));

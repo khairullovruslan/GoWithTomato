@@ -27,6 +27,7 @@ public class RouteDAOImpl extends RouteDAO {
         routeAndPointsDao = RouteAndPointsDaoImpl.getInstance();
         rowMapper = RouteMapper.getInstance();
     }
+
     public static RouteDAOImpl getInstance() {
         return INSTANCE;
     }
@@ -49,12 +50,15 @@ public class RouteDAOImpl extends RouteDAO {
 
 
     @Override
-    public Route save(Route route) {
+    public Route   save(Route route, Long userId) {
         try {
+
             Long startPointId = saveOrFindPoint(route.getDeparturePoint());
+            System.out.println("start id " + startPointId);
             Long finishPointId = saveOrFindPoint(route.getDestinationPoint());
 
-            long routeId = insertRoute(startPointId, finishPointId, route.getOwner().getId(), Math.round(route.getDistance()));
+            System.out.println("finisg id " + finishPointId);
+            long routeId = insertRoute(startPointId, finishPointId, userId, Math.round(route.getDistance()));
             route.setId(routeId);
 
             if (route.getOther() != null) {
@@ -66,10 +70,12 @@ public class RouteDAOImpl extends RouteDAO {
         }
     }
 
+    @Override
     public List<Route> findByUserWithPagination(User user, int page) {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     FIND_BY_USER_ID_SQL + String.format(" LIMIT %d OFFSET %d", LIMIT, LIMIT * (page - 1)))) {
+             PreparedStatement statement = connection
+                     .prepareStatement("%s LIMIT %d OFFSET %d"
+                             .formatted(FIND_BY_USER_ID_SQL, LIMIT, LIMIT * (page - 1)))) {
             statement.setLong(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
             List<Route> routes = new ArrayList<>();
@@ -83,6 +89,7 @@ public class RouteDAOImpl extends RouteDAO {
     }
 
 
+    @Override
     public long getCountPage(User user) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(COUNT_SQL)) {
@@ -94,24 +101,17 @@ public class RouteDAOImpl extends RouteDAO {
         }
     }
 
-    @Override
-    public void update(Route entity) {
-    }
-
-    @Override
-    public void delete(Long id) {
-    }
-
 
     private Long saveOrFindPoint(Point point) throws SQLException {
         try {
+            System.out.println("point - " + point);
             return pointDAO.save(point).getId();
-        } catch (UniqueSqlException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             Optional<Point> existingPoint = pointDAO.findByLatLng(point.getLat(), point.getLng());
             return existingPoint.orElseThrow(() -> new DaoException("Ошибка: точка не найдена и не может быть сохранена.")).getId();
         }
     }
-
 
 
     private long insertRoute(long startPointId, long finishPointId, long ownerId, long distance) throws SQLException {
@@ -132,11 +132,4 @@ public class RouteDAOImpl extends RouteDAO {
         }
     }
 
-
-    private Long convertResultSetToCountPages(ResultSet result) throws SQLException {
-        if (result.next()) {
-            return result.getLong("count");
-        }
-        throw new DaoException("Ошибка при поиске количества значений");
-    }
 }

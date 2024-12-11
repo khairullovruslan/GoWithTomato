@@ -6,7 +6,7 @@ public class RouteQueries {
     //language=sql
     public static final String SAVE_SQL =
             """
-                    INSERT INTO route(start_point_id, finish_point_id, distance, user_id) 
+                    INSERT INTO route(start_point_id, finish_point_id, distance, user_id)
                     VALUES (?, ?, ?, ?)
                     """;
     //language=sql
@@ -16,10 +16,6 @@ public class RouteQueries {
                 r.start_point_id,
                 r.finish_point_id,
                 r.distance,
-                u.id AS user_id,
-                u.login AS user_login,
-                u.email AS user_email,
-                u.phone_number AS user_phone_number,
                 p1.id AS start_id,
                 p1.lat AS start_lat,
                 p1.lng AS start_lng,
@@ -34,39 +30,29 @@ public class RouteQueries {
                 p2.country AS finish_country,
                 p2.osm_value AS finish_osm_value,
                 p2.state AS finish_state
-            FROM 
+            FROM
                 route r
-            JOIN 
-                users u ON r.user_id = u.id
-            JOIN 
+            JOIN
                 point p1 ON r.start_point_id = p1.id
-            JOIN 
+            JOIN
                 point p2 ON r.finish_point_id = p2.id
             """;
 
-    //language=sql
     public static final String FIND_BY_USER_ID_SQL =
-            FIND_TEMPLATE +
-            """
-                    WHERE r.user_id = ?
-                    """;
+            "%s WHERE r.user_id = ?".formatted(FIND_TEMPLATE);
+
 
     //language=sql
     public static final String COUNT_SQL = """
             SELECT COUNT(*)
             FROM route r
-            JOIN users u ON r.user_id = u.id
             JOIN point p1 ON r.start_point_id = p1.id
             JOIN point p2 ON r.finish_point_id = p2.id
             WHERE r.user_id = ?
             """;
 
-    //language=sql
     public static final String FIND_BY_ID_SQL =
-            FIND_TEMPLATE +
-            """
-                    WHERE r.id = ?
-                    """;
+            "%s WHERE r.id = ?".formatted(FIND_TEMPLATE);
 
-    public static final Integer LIMIT = 8;
+    public static final Integer LIMIT = 10;
 }
