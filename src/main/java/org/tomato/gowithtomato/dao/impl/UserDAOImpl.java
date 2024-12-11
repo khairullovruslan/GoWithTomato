@@ -3,14 +3,13 @@ package org.tomato.gowithtomato.dao.impl;
 import org.tomato.gowithtomato.dao.daoInterface.UserDAO;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.db.DaoException;
-import org.tomato.gowithtomato.exception.db.UniqueSqlException;
 import org.tomato.gowithtomato.mapper.UserMapper;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.tomato.gowithtomato.dao.query.TripQueries.CANCEL_TRIP_BY_USER_ID_SQL;
 import static org.tomato.gowithtomato.dao.query.UserQueries.*;
 
 public class UserDAOImpl extends UserDAO {
@@ -33,11 +32,10 @@ public class UserDAOImpl extends UserDAO {
             List<User> users = convertResultSetToList(result);
             return users.size() == 1 ? Optional.of(users.getFirst()) : Optional.empty();
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при поиске пользователя с id: " + id, e);
+            throw new DaoException("Ошибка при поиске пользователя с id: %s ".formatted(id), e);
         }
 
     }
-
 
 
     @Override
@@ -81,13 +79,30 @@ public class UserDAOImpl extends UserDAO {
             statement.setLong(4, entity.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при обновления пользователя по логину: " + entity.getLogin(), e);
+            throw new DaoException("Ошибка при обновления пользователя по логину: %s".formatted(entity.getLogin()), e);
         }
     }
 
     @Override
     public void delete(Long id) {
-        // Метод еще не реализован.
+        try (Connection connection = getConnection()) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement statement = connection.prepareStatement(DELETE_USER_BY_ID_SQL);
+                 PreparedStatement statementForCancelTrip = connection.prepareStatement(CANCEL_TRIP_BY_USER_ID_SQL)) {
+
+                statementForCancelTrip.setLong(1, id);
+                statementForCancelTrip.executeUpdate();
+                statement.setLong(1, id);
+                statement.executeUpdate();
+                connection.commit();
+            } catch (Exception e) {
+                connection.rollback();
+                throw new DaoException("Ошибка при удаления пользователя по id: %s".formatted(id), e);
+            }
+
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при удаления пользователя по id: %s".formatted(id), e);
+        }
     }
 
     @Override
@@ -99,7 +114,7 @@ public class UserDAOImpl extends UserDAO {
             List<User> users = convertResultSetToList(statement.executeQuery());
             return users.size() == 1 ? Optional.of(users.getFirst()) : Optional.empty();
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при поиске пользователя по логину: " + login, e);
+            throw new DaoException("Ошибка при поиске пользователя по логину: %s".formatted(login), e);
         }
     }
 
@@ -111,7 +126,7 @@ public class UserDAOImpl extends UserDAO {
             statement.setString(1, login);
             return convertResultSetToPassword(statement.executeQuery());
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при поиске пользователя по логину: " + login, e);
+            throw new DaoException("Ошибка при поиске пользователя по логину: %s".formatted(login), e);
         }
     }
 
@@ -124,28 +139,60 @@ public class UserDAOImpl extends UserDAO {
             List<User> users = convertResultSetToList(statement.executeQuery());
             return users.size() == 1 ? Optional.of(users.getFirst()) : Optional.empty();
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при поиске пользователя по email: " + email, e);
+            throw new DaoException("Ошибка при поиске пользователя по email: %s".formatted(email), e);
         }
     }
 
-    private Optional<String> convertResultSetToPassword(ResultSet resultSet) throws SQLException {
-        if (resultSet.next()) {
-            return Optional.ofNullable(resultSet.getString("password"));
+    @Override
+    public void updatePhotoUrl(String url, Long userId) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_PHOTO_SQL)) {
+
+            statement.setString(1, url);
+            statement.setLong(2, userId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при обновления автарки пользователя по id - %s".formatted(userId), e);
         }
-        return Optional.empty();
     }
 
-    private List<User> convertResultSetToList(ResultSet result) throws SQLException {
-        List<User> users = new ArrayList<>();
-        while (result.next()) {
-            users.add((mapper.mapRow(result)));
+    @Override
+    public void updateUserPassword(String password, Long userId) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_PASSWORD_SQL)) {
+
+            statement.setString(1, password);
+            statement.setLong(2, userId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при обновления пароли пользователя по id - %s".formatted(userId), e);
         }
-        return users;
     }
 
-    private void handleSQLException(SQLException e) throws UniqueSqlException {
-        if ("23505".equals(e.getSQLState())) {
-            throw new UniqueSqlException("Ошибка уникальности: " + e.getMessage(), e);
+    @Override
+    public Optional<User> getByTripId(Long tripId) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_BY_TRIP_ID_SQL)) {
+
+            statement.setLong(1, tripId);
+            List<User> users = convertResultSetToList(statement.executeQuery());
+            return users.size() == 1 ? Optional.of(users.getFirst()) : Optional.empty();
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при поиске пользователя по trip id: %s".formatted(tripId), e);
         }
     }
+
+    @Override
+    public Optional<User> getByRouteId(Long routeId) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_BY_ROUTE_ID_SQL)) {
+
+            statement.setLong(1, routeId);
+            List<User> users = convertResultSetToList(statement.executeQuery());
+            return users.size() == 1 ? Optional.of(users.getFirst()) : Optional.empty();
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при поиске пользователя по route id: %s".formatted(routeId), e);
+        }
+    }
+
 }
