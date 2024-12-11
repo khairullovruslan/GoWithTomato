@@ -28,6 +28,7 @@ public class UserMapper implements RowMapper<User> {
                 .password(result.getString("password"))
                 .email(result.getString("email"))
                 .phoneNumber(result.getString("phone_number"))
+                .avatarUrl(result.getString("photo_url"))
                 .build();
     }
 
@@ -38,6 +39,7 @@ public class UserMapper implements RowMapper<User> {
                 .login(userDTO.getLogin())
                 .phoneNumber(userDTO.getPhoneNumber())
                 .email(userDTO.getEmail())
+                .avatarUrl(userDTO.getAvatarUrl())
                 .build();
 
     }
@@ -49,6 +51,7 @@ public class UserMapper implements RowMapper<User> {
                 .login(user.getLogin())
                 .phoneNumber(user.getPhoneNumber())
                 .email(user.getEmail())
+                .avatarUrl(user.getAvatarUrl())
                 .build();
 
     }
@@ -66,10 +69,10 @@ public class UserMapper implements RowMapper<User> {
     public User convertUserEditDTOToUser(UserEditDTO userEditDTO, long userId) {
         return User
                 .builder()
-                    .id(userId)
-                    .phoneNumber(userEditDTO.phoneNumber())
-                    .email(userEditDTO.email())
-                    .login(userEditDTO.login())
+                .id(userId)
+                .phoneNumber(userEditDTO.phoneNumber())
+                .email(userEditDTO.email())
+                .login(userEditDTO.login())
                 .build();
     }
 }
