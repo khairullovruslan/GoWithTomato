@@ -6,5 +6,5 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public interface CloudinaryService {
-    String uploadPhoto(HttpServletRequest req) throws ServletException, IOException;
+    String uploadPhoto(HttpServletRequest req, boolean needToUpdate) throws ServletException, IOException;
 }

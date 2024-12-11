@@ -4,6 +4,10 @@ import org.tomato.gowithtomato.exception.db.DaoException;
 
 import java.util.Optional;
 
+
+/*
+ Базовый абстрактный CRUD DAO
+ */
 public abstract class AbstractCrudDAO<K, E> extends AbstractBaseDAO<E> {
 
     public abstract Optional<E> findById(K id);

@@ -8,9 +8,7 @@ import java.util.Map;
 
 public interface TripService {
 
-    void saveTrip(UserDTO userDTO, TripDTO tripDTO, Long id);
-
-    List<TripDTO> findAll();
+    Long saveTrip(UserDTO userDTO, TripDTO tripDTO, Long id);
 
     List<TripDTO> findByFilter(Map<String, String> filter);
 
@@ -21,4 +19,5 @@ public interface TripService {
     void cancelTrip(Long id);
 
     long getCountByUserId(Long id);
+
 }
