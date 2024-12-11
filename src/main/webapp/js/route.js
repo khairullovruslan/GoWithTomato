@@ -3,7 +3,7 @@ let currentField;
 let routeArray = [];
 let start;
 let finish;
-let distance;
+var distance;
 
 function openModal(field) {
     currentField = field;
@@ -11,11 +11,9 @@ function openModal(field) {
     document.getElementById('results').innerHTML = '';
 }
 
-function sendData() {
-    console.log("отправляю данные")
-    console.log(start.name)
-    getInfo();
-    console.log(distance)
+async function sendData() {
+    console.log("start send data")
+    await getInfo();
     const data = {
         infoType: "location-info",
         routeInfo: {
@@ -26,6 +24,8 @@ function sendData() {
         }
 
     }
+
+
     console.log(data)
     const path = contextPath + '/new-route';
     $.ajax({
@@ -34,6 +34,7 @@ function sendData() {
         contentType: 'application/json',
         data: JSON.stringify(data),
         success: function (response) {
+            console.log('url ' + response.url)
             if (response && response.url) {
                 window.location.href = response.url;
             } else {
@@ -44,36 +45,75 @@ function sendData() {
             console.error('Ошибка:', status, error);
         }
     });
+    console.log("finish send data")
 }
 
 function getInfo() {
-    const data = {
-        infoType: "time-distance",
-        routeInfo: {
-            start: start,
-            others: routeArray,
-            finish: finish
-        }
-    }
-    const path = contextPath + '/graph-hopper-api';
-    $.ajax({
-        url: path,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function (response) {
-            console.log("res" + response);
-            if (response) {
-                document.getElementById('routeTime').textContent = response.time;
-                document.getElementById('routeDistance').textContent = response.distance;
-                distance = response.distance;
-            } else {
-                console.error('info не найдена в ответе:', response);
+    return new Promise((resolve, reject) => {
+        console.log("get info starting");
+        const data = {
+            infoType: "time-distance",
+            routeInfo: {
+                start: start,
+                others: routeArray,
+                finish: finish
             }
-        },
-        error: function (xhr, status, error) {
-            console.error('Ошибка:', status, error);
+        };
+
+
+        const path = contextPath + '/graph-hopper-api';
+
+        const errorContainer = document.getElementById('error-container');
+        const errorListElement = errorContainer.querySelector('.error-list');
+
+        errorListElement.innerHTML = '';
+        errorContainer.style.display = 'none';
+
+
+        const errors = [];
+
+        if (!data.routeInfo.start) {
+            errors.push("Начальная точка не может быть пустым.");
         }
+        if (!data.routeInfo.finish) {
+            errors.push("Конечная не может быть пустым.");
+        }
+
+
+        if (errors.length > 0) {
+            errors.forEach(function (error) {
+                const li = document.createElement('li');
+                li.textContent = error;
+                errorListElement.appendChild(li);
+            });
+            errorContainer.style.display = 'block';
+            reject(new Error('не все поля заполнены'));
+            return;
+        }
+        $.ajax({
+            url: path,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (response) {
+                console.log("res" + response);
+                if (response) {
+                    document.getElementById('routeTime').textContent = response.time;
+                    document.getElementById('routeDistance').textContent = response.distance;
+
+                    distance = response.distance;
+                    resolve();
+                } else {
+                    console.error('info не найдена в ответе:', response);
+                    reject(new Error('info не найден'));
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Ошибка:', status, error);
+                reject(error);
+            }
+        });
+        console.log("get info finished");
     });
 }
 
@@ -106,21 +146,17 @@ function selectPoint(item) {
 function updateRouteDisplay() {
     if (start == null && finish == null) {
         document.getElementById('routeOutput').textContent = 'Не указан';
-    }
-    else if (start != null && finish != null && routeArray.length === 0) {
-        document.getElementById('routeOutput').textContent = start.name +  " - "  + finish.name ;
-    }
-    else if (routeArray.length === 0 && start != null){
+    } else if (start != null && finish != null && routeArray.length === 0) {
+        document.getElementById('routeOutput').textContent = start.name + " - " + finish.name;
+    } else if (routeArray.length === 0 && start != null) {
         document.getElementById('routeOutput').textContent = start.name + " - ";
-    }
-    else if (routeArray.length === 0 && finish != null){
-        document.getElementById('routeOutput').textContent = " - "  + finish.name ;
-    }
-    else {
+    } else if (routeArray.length === 0 && finish != null) {
+        document.getElementById('routeOutput').textContent = " - " + finish.name;
+    } else {
         console.log("вывод")
         console.log(routeArray)
         let formattedIntermediates = start.name + " - ";
-        for (i = 0; i < routeArray.length; i++){
+        for (i = 0; i < routeArray.length; i++) {
             formattedIntermediates += routeArray[i].name + " - "
         }
         formattedIntermediates += finish.name;
