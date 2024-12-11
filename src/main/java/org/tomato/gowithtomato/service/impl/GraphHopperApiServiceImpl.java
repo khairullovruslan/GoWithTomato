@@ -9,6 +9,7 @@ import org.tomato.gowithtomato.dto.PointDTO;
 import org.tomato.gowithtomato.dto.route.RouteDTO;
 import org.tomato.gowithtomato.exception.common.GraphHopperApiException;
 import org.tomato.gowithtomato.service.GraphHopperApiService;
+import org.tomato.gowithtomato.util.PropertiesUtil;
 
 import java.io.IOException;
 import java.net.URI;
@@ -26,8 +27,7 @@ import java.util.StringJoiner;
 public class GraphHopperApiServiceImpl implements GraphHopperApiService {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
-    //    private final String KEY = System.getenv("api_gh_key");
-    private final String KEY = "696a439e-9a37-42f6-8b5a-61315f8af609";
+    private final String KEY = PropertiesUtil.getInstance().get("graph.hopper.api_key");
     private static final String HTTP_REQUEST_GET_COORD_POINT_BY_NAME = "https://graphhopper.com/api/1/geocode?q=%s&locale=ru&key=%s";
     private static final String HTTP_REQUEST_GET_ROUTE_INFO_BY_COORDS = "https://graphhopper.com/api/1/route?profile=car&locale=ru&points_encoded=false&key=%s&";
     private static final GraphHopperApiServiceImpl INSTANCE = new GraphHopperApiServiceImpl();
@@ -40,14 +40,7 @@ public class GraphHopperApiServiceImpl implements GraphHopperApiService {
     }
 
 
-    private HttpResponse<String> httpSender(String uri) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI(uri))
-                .GET()
-                .build();
-        return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-    }
-
+    @Override
     public List<PointDTO> getPointsByName(String name) throws URISyntaxException, IOException, InterruptedException {
 
         HttpResponse<String> response = httpSender(String.format(HTTP_REQUEST_GET_COORD_POINT_BY_NAME, name, KEY));
@@ -57,14 +50,15 @@ public class GraphHopperApiServiceImpl implements GraphHopperApiService {
             return geoResponse.pointDTOList();
         }
         log.error("response code : {}", response.statusCode());
-        throw new GraphHopperApiException();
+        throw new GraphHopperApiException("Ошибка при получение информации маршрута");
     }
 
+    @Override
     public HashMap<String, String> getInfo(RouteDTO routeDTO) throws URISyntaxException, IOException, InterruptedException {
         String url = String.format(HTTP_REQUEST_GET_ROUTE_INFO_BY_COORDS, KEY);
 
         StringJoiner stringJoiner = convertRouteToUrl(routeDTO);
-        HttpResponse<String> response = httpSender(url + stringJoiner);
+        HttpResponse<String> response = httpSender("%s%s".formatted(url, stringJoiner));
         GraphInfoResponse graphInfoResponse = objectMapper.readValue(response.body(), new TypeReference<>() {
         });
         return new HashMap<>(Map.of("time", convertMillisToHHMMSS(graphInfoResponse.getPaths().getFirst().getTime()),
@@ -72,6 +66,15 @@ public class GraphHopperApiServiceImpl implements GraphHopperApiService {
 
 
     }
+
+    private HttpResponse<String> httpSender(String uri) throws URISyntaxException, IOException, InterruptedException {
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(new URI(uri))
+                .GET()
+                .build();
+        return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+    }
+
 
     private StringJoiner convertRouteToUrl(RouteDTO routeDTO) {
         StringJoiner stringJoiner = new StringJoiner("&");
