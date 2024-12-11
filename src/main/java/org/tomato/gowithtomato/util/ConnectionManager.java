@@ -25,7 +25,6 @@ public class ConnectionManager {
             initConnectionPool();
         } catch (Exception e) {
 
-            e.printStackTrace();
             log.error("Error connection");
         }
     }
