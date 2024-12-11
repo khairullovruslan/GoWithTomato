@@ -2,11 +2,7 @@ package org.tomato.gowithtomato.validator.review;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.tomato.gowithtomato.exception.db.UserNotFoundException;
-import org.tomato.gowithtomato.factory.ServiceFactory;
-import org.tomato.gowithtomato.service.UserService;
-import org.tomato.gowithtomato.validator.annotations.ValidEmail;
-import org.tomato.gowithtomato.validator.annotations.ValidRating;
+import org.tomato.gowithtomato.validator.annotations.review.ValidRating;
 
 public class RatingValidator implements ConstraintValidator<ValidRating, Integer> {
 

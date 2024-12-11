@@ -2,7 +2,7 @@ package org.tomato.gowithtomato.validator.review;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.tomato.gowithtomato.validator.annotations.ValidReviewDescription;
+import org.tomato.gowithtomato.validator.annotations.review.ValidReviewDescription;
 
 public class ReviewDescriptionValidator implements ConstraintValidator<ValidReviewDescription, String> {
 
