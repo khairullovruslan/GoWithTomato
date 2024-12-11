@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.tomato.gowithtomato.exception.common.ServletInitializationException;
 import org.tomato.gowithtomato.util.ExceptionHandler;
 
-
+/*
+Базовый сервлет
+ */
 @Slf4j
 public class BaseServlet extends HttpServlet {
     private ExceptionHandler exceptionHandler;
