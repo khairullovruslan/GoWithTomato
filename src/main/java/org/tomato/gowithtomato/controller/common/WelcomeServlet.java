@@ -7,10 +7,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+/*
+Welcome page
+ */
 @WebServlet("")
 public class WelcomeServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("templates/welcome.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/templates/welcome.jsp").forward(req, resp);
     }
 }
