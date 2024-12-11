@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.tomato.gowithtomato.dto.user.UserDTO;
-import org.tomato.gowithtomato.validator.annotations.ValidRating;
-import org.tomato.gowithtomato.validator.annotations.ValidReviewDescription;
+import org.tomato.gowithtomato.validator.annotations.review.ValidRating;
+import org.tomato.gowithtomato.validator.annotations.review.ValidReviewDescription;
 
 @Getter
 @Setter
