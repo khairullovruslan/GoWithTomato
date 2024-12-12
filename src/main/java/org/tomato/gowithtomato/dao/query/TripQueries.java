@@ -8,6 +8,10 @@ public class TripQueries {
     public static final String COUNT_SQL = """
             SELECT COUNT(*) 
             FROM trip t
+            
+            JOIN route r ON t.route_id = r.id
+            JOIN point p1 ON r.start_point_id = p1.id
+            JOIN point p2 ON r.finish_point_id = p2.id
             """;
 
     //language=sql
