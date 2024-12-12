@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>Регистрация</title>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/registration.css'/>">
+    <link rel="icon" href="<c:url value='/img/favicon.png'/>" type="image/png">
 </head>
 
 <body>

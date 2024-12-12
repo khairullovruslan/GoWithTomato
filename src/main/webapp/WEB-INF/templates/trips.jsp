@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/trips.css'/>">
-    <link rel="icon" href="<c:url value='/img/favicon.png'/>" type="image/png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <title>Найдите свою поездку</title>
+    <link rel="icon" href="<c:url value='/img/favicon.png'/>" type="image/png">
 </head>
 <body>
 <%@include file="/WEB-INF/templates/base/navbar.jsp" %>

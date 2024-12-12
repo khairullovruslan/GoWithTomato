@@ -10,6 +10,7 @@
     <title>Отзыв</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/review.css'/>">
+    <link rel="icon" href="<c:url value='/img/favicon.png'/>" type="image/png">
 </head>
 
 <body>
