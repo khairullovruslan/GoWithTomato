@@ -48,7 +48,7 @@ public class FilterTripDaoUtil {
 
         log.error("filter  page + " + filter.get("page"));
         if (filter.containsKey("page")) {
-            query.append(String.format(" limit %d offset %d", LIMIT,
+            query.append(" limit %s offset %s".formatted(LIMIT,
                     LIMIT * (Integer.parseInt(filter.get("page")) - 1)));
         }
 
