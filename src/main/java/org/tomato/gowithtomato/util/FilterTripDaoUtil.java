@@ -51,6 +51,7 @@ public class FilterTripDaoUtil {
             query.append(" limit %s offset %s".formatted(LIMIT,
                     LIMIT * (Integer.parseInt(filter.get("page")) - 1)));
         }
+        log.error("filter q dto "  + query);
 
 
         return FilterQueriesDTO
