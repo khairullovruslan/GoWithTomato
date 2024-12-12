@@ -74,12 +74,12 @@
 </div>
 <div class="pagination">
     <c:if test="${page > 1}">
-        <a href="?page=${page - 1}&from=${from}&to=${to}&date=${date}&count=${count}&organize=${organizer}"
+        <a href="?page=${page - 1}&from=${from}&to=${to}&date=${date}&organize=${organizer}"
            class="pagination-link">« Предыдущая</a>
     </c:if>
 
     <c:forEach begin="1" end="${totalPages}" var="i">
-        <a href="?page=${i}&from=${from}&to=${to}&date=${date}&count=${count}&organize=${organizer}"
+        <a href="?page=${i}&from=${from}&to=${to}&date=${date}&organize=${organizer}"
            class="pagination-link <c:if test='${i == page}'>active</c:if>">${i}</a>
     </c:forEach>
 

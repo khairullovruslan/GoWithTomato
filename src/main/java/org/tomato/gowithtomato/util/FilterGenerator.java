@@ -42,6 +42,7 @@ public final class FilterGenerator {
         processOwnerTicketsParameter(req, filter);
         processDateParameter(req, filter);
 
+        log.error("filter - " + filter);
         return filter;
     }
 
