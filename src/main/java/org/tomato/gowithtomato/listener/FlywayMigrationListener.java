@@ -27,6 +27,9 @@ public class FlywayMigrationListener implements ServletContextListener {
             flyway.migrate();
             log.info("Миграции выполнены успешно!");
         } catch (Exception e) {
+            log.error("url -%s, pwd - %s, username - %s".formatted(System.getenv(URL_KEY),
+            System.getenv(USERNAME_KEY),
+            System.getenv(PASSWORD_KEY)));
             log.error("Ошибка при выполнении миграций: ", e);
         }
     }
