@@ -12,6 +12,7 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/profile.css'/>">
     <link rel="icon" href="<c:url value='/img/favicon.png'/>" type="image/png">
+
 </head>
 <body>
 <%@include file="/WEB-INF/templates/base/navbar.jsp" %>
