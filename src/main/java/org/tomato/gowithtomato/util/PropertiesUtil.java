@@ -17,6 +17,7 @@ public class PropertiesUtil {
 
     static {
         loadProperties();
+        replaceEnvVariables();
     }
 
     public static PropertiesUtil getInstance() {
@@ -36,5 +37,24 @@ public class PropertiesUtil {
 
     public String get(String key) {
         return PROPERTIES.getProperty(key);
+    }
+
+    private static void replaceEnvVariables() {
+        for (String name : PROPERTIES.stringPropertyNames()) {
+            String value = PROPERTIES.getProperty(name);
+            if (value != null) {
+                value = value.replace("${PROD_DB_HOST}", System.getenv("PROD_DB_HOST"))
+                        .replace("${PROD_DB_PORT}", System.getenv("PROD_DB_PORT"))
+                        .replace("${PROD_DB_NAME}", System.getenv("PROD_DB_NAME"))
+                        .replace("${PROD_DB_PASSWORD}", System.getenv("PROD_DB_PASSWORD"))
+                        .replace("${PROD_DB_USERNAME}", System.getenv("PROD_DB_USERNAME"))
+                        .replace("${PROD_CLOUDINARY_CLOUD_NAME}", System.getenv("PROD_CLOUDINARY_CLOUD_NAME"))
+                        .replace("${PROD_CLOUDINARY_API_KEY}", System.getenv("PROD_CLOUDINARY_API_KEY"))
+                        .replace("${PROD_CLOUDINARY_API_SECRET}", System.getenv("PROD_CLOUDINARY_API_SECRET"))
+                        .replace("${PROD_GRAPH_HOPPER_API_KEY}", System.getenv("PROD_GRAPH_HOPPER_API_KEY"));
+
+                PROPERTIES.setProperty(name, value);
+            }
+        }
     }
 }
