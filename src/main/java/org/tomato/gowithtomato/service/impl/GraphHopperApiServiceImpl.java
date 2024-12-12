@@ -9,6 +9,7 @@ import org.tomato.gowithtomato.dto.PointDTO;
 import org.tomato.gowithtomato.dto.route.RouteDTO;
 import org.tomato.gowithtomato.exception.common.GraphHopperApiException;
 import org.tomato.gowithtomato.service.GraphHopperApiService;
+import org.tomato.gowithtomato.util.PropertiesUtil;
 
 import java.io.IOException;
 import java.net.URI;
@@ -26,7 +27,7 @@ import java.util.StringJoiner;
 public class GraphHopperApiServiceImpl implements GraphHopperApiService {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final String KEY = System.getenv("graph.hopper.api_key");
+    private final String KEY = PropertiesUtil.getInstance().get("graph.hopper.api_key");
     private static final String HTTP_REQUEST_GET_COORD_POINT_BY_NAME = "https://graphhopper.com/api/1/geocode?q=%s&locale=ru&key=%s";
     private static final String HTTP_REQUEST_GET_ROUTE_INFO_BY_COORDS = "https://graphhopper.com/api/1/route?profile=car&locale=ru&points_encoded=false&key=%s&";
     private static final GraphHopperApiServiceImpl INSTANCE = new GraphHopperApiServiceImpl();

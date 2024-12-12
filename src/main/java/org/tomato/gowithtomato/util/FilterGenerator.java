@@ -63,7 +63,6 @@ public final class FilterGenerator {
                 req.setAttribute("date", date.format(DATE_FORMATTER));
                 filter.put("date", localDateTime.toString());
             } catch (Exception e) {
-                System.err.println("Ошибка парсинга даты: %s, %s".formatted(dateParam, e.getMessage()));
             }
         }
     }

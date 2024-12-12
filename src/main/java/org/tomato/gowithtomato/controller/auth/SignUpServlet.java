@@ -52,7 +52,6 @@ public class SignUpServlet extends BaseServlet {
          Проверка на валидность
          */
         UserRegistrationDTO userRegistrationDto = objectMapper.readValue(req.getInputStream(), UserRegistrationDTO.class);
-        System.out.println(userRegistrationDto);
         Set<ConstraintViolation<UserRegistrationDTO>> violations = validator.validate(userRegistrationDto);
 
         if (!violations.isEmpty()) {

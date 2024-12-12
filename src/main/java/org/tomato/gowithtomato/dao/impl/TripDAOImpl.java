@@ -85,7 +85,6 @@ public class TripDAOImpl extends TripDAO {
     public List<Trip> findAllByFilter(Map<String, String> filter) {
         try (Connection connection = getConnection()) {
             FilterQueriesDTO filterQueriesDTO = filterUtil.getQueryByFilter(filter);
-            System.out.println("sql query : " + filterQueriesDTO.findByFilterSql());
             PreparedStatement statement = connection.prepareStatement(filterQueriesDTO.findByFilterSql());
             filterUtil.insertValueFromFilterIntoPreparedStatement(filter, statement, filterQueriesDTO);
             return getTripByResultSet(statement.executeQuery());

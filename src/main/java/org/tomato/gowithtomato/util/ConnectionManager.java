@@ -11,9 +11,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 @Slf4j
 public class ConnectionManager {
     private static final ConnectionManager INSTANCE = new ConnectionManager();
-    private static final String URL_KEY = System.getenv("db.url");
-    private static final String USERNAME_KEY = System.getenv("db.username");
-    private static final String PASSWORD_KEY = System.getenv("db.password");
+    private static final String URL_KEY = "db.url";
+    private static final String USERNAME_KEY = "db.username";
+    private static final String PASSWORD_KEY = "db.password";
     private static final int DEFAULT_POOL_SIZE = 10;
     private static final String POOL_SIZE_KEY = "db.pool.size";
     private static ArrayBlockingQueue<Connection> pool;
@@ -50,7 +50,9 @@ public class ConnectionManager {
 
     private Connection open() {
         try {
-            return DriverManager.getConnection(URL_KEY, USERNAME_KEY, PASSWORD_KEY);
+            return DriverManager.getConnection(propertiesUtil.get(URL_KEY),
+                    propertiesUtil.get(USERNAME_KEY),
+                    propertiesUtil.get(PASSWORD_KEY));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

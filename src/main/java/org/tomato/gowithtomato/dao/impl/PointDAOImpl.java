@@ -33,7 +33,6 @@ public class PointDAOImpl extends PointDAO {
             statement.setString(6, entity.getOsmValue());
 
             int affectedRows = statement.executeUpdate();
-            System.out.println("affr " + affectedRows);
             if (affectedRows == 0) {
                 throw new DaoException("Не удалось сохранить точку.");
             }
@@ -45,7 +44,6 @@ public class PointDAOImpl extends PointDAO {
                     entity.setId(keys.getLong(1));
                 }
             }
-            System.out.println("ent "  + entity);
             return entity;
         } catch (SQLException e) {
             e.printStackTrace();

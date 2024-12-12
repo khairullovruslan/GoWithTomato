@@ -5,7 +5,6 @@ import org.tomato.gowithtomato.entity.Point;
 import org.tomato.gowithtomato.entity.Route;
 import org.tomato.gowithtomato.entity.User;
 import org.tomato.gowithtomato.exception.db.DaoException;
-import org.tomato.gowithtomato.exception.db.UniqueSqlException;
 import org.tomato.gowithtomato.mapper.RouteMapper;
 import org.tomato.gowithtomato.mapper.RowMapper;
 
@@ -50,14 +49,12 @@ public class RouteDAOImpl extends RouteDAO {
 
 
     @Override
-    public Route   save(Route route, Long userId) {
+    public Route save(Route route, Long userId) {
         try {
 
             Long startPointId = saveOrFindPoint(route.getDeparturePoint());
-            System.out.println("start id " + startPointId);
             Long finishPointId = saveOrFindPoint(route.getDestinationPoint());
 
-            System.out.println("finisg id " + finishPointId);
             long routeId = insertRoute(startPointId, finishPointId, userId, Math.round(route.getDistance()));
             route.setId(routeId);
 
@@ -104,7 +101,6 @@ public class RouteDAOImpl extends RouteDAO {
 
     private Long saveOrFindPoint(Point point) throws SQLException {
         try {
-            System.out.println("point - " + point);
             return pointDAO.save(point).getId();
         } catch (Exception e) {
             e.printStackTrace();

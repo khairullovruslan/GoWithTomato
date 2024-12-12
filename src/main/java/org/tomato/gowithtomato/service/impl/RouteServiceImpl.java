@@ -32,7 +32,6 @@ public class RouteServiceImpl implements RouteService {
     @Override
 
     public void saveRoute(RouteDTO route, Long ownerId) {
-        System.out.println("route " + route);
         routeDAO.save(routeMapper.convertDTOToRoute(route), ownerId);
     }
 
