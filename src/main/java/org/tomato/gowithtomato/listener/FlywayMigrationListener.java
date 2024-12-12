@@ -6,6 +6,8 @@ import jakarta.servlet.annotation.WebListener;
 import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 
+import java.util.Map;
+
 @Slf4j
 @WebListener
 public class FlywayMigrationListener implements ServletContextListener {
@@ -27,6 +29,11 @@ public class FlywayMigrationListener implements ServletContextListener {
             flyway.migrate();
             log.info("Миграции выполнены успешно!");
         } catch (Exception e) {
+            // Получаем все переменные окружения
+            Map<String, String> env = System.getenv();
+
+            // Перебираем и логируем каждую переменную
+            env.forEach((key, value) -> log.info("Имя: {}, Значение: {}", key, value));
             log.error("url -%s, pwd - %s, username - %s".formatted(System.getenv(URL_KEY),
             System.getenv(USERNAME_KEY),
             System.getenv(PASSWORD_KEY)));
