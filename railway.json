@@ -1,6 +1,6 @@
 {
   "build": {
     "dockerfile": "Dockerfile",
-    "buildCommand": "./deploy/start.sh"
+    "buildCommand": "deploy/start.sh"
   }
 }
