@@ -11,6 +11,7 @@
           integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/profile.css'/>">
+    <link rel="icon" href="<c:url value='/img/favicon.png'/>" type="image/png">
 </head>
 <body>
 <%@include file="/WEB-INF/templates/base/navbar.jsp" %>

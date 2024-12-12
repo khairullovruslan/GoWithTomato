@@ -8,6 +8,7 @@
     <title>Редактирование профиля</title>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/edit.css'/>">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="<c:url value='/img/favicon.png'/>" type="image/png">
 </head>
 <body>
 <%@include file="/WEB-INF/templates/base/navbar.jsp" %>

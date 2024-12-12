@@ -10,6 +10,7 @@
           integrity="sha512-iecdLmaskl7CVkqk1w27AHzTy9FJWbW+r/l51NXP+NfJ2o+hW7u3I5pHU5Kz+0lEkmzupR+s/gTDVEuU99l/oQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/routes.css'/>">
+    <link rel="icon" href="<c:url value='/img/favicon.png'/>" type="image/png">
 </head>
 <body>
 
