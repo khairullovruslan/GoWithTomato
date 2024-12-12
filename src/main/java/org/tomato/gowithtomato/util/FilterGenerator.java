@@ -1,6 +1,7 @@
 package org.tomato.gowithtomato.util;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.tomato.gowithtomato.exception.auth.UnauthorizedException;
 import org.tomato.gowithtomato.factory.ServiceFactory;
 import org.tomato.gowithtomato.service.AuthService;
@@ -11,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public final class FilterGenerator {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final String DEFAULT_PAGE = "1";
@@ -29,6 +31,7 @@ public final class FilterGenerator {
         extractAndProcessParameter(req, filter, "count");
 
         String pageParam = req.getParameter("currentPage");
+        log.error("page param "  + pageParam);
         int page = Integer.parseInt(pageParam != null ? pageParam : DEFAULT_PAGE);
         filter.put("page", String.valueOf(page));
         req.setAttribute("page", page);
