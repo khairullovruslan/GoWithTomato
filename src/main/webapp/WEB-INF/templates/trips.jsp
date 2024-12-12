@@ -84,7 +84,7 @@
     </c:forEach>
 
     <c:if test="${page < totalPages}">
-        <a href="?page=${page + 1}&from=${from}&to=${to}&date=${date}&count=${count}&organize=${organizer}"
+        <a href="?page=${page + 1}&from=${from}&to=${to}&date=${date}&organize=${organizer}"
            class="pagination-link">Следующая »</a>
     </c:if>
 </div>
