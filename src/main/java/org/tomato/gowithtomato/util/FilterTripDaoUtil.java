@@ -46,12 +46,10 @@ public class FilterTripDaoUtil {
             queryForGetCountTotalPage.append(fil);
         }
 
-        log.error("filter  page + " + filter.get("page"));
         if (filter.containsKey("page")) {
             query.append(" limit %s offset %s".formatted(LIMIT,
                     LIMIT * (Integer.parseInt(filter.get("page")) - 1)));
         }
-        log.error("filter q dto "  + query);
 
 
         return FilterQueriesDTO
@@ -86,7 +84,9 @@ public class FilterTripDaoUtil {
                                                            final PreparedStatement preparedStatement,
                                                            final FilterQueriesDTO filterQueriesDTO) throws SQLException {
         HashMap<String, Integer> idx = filterQueriesDTO.keyIdxForPreparedStatement();
+        log.error(String.valueOf(idx));
         for (String key : filter.keySet()) {
+            log.error("key " + key);
             if (key.equals("page")) continue;
             switch (key) {
                 case "from", "to", "organizer" -> preparedStatement.setString(idx.get(key), filter.get(key));
