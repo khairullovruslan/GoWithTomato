@@ -1,5 +1,6 @@
 package org.tomato.gowithtomato.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tomato.gowithtomato.dto.FilterQueriesDTO;
 import org.tomato.gowithtomato.entity.TripStatus;
 
@@ -15,6 +16,8 @@ import java.util.Map;
 
 import static org.tomato.gowithtomato.dao.query.TripQueries.*;
 
+
+@Slf4j
 public class FilterTripDaoUtil {
     private static final FilterTripDaoUtil INSTANCE = new FilterTripDaoUtil();
 
@@ -42,6 +45,8 @@ public class FilterTripDaoUtil {
             query.append(fil);
             queryForGetCountTotalPage.append(fil);
         }
+
+        log.error("filter  page + " + filter.get("page"));
         if (filter.containsKey("page")) {
             query.append(String.format(" limit %d offset %d", LIMIT,
                     LIMIT * (Integer.parseInt(filter.get("page")) - 1)));

@@ -31,7 +31,7 @@ public final class FilterGenerator {
         extractAndProcessParameter(req, filter, "count");
 
         String pageParam = req.getParameter("page");
-        log.error("page param "  + pageParam);
+//        log.error("page param "  + pageParam);
         int page = Integer.parseInt(pageParam != null ? pageParam : DEFAULT_PAGE);
         filter.put("page", String.valueOf(page));
         req.setAttribute("page", page);
