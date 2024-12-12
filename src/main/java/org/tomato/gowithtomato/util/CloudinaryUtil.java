@@ -9,15 +9,13 @@ import java.util.Map;
 public class CloudinaryUtil {
 
     private static Cloudinary cloudinary;
-    private final static PropertiesUtil propertiesUtil = PropertiesUtil.getInstance();
-
 
     public static Cloudinary getInstance() {
         if (cloudinary == null) {
             Map<String, String> configMap = new HashMap<>();
-            configMap.put("cloud_name", propertiesUtil.get("cloudinary.cloud_name"));
-            configMap.put("api_key", propertiesUtil.get("cloudinary.api_key"));
-            configMap.put("api_secret", propertiesUtil.get("cloudinary.api_secret"));
+            configMap.put("cloud_name", System.getenv("cloudinary.cloud_name"));
+            configMap.put("api_key", System.getenv("cloudinary.api_key"));
+            configMap.put("api_secret", System.getenv("cloudinary.api_secret"));
             cloudinary = new Cloudinary(configMap);
         }
         return cloudinary;
