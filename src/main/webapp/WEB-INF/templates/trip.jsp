@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/trip.css'/>">
     <link rel="icon" href="<c:url value='/img/favicon.png'/>" type="image/png">
+
 </head>
 <body>
 <%@include file="/WEB-INF/templates/base/navbar.jsp" %>
