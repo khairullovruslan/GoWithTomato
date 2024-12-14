@@ -28,7 +28,7 @@ public final class FilterGenerator {
         extractAndProcessParameter(req, filter, "to");
         extractAndProcessParameter(req, filter, "count");
 
-        String pageParam = req.getParameter("currentPage");
+        String pageParam = req.getParameter("page");
         int page = Integer.parseInt(pageParam != null ? pageParam : DEFAULT_PAGE);
         filter.put("page", String.valueOf(page));
         req.setAttribute("page", page);
@@ -71,7 +71,7 @@ public final class FilterGenerator {
 
     private void extractAndProcessParameter(HttpServletRequest req, Map<String, String> filter, String paramName) {
         String paramValue = req.getParameter(paramName);
-        if (paramValue != null) {
+        if (paramValue != null && !paramValue.isEmpty()) {
             req.setAttribute(paramName, paramValue);
             filter.put(paramName, paramValue);
         }

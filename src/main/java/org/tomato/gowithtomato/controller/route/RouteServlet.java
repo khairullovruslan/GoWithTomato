@@ -53,7 +53,7 @@ public class RouteServlet extends BaseServlet {
             UserDTO user = authService.getUser(req);
 
             routeService.saveRoute(routeDTO, user.getId());
-            ajaxUtil.senderRespUrl("%s/profile".formatted(req.getContextPath()), resp);
+            ajaxUtil.senderRespUrl("%s/profile/routes".formatted(req.getContextPath()), resp);
             return;
         }
         ajaxUtil.senderErrorMessage("location-info не найден", resp);
